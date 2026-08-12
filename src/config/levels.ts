@@ -35,7 +35,12 @@ export const LEVELS: GameLevel[] = [
     sceneKey: 'PipelineScene',
     hudComponent: 'PipelineHUD',
     themeColor: 'indigo',
-    engine: 'phaser'
+    engine: 'phaser',
+    instructions: [
+      '管理 CPU 中的指令执行顺序与流水线瓶颈。',
+      '观察阶段(IF/ID/EX)的耗时，通过升级瓶颈处理中心来提升指令吞吐率。',
+      '在串行与流水线模式间切换，体验流水线重叠执行带来的性能飞跃！'
+    ]
   },
   {
     id: 'cpu-scheduling',
@@ -93,7 +98,12 @@ export const LEVELS: GameLevel[] = [
     sceneKey: 'SQLBattleScene',
     hudComponent: 'SQLConsole',
     themeColor: 'purple',
-    engine: 'phaser'
+    engine: 'phaser',
+    instructions: [
+      '面对 Boss 的 SQL 注入攻击，补全正确的防注入与安全查询语句。',
+      '选择正确的 SQL 关键字填空，拼接安全的预编译/过滤查询。',
+      '击败 Boss，守卫数据库安全！'
+    ]
   },
   {
     id: 'network-routing',
@@ -103,7 +113,12 @@ export const LEVELS: GameLevel[] = [
     sceneKey: 'NetworkScene',
     hudComponent: 'NetworkHUD',
     themeColor: 'emerald',
-    engine: 'phaser'
+    engine: 'phaser',
+    instructions: [
+      '模拟 TCP 三次握手与四次挥手过程。',
+      '根据当前 FSM 状态机，选择发送 SYN、ACK、FIN 或 DATA 报文。',
+      '完成正确的报文交互，成功建立与终止网络连接。'
+    ]
   },
   {
     id: 'crypto-defense',
@@ -113,7 +128,12 @@ export const LEVELS: GameLevel[] = [
     sceneKey: 'CryptoScene',
     hudComponent: 'CryptoHUD',
     themeColor: 'indigo',
-    engine: 'phaser'
+    engine: 'phaser',
+    instructions: [
+      '学习公钥加密、私钥解密以及数字签名的核心机制。',
+      '针对防窃听与防篡改任务，选择正确匹配的密钥对。',
+      '依次完成加密与解密流程，保护核心机密数据。'
+    ]
   },
   {
     id: 'binary-tree',
@@ -123,7 +143,12 @@ export const LEVELS: GameLevel[] = [
     sceneKey: 'TreeScene',
     hudComponent: 'TreeHUD',
     themeColor: 'cyan',
-    engine: 'phaser'
+    engine: 'phaser',
+    instructions: [
+      '用深度优先 (DFS) 或广度优先 (BFS) 遍历二叉搜索树 (BST)。',
+      '在搜索或插入节点任务中，根据节点值大小选择向左子树或右子树移动。',
+      '成功定位目标数值或找到正确的插入位置即可完成任务。'
+    ]
   },
   {
     id: 'load-balancer',
@@ -133,7 +158,12 @@ export const LEVELS: GameLevel[] = [
     sceneKey: 'LoadBalancerScene',
     hudComponent: 'LoadBalancerHUD',
     themeColor: 'yellow',
-    engine: 'phaser'
+    engine: 'phaser',
+    instructions: [
+      '面对高并发洪峰流量，合理选择负载均衡算法 (轮询 / 最少连接 / IP哈希)。',
+      '观察各个节点的实时 CPU 负载与连接数，避免单节点过载宕机。',
+      '支撑过指定时间倒计时，保持高可用状态通关。'
+    ]
   },
   
   // --- 新增纯 React 游戏 ---
@@ -160,7 +190,12 @@ export const LEVELS: GameLevel[] = [
     hudComponent: 'BankersMaze',
     themeColor: 'red',
     engine: 'react',
-    isNew: true
+    isNew: true,
+    instructions: [
+      '利用银行家算法计算系统的安全性。',
+      '判断分配请求后，系统是否依然存在可行安全序列 (Safe Sequence)。',
+      '选择能安全避开死锁的分配路径通关。'
+    ]
   },
   {
     id: 'cipher-workshop',
@@ -170,7 +205,12 @@ export const LEVELS: GameLevel[] = [
     hudComponent: 'CipherWorkshop',
     themeColor: 'indigo',
     engine: 'react',
-    isNew: true
+    isNew: true,
+    instructions: [
+      '学习对称加密与非对称加密算法的密钥匹配规则。',
+      '根据算法类型匹配对应的秘钥对与加解密流程。',
+      '完成加密校验通关。'
+    ]
   },
   {
     id: 'critical-path',
@@ -180,7 +220,12 @@ export const LEVELS: GameLevel[] = [
     hudComponent: 'CriticalPathExpedition',
     themeColor: 'orange',
     engine: 'react',
-    isNew: true
+    isNew: true,
+    instructions: [
+      '分析项目 AOE 网中的各个活动节点与其紧前关系。',
+      '计算各个事件的最早发生时间 ES 和最迟发生时间 LS。',
+      '找出总时差为 0 的关键路径，确定项目的最短工期。'
+    ]
   },
   {
     id: 'design-pattern-td-react',
@@ -190,7 +235,12 @@ export const LEVELS: GameLevel[] = [
     hudComponent: 'DesignPatternTD',
     themeColor: 'purple',
     engine: 'react',
-    isNew: true
+    isNew: true,
+    instructions: [
+      '点击下方设计模式卡片在网格上建造防御塔。',
+      '利用单例模式、工厂模式、观察者模式等的特定能力抵御 Bug。',
+      '抵御所有波次怪物，守护核心系统。'
+    ]
   },
   {
     id: 'pipeline-factory-react',
@@ -200,7 +250,13 @@ export const LEVELS: GameLevel[] = [
     hudComponent: 'PipelineFactory',
     themeColor: 'blue',
     engine: 'react',
-    isNew: true
+    isNew: true,
+    instructions: [
+      '点击两张指令卡互换位置，调整指令执行顺序。',
+      '带有依赖箭头的指令顺序不能颠倒。',
+      '将无依赖的独立指令（如 MUL、AND）插到有依赖的指令之间，消灭流水线停顿气泡。',
+      '将停顿周期压缩至理论最小值（3星）即可通关。'
+    ]
   },
   {
     id: 'pseudocode-forge',
@@ -210,7 +266,12 @@ export const LEVELS: GameLevel[] = [
     hudComponent: 'PseudocodeForge',
     themeColor: 'amber',
     engine: 'react',
-    isNew: true
+    isNew: true,
+    instructions: [
+      '填补常见算法与数据结构的伪代码空缺。',
+      '理解循环条件、指针移动与边界控制。',
+      '补全代码完成铸造。'
+    ]
   },
   {
     id: 'sql-assembly-bench',
@@ -220,7 +281,12 @@ export const LEVELS: GameLevel[] = [
     hudComponent: 'SQLAssemblyBench',
     themeColor: 'emerald',
     engine: 'react',
-    isNew: true
+    isNew: true,
+    instructions: [
+      '将分散的 SQL 语法片段按逻辑顺序拼装。',
+      '注意 WHERE, GROUP BY, HAVING, ORDER BY 的语法限制。',
+      '构造出符合需求的 SQL 语句。'
+    ]
   },
   {
     id: 'subnet-territory',
@@ -230,7 +296,12 @@ export const LEVELS: GameLevel[] = [
     hudComponent: 'SubnetTerritory',
     themeColor: 'cyan',
     engine: 'react',
-    isNew: true
+    isNew: true,
+    instructions: [
+      '根据给定的 IP 地址与子网掩码 CIDR 标记。',
+      '计算网络地址、广播地址、可分配 IP 范围及子网数量。',
+      '完成精确的子网分割。'
+    ]
   },
   // --- 新增 GDD_LEVELS_19_33 关卡 ---
   {
@@ -241,7 +312,12 @@ export const LEVELS: GameLevel[] = [
     hudComponent: 'HammingAgent',
     themeColor: 'emerald',
     engine: 'react',
-    isNew: true
+    isNew: true,
+    instructions: [
+      'Phase 1: 依据偶校验公式 (异或^)，计算放置在 2^k 位置的校验位 P1, P2, P4, P8。',
+      'Phase 2: 面对被翻转的数据流，重新计算指错字 G8 G4 G2 G1。',
+      '将 G8 G4 G2 G1 二进制转换成十进制数字，即可定位被翻转的比特位置并实施纠错！'
+    ]
   },
   {
     id: 'cache-master',
@@ -251,7 +327,12 @@ export const LEVELS: GameLevel[] = [
     hudComponent: 'CacheMaster',
     themeColor: 'indigo',
     engine: 'react',
-    isNew: true
+    isNew: true,
+    instructions: [
+      '学习组相联映射 (Set-Associative Mapping) 的标记 Tag、组号 Index、块内地址 Offset 计算。',
+      '结合 LRU (最近最少使用) 算法更新 Cache 槽位。',
+      '提高 Cache 命中率通关。'
+    ]
   },
   {
     id: 'dfa-maze',
@@ -261,7 +342,12 @@ export const LEVELS: GameLevel[] = [
     hudComponent: 'DFAMaze',
     themeColor: 'blue',
     engine: 'react',
-    isNew: true
+    isNew: true,
+    instructions: [
+      '根据正规式 (如 0(0|1)*1) 的状态转移图。',
+      '输入字符序列，观察初态 S0 到终态的转移路线。',
+      '确保终态为接受状态即可走出迷宫。'
+    ]
   },
   {
     id: 'unix-inode',
@@ -271,7 +357,11 @@ export const LEVELS: GameLevel[] = [
     hudComponent: 'UnixInode',
     themeColor: 'cyan',
     engine: 'react',
-    isNew: true
+    isNew: true,
+    instructions: [
+      '计算直接索引、一级间接索引、二级间接索引能寻址的最大逻辑块。',
+      '根据逻辑字节偏移量，换算出对应的磁盘物理块号。'
+    ]
   },
   {
     id: 'path-finder',
@@ -281,7 +371,11 @@ export const LEVELS: GameLevel[] = [
     hudComponent: 'PathFinder',
     themeColor: 'green',
     engine: 'react',
-    isNew: true
+    isNew: true,
+    instructions: [
+      '学习 Linux 绝对路径 (/) 与相对路径 (., ..) 的变换规则。',
+      '根据当前工作目录，写出到达目标文件的最简路径。'
+    ]
   },
   {
     id: 'white-box-explorer',
@@ -291,7 +385,11 @@ export const LEVELS: GameLevel[] = [
     hudComponent: 'WhiteBoxExplorer',
     themeColor: 'pink',
     engine: 'react',
-    isNew: true
+    isNew: true,
+    instructions: [
+      '分析程序的控制流图 (CFG) 与条件分支。',
+      '设计测试用例输入参数，使得测试覆盖率达到 100% 判定覆盖/条件覆盖。'
+    ]
   },
   {
     id: 'dfd-inspector',
@@ -301,7 +399,11 @@ export const LEVELS: GameLevel[] = [
     hudComponent: 'DFDInspector',
     themeColor: 'orange',
     engine: 'react',
-    isNew: true
+    isNew: true,
+    instructions: [
+      '检查数据流图 (DFD) 中的加工逻辑。',
+      '找出并修复"黑洞"(只有输入没有输出)和"奇迹"(只有输出没有输入)等语法错误。'
+    ]
   },
   {
     id: 'uml-state-machine',
@@ -311,7 +413,11 @@ export const LEVELS: GameLevel[] = [
     hudComponent: 'UMLStateMachine',
     themeColor: 'purple',
     engine: 'react',
-    isNew: true
+    isNew: true,
+    instructions: [
+      '检查 UML 状态机图的事件 (Event)、条件 (Guard) 与动作 (Action)。',
+      '修复状态转移漏洞，使自动售货机逻辑严密。'
+    ]
   },
   {
     id: 'dp-knapsack',
@@ -321,7 +427,12 @@ export const LEVELS: GameLevel[] = [
     hudComponent: 'DPKnapsack',
     themeColor: 'amber',
     engine: 'react',
-    isNew: true
+    isNew: true,
+    instructions: [
+      '对比贪心算法与动态规划 (DP) 状态转移方程。',
+      '填补 DP 状态表 dp[i][j] = max(dp[i-1][j], dp[i-1][j-w[i]] + v[i])。',
+      '求出在容量限制下的最大价值。'
+    ]
   },
   {
     id: 'db-normalizer',
@@ -331,7 +442,11 @@ export const LEVELS: GameLevel[] = [
     hudComponent: 'DBNormalizer',
     themeColor: 'blue',
     engine: 'react',
-    isNew: true
+    isNew: true,
+    instructions: [
+      '理解 1NF, 2NF, 3NF 的定义与消除传递函数依赖。',
+      '将冗余的非主属性拆分至正确的独立关系表。'
+    ]
   },
   {
     id: 'float-operator',
@@ -341,7 +456,11 @@ export const LEVELS: GameLevel[] = [
     hudComponent: 'FloatOperator',
     themeColor: 'cyan',
     engine: 'react',
-    isNew: true
+    isNew: true,
+    instructions: [
+      'IEEE 754 浮点数加减法实战。',
+      '小阶看齐大阶，对阶时尾数右移，求和后规格化与舍入。'
+    ]
   },
   {
     id: 'reliability-architect',
@@ -351,7 +470,11 @@ export const LEVELS: GameLevel[] = [
     hudComponent: 'ReliabilityArchitect',
     themeColor: 'emerald',
     engine: 'react',
-    isNew: true
+    isNew: true,
+    instructions: [
+      '计算系统可靠度：串行系统 R = R1 * R2，并行系统 R = 1 - (1-R1)(1-R2)。',
+      '设计符合最低可靠度指标的混合系统架构。'
+    ]
   },
   {
     id: 'matrix-compressor',
@@ -361,7 +484,11 @@ export const LEVELS: GameLevel[] = [
     hudComponent: 'MatrixCompressor',
     themeColor: 'indigo',
     engine: 'react',
-    isNew: true
+    isNew: true,
+    instructions: [
+      '推导对称矩阵 / 三角矩阵压缩存储公式 k = i(i-1)/2 + j - 1。',
+      '将二维坐标 (i, j) 映射到一维数组下标 k。'
+    ]
   },
   {
     id: 'mccabe-surveyor',
@@ -371,7 +498,11 @@ export const LEVELS: GameLevel[] = [
     hudComponent: 'McCabeSurveyor',
     themeColor: 'fuchsia',
     engine: 'react',
-    isNew: true
+    isNew: true,
+    instructions: [
+      '计算程序图环路复杂度 V(G) = m - n + 2p (边数 - 节点数 + 2) 或 V(G) = P + 1 (判定节点数 + 1)。',
+      '准确求出线性无关的独立路径条数。'
+    ]
   },
   {
     id: 'ip-judge',
@@ -381,7 +512,11 @@ export const LEVELS: GameLevel[] = [
     hudComponent: 'IPJudge',
     themeColor: 'amber',
     engine: 'react',
-    isNew: true
+    isNew: true,
+    instructions: [
+      '区分著作权(版权)、专利权、商标权与商业秘密。',
+      '为软件侵权案例与职务开发成果做出正确的法律归属判定。'
+    ]
   },
   {
     id: 'normalization-vein',
