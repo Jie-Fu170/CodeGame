@@ -129,7 +129,7 @@ function tick(prev) {
     });
 
     if (attacks.length > 0) {
-      soundManager.playLaser(attacks[0].type === 'singleton' ? 'heavy' : 'laser');
+      try { soundManager.playLaser(attacks[0].type === 'singleton' ? 'heavy' : 'laser'); } catch (e) {}
     }
 
     const observerFired = attacks.some(a => a.type === 'observer');
@@ -152,7 +152,7 @@ function tick(prev) {
       const hp = e.hp - (dmgMap[e.id] || 0);
       if (hp <= 0) {
         gold += (ENEMIES[e.type] || ENEMIES.nullptr).reward;
-        soundManager.playHit();
+        try { soundManager.playHit(); } catch (e) {}
       } else {
         survivors.push({ ...e, hp });
       }
