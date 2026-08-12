@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Shield, Factory, Eye, Layers, Bug, Skull, Coins, Heart, Play, RotateCcw, Info, Sparkles, Zap, GitBranch, Link2, FileCode2, AlertOctagon, X, CheckCircle2 } from 'lucide-react';
+import { Shield, Factory, Eye, Layers, Bug, Skull, Coins, Heart, Play, RotateCcw, Info, Sparkles, Zap, GitBranch, Link2, FileCode2, AlertOctagon, Volume2, VolumeX, CheckCircle2 } from 'lucide-react';
 import { useGameStore } from '../../store/useGameStore';
 import { SYSTEM_SCENARIOS } from '../../config/umlTempleScenarios';
 import { CodeDiffDrawer } from '../CodeDiffDrawer';
 import { UMLBlueprintPanel } from '../UMLBlueprintPanel';
+import { soundManager } from '../../utils/audio';
 
 const ROWS = 6, COLS = 10;
 
@@ -65,7 +66,7 @@ function initState() {
   return {
     towers: [], enemies: [], gold: 200, baseHp: 100, maxBaseHp: 100,
     wave: 0, status: 'ready', spawnQueue: [], spawnTimer: 0, nextId: 1,
-    selected: null, flash: null, message: null, attacks: [],
+    selected: null, flash: null, message: null, attacks: [], damagePopups: [],
   };
 }
 
@@ -76,7 +77,7 @@ function tick(prev) {
   let gold = prev.gold;
   let enemies = [];
   prev.enemies.forEach(e => {
-    const idx = e.pathIndex + (e.slowed ? Math.max(1, ENEMIES[e.type].speed / 2) : ENEMIES[e.type].speed);
+    const idx = e.pathIndex + (e.slowed ? Math.max(0.5, ENEMIES[e.type].speed / 2) : ENEMIES[e.type].speed);
     if (idx >= PATH.length - 1) baseHp -= ENEMIES[e.type].dmg;
     else enemies.push({ ...e, pathIndex: idx, slowed: false });
   });
@@ -103,7 +104,7 @@ function tick(prev) {
       const pos = PATH[Math.min(Math.floor(target.pathIndex), PATH.length - 1)];
       attacks.push({
         id: target.id,
-        dmg: def.dmg * mult,
+        dmg: Math.round(def.dmg * mult),
         type: t.type,
         fromR: t.r,
         fromC: t.c,
@@ -114,18 +115,34 @@ function tick(prev) {
     t.cooldown = def.cd;
   });
 
+  if (attacks.length > 0) {
+    soundManager.playLaser(attacks[0].type === 'singleton' ? 'heavy' : 'laser');
+  }
+
   const observerFired = attacks.some(a => a.type === 'observer');
   const dmgMap = {};
+  const damagePopups = [];
   attacks.forEach(a => {
-    const d = (observerFired && a.type !== 'observer') ? a.dmg * 1.5 : a.dmg;
+    const d = Math.round((observerFired && a.type !== 'observer') ? a.dmg * 1.5 : a.dmg);
     dmgMap[a.id] = (dmgMap[a.id] || 0) + d;
+    damagePopups.push({
+      id: `dmg-${a.id}-${Date.now()}-${Math.random()}`,
+      text: `-${d}`,
+      r: a.toR,
+      c: a.toC,
+      color: TOWERS[a.type]?.stroke || '#facc15'
+    });
   });
 
   const survivors = [];
   enemies.forEach(e => {
     const hp = e.hp - (dmgMap[e.id] || 0);
-    if (hp <= 0) gold += ENEMIES[e.type].reward;
-    else survivors.push({ ...e, hp });
+    if (hp <= 0) {
+      gold += ENEMIES[e.type].reward;
+      soundManager.playHit();
+    } else {
+      survivors.push({ ...e, hp });
+    }
   });
   enemies = survivors;
 
@@ -141,21 +158,33 @@ function tick(prev) {
   let status = prev.status;
   if (spawnQueue.length === 0 && enemies.length === 0) {
     status = 'quiz';
+    soundManager.playWaveSuccess();
   }
-  if (baseHp <= 0) { baseHp = 0; status = 'lost'; }
+  if (baseHp <= 0) {
+    baseHp = 0;
+    status = 'lost';
+    soundManager.playGameOver();
+  }
 
-  return { ...prev, enemies, towers, gold, baseHp, spawnQueue, spawnTimer, nextId, status, attacks };
+  return { ...prev, enemies, towers, gold, baseHp, spawnQueue, spawnTimer, nextId, status, attacks, damagePopups };
 }
 
 export default function DesignPatternTD() {
   const [g, setG] = useState(initState);
   const [isCodeDiffOpen, setIsCodeDiffOpen] = useState(false);
   const [showUMLBlueprint, setShowUMLBlueprint] = useState(false);
+  const [isMuted, setIsMuted] = useState(soundManager.getMuted());
   const { setLevel } = useGameStore();
 
   const currentScenario = SYSTEM_SCENARIOS[Math.min(g.wave > 0 ? g.wave - 1 : 0, SYSTEM_SCENARIOS.length - 1)];
 
+  const toggleSound = () => {
+    const muted = soundManager.toggleMute();
+    setIsMuted(muted);
+  };
+
   const startWave = useCallback((idx) => {
+    soundManager.playBuild();
     setG(prev => ({ ...prev, wave: idx + 1, spawnQueue: [...WAVES[idx]], spawnTimer: 0, status: 'playing' }));
   }, []);
 
@@ -171,6 +200,7 @@ export default function DesignPatternTD() {
     if (PATH_INDEX.has(key) || g.towers.some(t => t.r === r && t.c === c)) return;
     const def = TOWERS[g.selected];
     if (g.gold < def.cost || (def.unique && g.towers.some(t => t.type === g.selected))) return;
+    soundManager.playBuild();
     setG(prev => ({
       ...prev,
       towers: [...prev.towers, { id: `tw-${prev.towers.length}-${Date.now()}`, r, c, type: g.selected, cooldown: 0 }],
@@ -182,13 +212,20 @@ export default function DesignPatternTD() {
   function answerQuiz(i) {
     const q = QUIZ[(g.wave - 1) % QUIZ.length];
     const correct = i === q.a;
+    if (correct) soundManager.playWaveSuccess();
+    else soundManager.playHit();
     setG(prev => ({ ...prev, flash: { correct, picked: i }, gold: prev.gold + (correct ? 30 : 0) }));
   }
 
   function continueAfterQuiz() {
     const idx = g.wave;
-    if (idx >= WAVES.length) setG(prev => ({ ...prev, flash: null, status: 'won' }));
-    else { setG(prev => ({ ...prev, flash: null })); startWave(idx); }
+    if (idx >= WAVES.length) {
+      soundManager.playVictory();
+      setG(prev => ({ ...prev, flash: null, status: 'won' }));
+    } else {
+      setG(prev => ({ ...prev, flash: null }));
+      startWave(idx);
+    }
   }
 
   function reset() { setG(initState()); }
@@ -196,7 +233,7 @@ export default function DesignPatternTD() {
   const totalWaves = WAVES.length;
 
   return (
-    <div className="w-full max-w-4xl mx-auto rounded-2xl p-3 sm:p-6 font-mono" style={{ background: '#0a0e1a', backgroundImage: 'radial-gradient(circle, #1c2942 1px, transparent 1px)', backgroundSize: '18px 18px', color: '#e2e8f0' }}>
+    <div className="w-full max-w-4xl mx-auto rounded-2xl p-3 sm:p-6 font-mono relative" style={{ background: '#0a0e1a', backgroundImage: 'radial-gradient(circle, #1c2942 1px, transparent 1px)', backgroundSize: '18px 18px', color: '#e2e8f0' }}>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=JetBrains+Mono:wght@400;600&display=swap');
         .dpt-display { font-family: 'Space Grotesk', system-ui, sans-serif; }
@@ -204,6 +241,10 @@ export default function DesignPatternTD() {
         @keyframes dptFlow { 0%, 100% { opacity: .28; } 50% { opacity: .85; } }
         .dpt-path { animation: dptFlow 3s ease-in-out infinite; }
         .dpt-focus:focus-visible { outline: 2px solid #22d3ee; outline-offset: 2px; }
+        @keyframes dptFloatUp { 0% { opacity: 1; transform: translate(-50%, 0) scale(1); } 100% { opacity: 0; transform: translate(-50%, -24px) scale(1.2); } }
+        .dpt-dmg-popup { animation: dptFloatUp 0.6s ease-out forwards; }
+        @keyframes bulletTravel { 0% { stroke-dashoffset: 20; } 100% { stroke-dashoffset: 0; } }
+        .dpt-bullet-line { animation: bulletTravel 0.3s linear infinite; }
       `}</style>
 
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-3 gap-2">
@@ -215,6 +256,14 @@ export default function DesignPatternTD() {
         </div>
 
         <div className="flex items-center gap-2 w-full sm:w-auto justify-between sm:justify-end">
+          <button
+            onClick={toggleSound}
+            title={isMuted ? "开启音效" : "静音"}
+            className="p-1.5 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-lg text-slate-300 transition-all"
+          >
+            {isMuted ? <VolumeX className="w-4 h-4 text-red-400" /> : <Volume2 className="w-4 h-4 text-emerald-400" />}
+          </button>
+
           <button onClick={() => setIsCodeDiffOpen(true)} className="flex items-center gap-1 text-[11px] px-2.5 py-1.5 rounded-lg bg-purple-950/90 hover:bg-purple-900 border border-purple-500/60 text-purple-200 transition-all shadow">
             <FileCode2 size={14} className="text-purple-400" /> 代码重构对比
           </button>
@@ -266,12 +315,13 @@ export default function DesignPatternTD() {
             const isPath = PATH_INDEX.has(key);
             const tower = g.towers.find(t => t.r === r && t.c === c);
             const canBuild = g.status === 'playing' && !!g.selected && !isPath && !tower;
+            const isDecorated = tower && tower.type !== 'decorator' && g.towers.some(o => o.type === 'decorator' && (Math.abs(o.r - r) + Math.abs(o.c - c)) === 1);
             return (
               <div key={key} onClick={() => placeTower(r, c)} className={`relative flex items-center justify-center border ${isPath ? 'bg-slate-800/60 border-slate-950/60' : canBuild ? 'bg-slate-800/70 border-cyan-400/70 cursor-pointer' : 'bg-slate-900/40 border-slate-950/60'}`}>
                 {tower && (() => {
                   const TIcon = TOWERS[tower.type].Icon;
                   return (
-                    <div className={`relative w-2/3 h-2/3 rounded-lg flex items-center justify-center ${TOWERS[tower.type].bg} shadow-lg shadow-black/40`}>
+                    <div className={`relative w-2/3 h-2/3 rounded-lg flex items-center justify-center ${TOWERS[tower.type].bg} shadow-lg shadow-black/40 ${isDecorated ? 'ring-2 ring-purple-400 animate-pulse' : ''}`}>
                       <TIcon size={14} className="text-slate-950" strokeWidth={2.5} />
                     </div>
                   );
@@ -281,17 +331,23 @@ export default function DesignPatternTD() {
           }))}
         </div>
 
-        {/* SVG Attack Lasers / Bullet Tracers Overlay */}
         <svg className="absolute inset-0 w-full h-full pointer-events-none z-20 overflow-visible">
-          {g.status === 'playing' && g.attacks?.map((att, idx) => (
-            <g key={idx}>
-              <line x1={`${((att.fromC + 0.5) / COLS) * 100}%`} y1={`${((att.fromR + 0.5) / ROWS) * 100}%`} x2={`${((att.toC + 0.5) / COLS) * 100}%`} y2={`${((att.toR + 0.5) / ROWS) * 100}%`} stroke={TOWERS[att.type]?.stroke || '#facc15'} strokeWidth="2.5" strokeDasharray="4 2" opacity="0.9" className="animate-pulse" />
-              <circle cx={`${((att.toC + 0.5) / COLS) * 100}%`} cy={`${((att.toR + 0.5) / ROWS) * 100}%`} r="4" fill={TOWERS[att.type]?.stroke || '#facc15'} className="animate-ping" />
-            </g>
-          ))}
+          {g.status === 'playing' && g.attacks?.map((att, idx) => {
+            const x1 = ((att.fromC + 0.5) / COLS) * 100;
+            const y1 = ((att.fromR + 0.5) / ROWS) * 100;
+            const x2 = ((att.toC + 0.5) / COLS) * 100;
+            const y2 = ((att.toR + 0.5) / ROWS) * 100;
+            const strokeColor = TOWERS[att.type]?.stroke || '#facc15';
+            return (
+              <g key={idx}>
+                <line x1={`${x1}%`} y1={`${y1}%`} x2={`${x2}%`} y2={`${y2}%`} stroke={strokeColor} strokeWidth="3" strokeDasharray="6 3" opacity="0.9" className="dpt-bullet-line" />
+                <circle cx={`${x1 + (x2 - x1) * 0.7}%`} cy={`${y1 + (y2 - y1) * 0.7}%`} r="4" fill="#ffffff" stroke={strokeColor} strokeWidth="2" className="shadow-lg" />
+                <circle cx={`${x2}%`} cy={`${y2}%`} r="6" fill={strokeColor} opacity="0.8" className="animate-ping" />
+              </g>
+            );
+          })}
         </svg>
 
-        {/* Enemies Layer */}
         <div className="absolute inset-0 pointer-events-none z-10">
           {g.enemies.map(e => {
             const pos = PATH[Math.min(Math.floor(e.pathIndex), PATH.length - 1)];
@@ -301,13 +357,18 @@ export default function DesignPatternTD() {
             const size = def.boss ? 22 : 14;
             return (
               <div key={e.id} className="dpt-enemy absolute flex flex-col items-center" style={{ left: `${left}%`, top: `${top}%`, transform: 'translate(-50%,-50%)', transition: 'left 0.42s linear, top 0.42s linear' }}>
+                {e.slowed && <div className="absolute -top-4 px-1 py-0.2 bg-cyan-950/90 border border-cyan-400/80 rounded text-[9px] text-cyan-300 font-bold animate-pulse whitespace-nowrap z-20">❄️ 减速 -50%</div>}
                 {def.boss ? <Skull size={size} style={{ color: def.color }} /> : <Bug size={size} style={{ color: def.color }} />}
-                <div className="w-6 h-1 bg-slate-950/70 rounded-full mt-0.5 overflow-hidden">
-                  <div className="h-full" style={{ width: `${(e.hp / def.hp) * 100}%`, background: def.color }} />
+                <div className="w-8 h-1.5 bg-slate-950/80 rounded-full mt-0.5 overflow-hidden border border-slate-800 relative flex items-center justify-center">
+                  <div className="h-full absolute left-0 top-0 transition-all duration-300" style={{ width: `${(e.hp / def.hp) * 100}%`, background: def.color }} />
                 </div>
+                <div className="text-[8px] font-bold font-mono text-slate-200 drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)] mt-0.5">{Math.round(e.hp)}/{def.hp}</div>
               </div>
             );
           })}
+          {g.status === 'playing' && g.damagePopups?.map(pop => (
+            <div key={pop.id} className="dpt-dmg-popup absolute font-bold text-xs sm:text-sm font-mono drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)] z-30" style={{ left: `${((pop.c + 0.5) / COLS) * 100}%`, top: `${((pop.r + 0.5) / ROWS) * 100}%`, color: pop.color }}>{pop.text}</div>
+          ))}
         </div>
       </div>
 
