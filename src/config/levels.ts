@@ -75,9 +75,9 @@ export const LEVELS: GameLevel[] = [
   },
   {
     id: 'uml-temple',
-    title: 'UML类图解析',
+    title: 'GoF 设计模式与 UML 架构',
     category: LEVEL_CATEGORIES.DESIGN_PATTERN,
-    description: '部署7种设计模式防御塔，在波间答题中深度掌握GoF设计模式核心知识',
+    description: '部署7种GoF设计模式防御塔，在波间答题与UML重构中深度掌握设计模式核心考点',
     sceneKey: 'UMLTempleScene',
     hudComponent: 'TowerHUD',
     themeColor: 'purple',
