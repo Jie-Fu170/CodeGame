@@ -24,30 +24,31 @@ const BASE_CELL = PATH[PATH.length - 1];
 const SPAWN_CELL = PATH[0];
 
 const TOWERS = {
-  singleton: { name: '单例塔', Icon: Shield, cost: 120, dmg: 32, range: 2.3, cd: 1, unique: true, bg: 'bg-amber-400', stroke: '#facc15', desc: '全局唯一，同一时刻只能存在一座——单体极高伤害，专克强敌。' },
-  factory:   { name: '工厂塔', Icon: Factory, cost: 60, dmg: 14, range: 2.0, cd: 1, multi: true, bg: 'bg-orange-500', stroke: '#f97316', desc: '一次生产、批量打击，可同时命中场上 2 个目标。' },
-  observer:  { name: '观察者塔', Icon: Eye, cost: 50, dmg: 7, range: 2.3, cd: 1, buff: true, bg: 'bg-cyan-400', stroke: '#22d3ee', desc: '每次攻击都会"通知"全场其他塔，使它们本回合伤害 +50%。' },
-  decorator: { name: '装饰器塔', Icon: Layers, cost: 40, dmg: 5, range: 1.5, cd: 1, decorate: true, bg: 'bg-violet-400', stroke: '#a78bfa', desc: '给上下左右相邻的塔叠加 +40% 伤害，可与多个装饰器叠加。' },
-  adapter:   { name: '适配器塔', Icon: Zap, cost: 45, dmg: 16, range: 1.8, cd: 1, slow: true, bg: 'bg-emerald-400', stroke: '#34d399', desc: '兼容第三方老旧接口，使范围内的 Bug 减速 50%。' },
-  strategy:  { name: '策略塔', Icon: GitBranch, cost: 70, dmg: 22, range: 3.0, cd: 1, pierce: true, bg: 'bg-pink-400', stroke: '#f472b6', desc: '算法无缝切换，横扫超远距离穿透打击。' },
-  chain:     { name: '责任链塔', Icon: Link2, cost: 55, dmg: 18, range: 2.0, cd: 1, chain: true, bg: 'bg-indigo-400', stroke: '#818cf8', desc: '多级责任传递，闪电链在多个 Bug 间连续弹射。' },
+  singleton: { name: '单例塔', Icon: Shield, cost: 120, dmg: 52, range: 2.5, cd: 1, unique: true, bg: 'bg-amber-400', stroke: '#facc15', desc: '全局唯一，同一时刻只能存在一座——单体极高伤害，专克强敌。' },
+  factory:   { name: '工厂塔', Icon: Factory, cost: 60, dmg: 22, range: 2.2, cd: 1, multi: true, bg: 'bg-orange-500', stroke: '#f97316', desc: '一次生产、批量打击，可同时命中场上 2 个目标。' },
+  observer:  { name: '观察者塔', Icon: Eye, cost: 50, dmg: 12, range: 2.3, cd: 1, buff: true, bg: 'bg-cyan-400', stroke: '#22d3ee', desc: '每次攻击都会"通知"全场其他塔，使它们本回合伤害 +50%。' },
+  decorator: { name: '装饰器塔', Icon: Layers, cost: 40, dmg: 10, range: 1.5, cd: 1, decorate: true, bg: 'bg-violet-400', stroke: '#a78bfa', desc: '给上下左右相邻的塔叠加 +40% 伤害，可与多个装饰器叠加。' },
+  adapter:   { name: '适配器塔', Icon: Zap, cost: 45, dmg: 25, range: 2.0, cd: 1, slow: true, bg: 'bg-emerald-400', stroke: '#34d399', desc: '兼容第三方老旧接口，使范围内的 Bug 减速 50%。' },
+  strategy:  { name: '策略塔', Icon: GitBranch, cost: 70, dmg: 35, range: 3.2, cd: 1, pierce: true, bg: 'bg-pink-400', stroke: '#f472b6', desc: '算法无缝切换，横扫超远距离穿透打击。' },
+  chain:     { name: '责任链塔', Icon: Link2, cost: 55, dmg: 30, range: 2.2, cd: 1, chain: true, bg: 'bg-indigo-400', stroke: '#818cf8', desc: '多级责任传递，闪电链在多个 Bug 间连续弹射。' },
 };
 
 const ENEMIES = {
-  nullptr:  { name: '空指针虫', hp: 25, speed: 1, reward: 6, dmg: 5, color: '#fb7185' },
-  leak:     { name: '内存泄漏怪', hp: 75, speed: 1, reward: 14, dmg: 10, color: '#65a30d' },
-  deadlock: { name: '死锁毒虫', hp: 20, speed: 2, reward: 9, dmg: 8, color: '#facc15' },
-  overflow: { name: '边界溢出兽', hp: 260, speed: 1, reward: 70, dmg: 30, color: '#dc2626', boss: true },
+  nullptr:  { name: '空指针虫', hp: 80, speed: 1, reward: 8, dmg: 5, color: '#fb7185', desc: '基础并发 Bug，数量庞大' },
+  deadlock: { name: '死锁毒虫', hp: 60, speed: 2, reward: 10, dmg: 8, color: '#facc15', desc: '极速冲锋刺客，迅速侵入核心' },
+  leak:     { name: '内存泄漏怪', hp: 200, speed: 0.8, reward: 18, dmg: 12, color: '#84cc16', desc: '重型防御肉盾，吞噬海量内存' },
+  racecond: { name: '竞态并发兽', hp: 140, speed: 1.2, reward: 22, dmg: 15, color: '#a855f7', desc: '多线程争用变种，攻击附带干扰' },
+  overflow: { name: '栈溢出魔领主', hp: 600, speed: 0.7, reward: 60, dmg: 30, color: '#dc2626', boss: true, desc: '终极巨型 BOSS，拥有毁天灭地的破坏力' },
 };
 
 const WAVES = [
-  Array(6).fill('nullptr'),
-  [...Array(8).fill('nullptr'), ...Array(3).fill('deadlock')],
-  [...Array(5).fill('leak'), ...Array(5).fill('deadlock')],
-  [...Array(8).fill('nullptr'), ...Array(5).fill('leak'), ...Array(4).fill('deadlock')],
-  [...Array(6).fill('leak'), ...Array(6).fill('deadlock')],
-  [...Array(10).fill('nullptr'), ...Array(6).fill('leak'), ...Array(6).fill('deadlock')],
-  ['overflow', ...Array(6).fill('deadlock'), ...Array(4).fill('leak')],
+  ['nullptr', 'nullptr', 'nullptr', 'nullptr', 'nullptr'],
+  ['nullptr', 'nullptr', 'nullptr', 'nullptr', 'nullptr', 'deadlock', 'deadlock'],
+  ['leak', 'leak', 'leak', 'deadlock', 'deadlock', 'deadlock'],
+  ['nullptr', 'nullptr', 'nullptr', 'leak', 'leak', 'racecond', 'deadlock'],
+  ['leak', 'leak', 'leak', 'racecond', 'racecond', 'deadlock', 'deadlock'],
+  ['nullptr', 'nullptr', 'leak', 'leak', 'racecond', 'deadlock', 'leak'],
+  ['leak', 'leak', 'racecond', 'deadlock', 'overflow', 'deadlock', 'leak'],
 ];
 
 const QUIZ = [
