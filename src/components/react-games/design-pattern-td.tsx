@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Shield, Factory, Eye, Layers, Bug, Skull, Coins, Heart, Play, RotateCcw, Info } from 'lucide-react';
+import { Shield, Factory, Eye, Layers, Bug, Skull, Coins, Heart, Play, RotateCcw, Info, Sparkles } from 'lucide-react';
+import { useGameStore } from '../../store/useGameStore';
 
 const ROWS = 6, COLS = 10;
 
@@ -81,7 +82,18 @@ function tick(prev) {
     const targets = def.multi ? inRange.slice(0, 2) : inRange.slice(0, 1);
     const decorators = towers.filter(o => o.type === 'decorator' && (Math.abs(o.r - t.r) + Math.abs(o.c - t.c)) === 1);
     const mult = t.type === 'decorator' ? 1 : (1 + 0.4 * decorators.length);
-    targets.forEach(target => attacks.push({ id: target.id, dmg: def.dmg * mult, type: t.type }));
+    targets.forEach(target => {
+      const pos = PATH[Math.min(target.pathIndex, PATH.length - 1)];
+      attacks.push({
+        id: target.id,
+        dmg: def.dmg * mult,
+        type: t.type,
+        fromR: t.r,
+        fromC: t.c,
+        toR: pos.r,
+        toC: pos.c
+      });
+    });
     t.cooldown = def.cd;
   });
 
@@ -115,11 +127,12 @@ function tick(prev) {
   }
   if (baseHp <= 0) { baseHp = 0; status = 'lost'; }
 
-  return { ...prev, enemies, towers, gold, baseHp, spawnQueue, spawnTimer, nextId, status };
+  return { ...prev, enemies, towers, gold, baseHp, spawnQueue, spawnTimer, nextId, status, attacks };
 }
 
 export default function DesignPatternTD() {
   const [g, setG] = useState(initState);
+  const { setLevel } = useGameStore();
 
   const startWave = useCallback((idx) => {
     setG(prev => ({ ...prev, wave: idx + 1, spawnQueue: [...WAVES[idx]], spawnTimer: 0, status: 'playing' }));
@@ -209,10 +222,19 @@ export default function DesignPatternTD() {
         }
       `}</style>
 
-      <div className="flex items-center justify-between mb-3">
-        <div>
-          <h1 className="dpt-display text-lg sm:text-xl font-bold tracking-tight text-slate-50">设计模式魔法圣殿</h1>
-          <p className="text-xs text-slate-400 mt-0.5">用设计模式筑塔，挡住 Bug 入侵代码大陆</p>
+      <div className="flex items-center justify-between mb-3 gap-2">
+        <div className="flex items-center gap-2">
+          <div>
+            <h1 className="dpt-display text-lg sm:text-xl font-bold tracking-tight text-slate-50">设计模式魔法圣殿</h1>
+            <p className="text-xs text-slate-400 mt-0.5">用设计模式筑塔，挡住 Bug 入侵代码大陆</p>
+          </div>
+          <button
+            onClick={() => setLevel('uml-temple')}
+            className="hidden sm:flex items-center gap-1 text-[11px] px-2.5 py-1 rounded-lg bg-purple-950/80 hover:bg-purple-900 border border-purple-500/50 text-purple-200 transition-all shadow shrink-0"
+            title="切换至包含全功能2D物理弹道与UML重构对比的Phaser版本"
+          >
+            <Sparkles size={12} className="text-purple-400" /> 2D UML重构版
+          </button>
         </div>
         <div className="flex items-center gap-3 dpt-mono text-sm shrink-0">
           <span className="flex items-center gap-1 text-amber-300"><Coins size={15} />{g.gold}</span>
@@ -265,7 +287,32 @@ export default function DesignPatternTD() {
           }))}
         </div>
 
-        <div className="absolute inset-0 pointer-events-none">
+        {/* SVG Attack Lasers / Bullet Tracers Overlay */}
+        <svg className="absolute inset-0 w-full h-full pointer-events-none z-20 overflow-visible">
+          {g.status === 'playing' && g.attacks?.map((att, idx) => {
+            const x1 = ((att.fromC + 0.5) / COLS) * 100;
+            const y1 = ((att.fromR + 0.5) / ROWS) * 100;
+            const x2 = ((att.toC + 0.5) / COLS) * 100;
+            const y2 = ((att.toR + 0.5) / ROWS) * 100;
+            const strokeColor = att.type === 'singleton' ? '#facc15' : att.type === 'factory' ? '#f97316' : att.type === 'observer' ? '#22d3ee' : '#a78bfa';
+            return (
+              <g key={idx}>
+                <line
+                  x1={`${x1}%`} y1={`${y1}%`}
+                  x2={`${x2}%`} y2={`${y2}%`}
+                  stroke={strokeColor}
+                  strokeWidth="2.5"
+                  strokeDasharray="4 2"
+                  opacity="0.9"
+                  className="animate-pulse"
+                />
+                <circle cx={`${x2}%`} cy={`${y2}%`} r="4" fill={strokeColor} className="animate-ping" />
+              </g>
+            );
+          })}
+        </svg>
+
+        <div className="absolute inset-0 pointer-events-none z-10">
           {g.enemies.map(e => {
             const pos = PATH[Math.min(e.pathIndex, PATH.length - 1)];
             const def = ENEMIES[e.type];
