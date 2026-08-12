@@ -296,52 +296,52 @@ export const TowerHUD = () => {
       </div>
 
       {/* 1. LEFT PANEL */}
-      <div className="absolute top-4 left-4 flex flex-col gap-3 pointer-events-none z-20">
+      <div className="absolute top-10 sm:top-14 left-2 sm:left-4 flex flex-row sm:flex-col gap-1.5 sm:gap-3 pointer-events-none z-20 w-full sm:w-auto max-w-[calc(100vw-120px)] sm:max-w-none overflow-x-auto">
         
         {/* Core HP */}
-        <div className="bg-slate-900/80 backdrop-blur-md border border-slate-700 p-4 rounded-xl shadow-lg w-64 pointer-events-auto">
-          <div className="flex justify-between items-center mb-2">
-            <span className="font-bold text-slate-200 flex items-center gap-2">
-              <Heart className="w-5 h-5 text-red-400" />
-              核心圣殿 HP
+        <div className="bg-slate-900/90 backdrop-blur-md border border-slate-700 p-2 sm:p-4 rounded-xl shadow-lg shrink-0 w-28 sm:w-64 pointer-events-auto">
+          <div className="flex justify-between items-center mb-1 sm:mb-2">
+            <span className="font-bold text-slate-200 flex items-center gap-1 sm:gap-2 text-[10px] sm:text-sm">
+              <Heart className="w-3 h-3 sm:w-5 sm:h-5 text-red-400 shrink-0" />
+              <span className="hidden sm:inline">核心圣殿</span> HP
             </span>
-            <span className="text-slate-300 font-mono text-sm">{hp}/{maxHp}</span>
+            <span className="text-slate-300 font-mono text-[10px] sm:text-sm">{hp}/{maxHp}</span>
           </div>
-          <div className="w-full bg-slate-800 rounded-full h-2.5 overflow-hidden">
-            <div className={`h-2.5 rounded-full transition-all duration-300 ${hpColor}`} style={{ width: `${hpPercentage}%` }}></div>
+          <div className="w-full bg-slate-800 rounded-full h-1.5 sm:h-2.5 overflow-hidden">
+            <div className={`h-full rounded-full transition-all duration-300 ${hpColor}`} style={{ width: `${hpPercentage}%` }}></div>
           </div>
         </div>
 
         {/* Resources */}
-        <div className="bg-slate-900/80 backdrop-blur-md border border-yellow-500/30 p-4 rounded-xl shadow-lg w-64 pointer-events-auto flex items-center gap-4 relative overflow-hidden">
+        <div className="bg-slate-900/90 backdrop-blur-md border border-yellow-500/30 p-2 sm:p-4 rounded-xl shadow-lg shrink-0 w-28 sm:w-64 pointer-events-auto flex items-center gap-2 sm:gap-4 relative overflow-hidden">
           <div className="absolute inset-0 bg-yellow-500/5 animate-pulse"></div>
-          <div className="bg-yellow-500/20 p-2 rounded-lg">
-            <Coins className="w-6 h-6 text-yellow-400" />
+          <div className="bg-yellow-500/20 p-1 sm:p-2 rounded-lg shrink-0">
+            <Coins className="w-4 h-4 sm:w-6 sm:h-6 text-yellow-400" />
           </div>
           <div>
-            <div className="text-xs text-yellow-200/70 font-medium">系统算力 (资源)</div>
-            <div className="text-2xl font-black text-yellow-400 font-mono drop-shadow-[0_0_8px_rgba(250,204,21,0.5)]">{money}</div>
+            <div className="text-[9px] sm:text-xs text-yellow-200/70 font-medium leading-none mb-0.5">算力</div>
+            <div className="text-sm sm:text-2xl font-black text-yellow-400 font-mono drop-shadow-[0_0_8px_rgba(250,204,21,0.5)]">{money}</div>
           </div>
         </div>
 
         {/* Wave Progress */}
-        <div className="bg-slate-900/80 backdrop-blur-md border border-slate-700 p-3 rounded-xl shadow-lg w-64 pointer-events-auto">
-          <div className="flex justify-between items-center mb-2">
-            <span className="text-sm font-semibold text-slate-300 flex items-center gap-2">
-              <Zap className="w-4 h-4 text-blue-400" />
+        <div className="bg-slate-900/90 backdrop-blur-md border border-slate-700 p-2 sm:p-3 rounded-xl shadow-lg shrink-0 w-24 sm:w-64 pointer-events-auto">
+          <div className="flex justify-between items-center mb-1 sm:mb-2">
+            <span className="text-[10px] sm:text-sm font-semibold text-slate-300 flex items-center gap-1 sm:gap-2">
+              <Zap className="w-3 h-3 sm:w-4 sm:h-4 text-blue-400 shrink-0" />
               波次 {wave}/{maxWaves}
             </span>
           </div>
-          <div className="w-full bg-slate-800 rounded-full h-1.5 overflow-hidden">
-            <div className="bg-blue-500 h-1.5 rounded-full transition-all duration-300" style={{ width: `${(wave / maxWaves) * 100}%` }}></div>
+          <div className="w-full bg-slate-800 rounded-full h-1 sm:h-1.5 overflow-hidden">
+            <div className="bg-blue-500 h-full rounded-full transition-all duration-300" style={{ width: `${(wave / maxWaves) * 100}%` }}></div>
           </div>
         </div>
 
       </div>
 
       {/* 2. BOTTOM BUILD BAR */}
-      <div className="absolute bottom-3 left-1/2 -translate-x-1/2 pointer-events-none w-full max-w-[95vw] sm:max-w-6xl px-2">
-        <div className="bg-slate-900/95 backdrop-blur-xl border border-slate-700/60 rounded-2xl p-2.5 shadow-2xl pointer-events-auto flex gap-2.5 overflow-x-auto custom-scrollbar items-center justify-start">
+      <div className="absolute bottom-2 sm:bottom-3 left-1/2 -translate-x-1/2 pointer-events-none w-full max-w-[98vw] sm:max-w-6xl px-1 sm:px-2 z-30">
+        <div className="bg-slate-900/95 backdrop-blur-xl border border-slate-700/60 rounded-xl sm:rounded-2xl p-1.5 sm:p-2.5 shadow-2xl pointer-events-auto flex gap-1.5 sm:gap-2.5 overflow-x-auto custom-scrollbar items-center justify-start">
           {TOWERS.map((tower) => {
             const canAfford = money >= tower.cost;
             const isRestrictedSingleton = tower.type === 'SINGLETON' && hasSingleton;
@@ -354,28 +354,28 @@ export const TowerHUD = () => {
                 key={tower.type}
                 disabled={isDisabled}
                 onClick={() => setSelectedTowerType(isSelected ? null : (tower.type as TowerType))}
-                className={`group relative flex flex-col items-center w-24 shrink-0 p-2.5 rounded-xl border-2 transition-all duration-200 
+                className={`group relative flex flex-col items-center w-20 sm:w-24 shrink-0 p-1.5 sm:p-2.5 rounded-lg sm:rounded-xl border-2 transition-all duration-200 
                   ${isSelected ? `${tower.color} bg-slate-800 shadow-[0_0_15px_rgba(0,0,0,0.5)] scale-105 z-10` : 'border-slate-700 bg-slate-800/50 hover:border-slate-500 hover:bg-slate-800'}
                   ${isDisabled ? 'opacity-40 grayscale cursor-not-allowed' : 'cursor-pointer'}
                 `}
               >
-                <div className={`p-2 rounded-lg mb-2 ${isSelected ? `bg-slate-700 ${tower.textColors}` : 'bg-slate-700/50 text-slate-400 group-hover:text-slate-300'}`}>
-                  <Icon className="w-6 h-6" />
+                <div className={`p-1 sm:p-2 rounded-lg mb-1 sm:mb-2 ${isSelected ? `bg-slate-700 ${tower.textColors}` : 'bg-slate-700/50 text-slate-400 group-hover:text-slate-300'}`}>
+                  <Icon className="w-4 h-4 sm:w-6 sm:h-6" />
                 </div>
                 
-                <div className="text-xs font-bold text-slate-200 mb-1 text-center truncate w-full">{tower.name}</div>
+                <div className="text-[10px] sm:text-xs font-bold text-slate-200 mb-0.5 text-center truncate w-full">{tower.name}</div>
                 
-                <div className={`text-[10px] whitespace-pre-line text-center text-slate-400 leading-tight mb-2 flex-grow h-10 ${isSelected ? tower.textColors : ''}`}>
+                <div className={`text-[9px] sm:text-[10px] whitespace-pre-line text-center text-slate-400 leading-tight mb-1 flex-grow h-7 sm:h-10 hidden sm:block ${isSelected ? tower.textColors : ''}`}>
                   {tower.desc}
                 </div>
 
-                <div className={`flex items-center gap-1 font-mono text-sm font-bold ${canAfford ? 'text-yellow-400' : 'text-red-400'}`}>
+                <div className={`flex items-center gap-0.5 font-mono text-xs sm:text-sm font-bold ${canAfford ? 'text-yellow-400' : 'text-red-400'}`}>
                   <Coins className="w-3 h-3" />
                   {tower.cost}
                 </div>
 
                 {/* Hover Knowledge Tooltip */}
-                <div className="absolute bottom-full mb-3 left-1/2 -translate-x-1/2 w-64 p-3 bg-slate-900/95 backdrop-blur border border-slate-700 rounded-xl shadow-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-50 text-left">
+                <div className="absolute bottom-full mb-3 left-1/2 -translate-x-1/2 w-64 p-3 bg-slate-900/95 backdrop-blur border border-slate-700 rounded-xl shadow-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-50 text-left hidden sm:block">
                   <div className="flex items-center justify-between mb-1">
                     <span className="font-bold text-xs text-white">{KNOWLEDGE_DATA[tower.type]?.title}</span>
                     <span className="text-[9px] px-1.5 py-0.5 rounded bg-purple-500/20 text-purple-300 border border-purple-500/30 font-semibold">{KNOWLEDGE_DATA[tower.type]?.category}</span>
@@ -386,7 +386,7 @@ export const TowerHUD = () => {
 
                 {isRestrictedSingleton && (
                   <div className="absolute inset-0 bg-slate-900/80 rounded-lg flex items-center justify-center backdrop-blur-sm">
-                    <span className="text-xs font-bold text-red-400 bg-red-950/80 px-2 py-1 rounded border border-red-500/50">已建造</span>
+                    <span className="text-[10px] sm:text-xs font-bold text-red-400 bg-red-950/80 px-1.5 py-0.5 rounded border border-red-500/50">已建造</span>
                   </div>
                 )}
               </button>
@@ -396,18 +396,18 @@ export const TowerHUD = () => {
       </div>
 
       {/* Manual Handbook Button (Top Right) */}
-      <div className="absolute top-4 right-32 z-30 pointer-events-auto">
+      <div className="absolute top-10 sm:top-14 right-2 sm:right-32 z-30 pointer-events-auto">
         <button
           onClick={() => setShowKnowledgeCard(selectedTowerType || 'SINGLETON')}
-          className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-900/80 hover:bg-slate-800 backdrop-blur border border-purple-500/40 rounded-lg text-purple-300 hover:text-purple-200 text-xs font-bold shadow-lg transition-all"
+          className="flex items-center gap-1 px-2.5 sm:px-3 py-1 sm:py-1.5 bg-slate-900/90 hover:bg-slate-800 backdrop-blur border border-purple-500/40 rounded-lg text-purple-300 hover:text-purple-200 text-[11px] sm:text-xs font-bold shadow-lg transition-all"
         >
-          <span>📖</span> 模式图鉴
+          <span>📖</span> <span className="hidden sm:inline">模式</span>图鉴
         </button>
       </div>
 
       {/* 3. NON-BLOCKING FLOATING KNOWLEDGE CARD (Top Right / Right Panel) */}
       {showKnowledgeCard && KNOWLEDGE_DATA[showKnowledgeCard] && (
-        <div className="absolute top-16 right-4 z-40 pointer-events-auto w-80 animate-in fade-in slide-in-from-right-4 duration-300">
+        <div className="absolute top-12 sm:top-16 right-2 sm:right-4 z-40 pointer-events-auto w-72 sm:w-80 max-w-[90vw] animate-in fade-in slide-in-from-right-4 duration-300">
           <div 
             className="bg-slate-900/95 backdrop-blur-xl border border-slate-700/80 rounded-xl shadow-2xl overflow-hidden"
           >

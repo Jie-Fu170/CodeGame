@@ -137,29 +137,29 @@ function App() {
       <div className="absolute inset-0 bg-blueprint-grid"></div>
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_transparent_40%,_rgba(2,6,23,0.85)_100%)] pointer-events-none"></div>
 
-      {/* 品牌角标（左上，纯文字无底色，高度避开游戏 HUD 列） */}
-      <div className="absolute top-1.5 left-4 z-40 font-mono text-[10px] leading-none tracking-[0.3em] text-slate-600 select-none pointer-events-none">
+      {/* 品牌角标（左上，纯文字无底色，小屏隐藏避开胶囊） */}
+      <div className="absolute top-1.5 left-4 z-40 font-mono text-[10px] leading-none tracking-[0.3em] text-slate-600 select-none pointer-events-none hidden sm:block">
         CODE CONTINENT <span className="text-slate-700">//</span> 代码大陆
       </div>
 
-      {/* 当前关卡胶囊 —— 顶部居中（各游戏 HUD 的左右两列均占用，唯独顶中是空的） */}
+      {/* 当前关卡胶囊 —— 顶部居中 */}
       {currentLevel && (
-        <div className="absolute top-3 left-1/2 -translate-x-1/2 z-40 pointer-events-none">
+        <div className="absolute top-2 sm:top-3 left-1/2 -translate-x-1/2 z-40 pointer-events-none max-w-[calc(100vw-130px)]">
           <div
             key={currentLevel.id}
-            className={`panel-in flex items-center gap-2.5 rounded-full border ${theme.borderSoft} ${theme.bgDeep} backdrop-blur px-4 py-1.5 shadow-lg whitespace-nowrap`}
+            className={`panel-in flex items-center gap-1.5 sm:gap-2.5 rounded-full border ${theme.borderSoft} ${theme.bgDeep} backdrop-blur px-2.5 sm:px-4 py-1 sm:py-1.5 shadow-lg whitespace-nowrap overflow-hidden`}
           >
             <span className={`h-2 w-2 rounded-full shrink-0 ${theme.dot}`}></span>
-            <span className={`text-sm font-bold leading-none ${theme.textBright}`}>{currentLevel.title}</span>
-            <span className="font-mono text-[11px] leading-none text-slate-400">{currentLevel.category}</span>
-            <span className="font-mono text-[11px] leading-none text-slate-500">
+            <span className={`text-xs sm:text-sm font-bold leading-none truncate ${theme.textBright}`}>{currentLevel.title}</span>
+            <span className="font-mono text-[11px] leading-none text-slate-400 hidden md:inline">{currentLevel.category}</span>
+            <span className="font-mono text-[10px] sm:text-[11px] leading-none text-slate-500">
               {String(levelIndex).padStart(2, '0')}/{LEVELS.length}
             </span>
-            <span className={`font-mono text-[10px] leading-none px-1.5 py-0.5 rounded border ${theme.borderSoft} ${theme.bgSoft} ${theme.text}`}>
+            <span className={`font-mono text-[9px] sm:text-[10px] leading-none px-1 sm:px-1.5 py-0.5 rounded border ${theme.borderSoft} ${theme.bgSoft} ${theme.text} hidden xs:inline`}>
               {isReactLevel ? 'REACT' : 'PHASER'}
             </span>
             {currentLevel.isNew && (
-              <span className="font-mono text-[10px] leading-none px-1.5 py-0.5 rounded border border-yellow-500/30 bg-yellow-500/10 text-yellow-300">
+              <span className="font-mono text-[9px] sm:text-[10px] leading-none px-1 sm:px-1.5 py-0.5 rounded border border-yellow-500/30 bg-yellow-500/10 text-yellow-300">
                 NEW
               </span>
             )}
@@ -168,16 +168,16 @@ function App() {
       )}
 
       {/* 考点导航（右上角） */}
-      <div className="absolute top-3 right-4 z-40">
+      <div className="absolute top-2 sm:top-3 right-2 sm:right-4 z-40">
         <button
           onClick={() => setIsMenuOpen(!isMenuOpen)}
           aria-expanded={isMenuOpen}
-          className="px-4 py-2 bg-slate-900/80 backdrop-blur text-slate-300 hover:text-white rounded-lg border border-slate-700 hover:border-slate-500 shadow-lg flex items-center gap-2.5 transition-colors font-mono"
+          className="px-2.5 sm:px-4 py-1.5 sm:py-2 bg-slate-900/80 backdrop-blur text-slate-300 hover:text-white rounded-lg border border-slate-700 hover:border-slate-500 shadow-lg flex items-center gap-1.5 sm:gap-2.5 transition-colors font-mono text-xs sm:text-sm"
         >
           <span className={`h-2 w-2 rounded-full ${theme.dot}`}></span>
-          <span className="font-bold text-sm">考点导航</span>
-          <span className="text-[11px] text-slate-500">{LEVELS.length}</span>
-          <span className="text-xs text-slate-500">{isMenuOpen ? '▲' : '▼'}</span>
+          <span className="font-bold text-xs sm:text-sm">考点导航</span>
+          <span className="text-[10px] sm:text-[11px] text-slate-500">{LEVELS.length}</span>
+          <span className="text-[10px] sm:text-xs text-slate-500">{isMenuOpen ? '▲' : '▼'}</span>
         </button>
 
         {isMenuOpen && (
@@ -239,32 +239,30 @@ function App() {
       </div>
 
       {/* Active HUD Layer / React Game Layer */}
-      <div className="relative z-10 w-full h-full flex items-center justify-center pointer-events-none">
+      <div className="relative z-10 w-full h-full flex items-center justify-center pointer-events-none overflow-hidden">
         <div className={`w-full h-full flex items-center justify-center ${isReactLevel ? 'pointer-events-auto' : 'pointer-events-none'}`}>
           {ActiveHUD && <ActiveHUD />}
         </div>
       </div>
 
-      {/* 游戏视口：Phaser 舞台 + HUD 式框架（签名元素）
-          注意：React 关卡时仅隐藏不卸载 —— Phaser canvas 挂载在该容器内，
-          卸载后无法恢复，故保持 hidden class 方案。 */}
+      {/* 游戏视口：Phaser 舞台 + HUD 式框架 */}
       <div
-        className={`absolute inset-0 z-0 flex items-center justify-center ${isReactLevel ? 'hidden' : ''}`}
+        className={`absolute inset-0 z-0 flex items-center justify-center p-2 sm:p-4 ${isReactLevel ? 'hidden' : ''}`}
         style={{ '--accent': theme.hex } as React.CSSProperties}
       >
-        <div className="flex flex-col items-stretch">
+        <div className="flex flex-col items-stretch w-full max-w-[800px]">
           {/* 视口状态条 */}
-          <div className="flex items-center justify-between pb-2 px-0.5 font-mono text-[11px] select-none">
-            <span className="flex items-center gap-2">
+          <div className="flex items-center justify-between pb-1 sm:pb-2 px-0.5 font-mono text-[10px] sm:text-[11px] select-none">
+            <span className="flex items-center gap-1.5 sm:gap-2">
               <span className="stage-live-dot h-1.5 w-1.5 rounded-full" style={{ backgroundColor: 'var(--accent)' }}></span>
               <span className={theme.text}>viewport</span>
-              <span className="text-slate-600">://{currentLevel?.id}</span>
+              <span className="text-slate-600 truncate max-w-[120px] sm:max-w-none">://{currentLevel?.id}</span>
             </span>
-            <span className="text-slate-600">800 × 600 · PHASER</span>
+            <span className="text-slate-600 text-[9px] sm:text-[11px]">800 × 600 · PHASER</span>
           </div>
 
           {/* 舞台框架 + 四角括号 */}
-          <div className="stage-glow relative rounded-2xl border border-slate-800">
+          <div className="stage-glow relative rounded-xl sm:rounded-2xl border border-slate-800 flex items-center justify-center overflow-hidden">
             <span className="stage-corner stage-corner-tl"></span>
             <span className="stage-corner stage-corner-tr"></span>
             <span className="stage-corner stage-corner-bl"></span>
@@ -272,7 +270,7 @@ function App() {
             <div
               id="phaser-game-container"
               ref={gameRef}
-              className="w-[800px] h-[600px] overflow-hidden rounded-2xl bg-slate-950/40"
+              className="w-full aspect-[4/3] max-h-[70vh] sm:max-h-[80vh] overflow-hidden rounded-xl sm:rounded-2xl bg-slate-950/40 touch-none flex items-center justify-center"
             >
               {/* Phaser injects canvas here */}
             </div>
