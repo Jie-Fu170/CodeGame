@@ -1,0 +1,20 @@
+{
+  "last_completed_level": 33,
+  "levels": {
+    "19": { "status": "completed", "id": "hamming-agent", "engine": "React", "title": "海明码特工", "category": "计算机组成原理" },
+    "20": { "status": "completed", "id": "cache-master", "engine": "React", "title": "存储 Cache 物语", "category": "计算机组成原理" },
+    "21": { "status": "completed", "id": "dfa-maze", "engine": "React", "title": "有限自动机 DFA 迷宫", "category": "软件工程" },
+    "22": { "status": "completed", "id": "unix-inode", "engine": "React", "title": "UNIX 磁盘多级索引寻宝", "category": "操作系统" },
+    "23": { "status": "completed", "id": "path-finder", "engine": "React", "title": "路径漫游指南", "category": "操作系统" },
+    "24": { "status": "completed", "id": "white-box-explorer", "engine": "React", "title": "控制流图与白盒测试染色", "category": "软件工程" },
+    "25": { "status": "completed", "id": "dfd-inspector", "engine": "React", "title": "数据流图 DFD 故障检修师", "category": "系统架构" },
+    "26": { "status": "completed", "id": "uml-state-machine", "engine": "React", "title": "自动售货机：UML 逻辑调试器", "category": "设计模式" },
+    "27": { "status": "completed", "id": "dp-knapsack", "engine": "React", "title": "0-1 背包大盗", "category": "数据结构与算法" },
+    "28": { "status": "completed", "id": "db-normalizer", "engine": "React", "title": "数据库范式收纳整理狂", "category": "数据库" },
+    "29": { "status": "completed", "id": "float-operator", "engine": "React", "title": "浮点数极速对阶工厂", "category": "计算机组成原理" },
+    "30": { "status": "completed", "id": "reliability-architect", "engine": "React", "title": "可靠度大厦架构师", "category": "系统架构" },
+    "31": { "status": "completed", "id": "matrix-compressor", "engine": "React", "title": "压缩矩阵一维收纳盒", "category": "数据结构与算法" },
+    "32": { "status": "completed", "id": "mccabe-surveyor", "engine": "React", "title": "McCabe 环路复杂度勘测员", "category": "软件工程" },
+    "33": { "status": "completed", "id": "ip-judge", "engine": "React", "title": "知识产权大法庭", "category": "信息安全" }
+  }
+}
