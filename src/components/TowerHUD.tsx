@@ -254,8 +254,8 @@ export const TowerHUD = () => {
   return (
     <div className="absolute inset-0 w-full h-full pointer-events-none">
       
-      {/* 🚨 TOP SYSTEM CRISIS BANNER */}
-      <div className="absolute top-14 left-1/2 -translate-x-1/2 z-20 pointer-events-auto max-w-2xl w-full px-4">
+      {/* 🚨 TOP SYSTEM CRISIS BANNER (Desktop: Centered / Mobile: Compact Strip below top bar) */}
+      <div className="absolute top-14 left-1/2 -translate-x-1/2 z-20 pointer-events-auto max-w-2xl w-full px-4 hidden sm:block">
         <div className="bg-slate-900/90 backdrop-blur-md border border-red-500/40 rounded-xl p-3 shadow-xl flex items-center justify-between gap-3">
           <div className="flex items-center gap-2.5 min-w-0">
             <AlertOctagon className="w-5 h-5 text-rose-400 shrink-0 animate-pulse" />
@@ -286,6 +286,24 @@ export const TowerHUD = () => {
               <FileCode2 className="w-4 h-4 text-purple-400" />
               <span>代码重构对比</span>
             </button>
+
+            <button
+              onClick={() => setShowKnowledgeCard(selectedTowerType || 'SINGLETON')}
+              className="flex items-center gap-1 px-3 py-1.5 bg-slate-900 hover:bg-slate-800 border border-purple-500/40 rounded-lg text-purple-300 hover:text-purple-200 text-xs font-bold shadow transition-all"
+            >
+              <span>📖</span> 模式图鉴
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* 📱 MOBILE ONLY: Compact Crisis Banner */}
+      <div className="absolute top-16 left-2 right-2 z-20 pointer-events-auto block sm:hidden">
+        <div className="bg-slate-900/95 backdrop-blur-md border border-red-500/40 rounded-lg p-1.5 shadow-lg flex items-center justify-between gap-2">
+          <div className="flex items-center gap-1.5 min-w-0">
+            <AlertOctagon className="w-3.5 h-3.5 text-rose-400 shrink-0 animate-pulse" />
+            <span className="text-[10px] font-black text-rose-400 font-mono">#{currentScenario.wave}</span>
+            <span className="text-[10px] font-bold text-slate-200 truncate">{currentScenario.title}</span>
           </div>
         </div>
       </div>
@@ -296,16 +314,16 @@ export const TowerHUD = () => {
       </div>
 
       {/* 1. LEFT PANEL */}
-      <div className="absolute top-10 sm:top-14 left-2 sm:left-4 flex flex-row sm:flex-col gap-1.5 sm:gap-3 pointer-events-none z-20 w-full sm:w-auto max-w-[calc(100vw-120px)] sm:max-w-none overflow-x-auto">
+      <div className="absolute top-10 sm:top-14 left-2 sm:left-4 flex flex-row sm:flex-col gap-1.5 sm:gap-3 pointer-events-none z-20 w-auto max-w-[calc(100vw-130px)] sm:max-w-none overflow-x-auto">
         
         {/* Core HP */}
-        <div className="bg-slate-900/90 backdrop-blur-md border border-slate-700 p-2 sm:p-4 rounded-xl shadow-lg shrink-0 w-28 sm:w-64 pointer-events-auto">
+        <div className="bg-slate-900/90 backdrop-blur-md border border-slate-700 p-1.5 sm:p-4 rounded-lg sm:rounded-xl shadow-lg shrink-0 w-24 sm:w-64 pointer-events-auto">
           <div className="flex justify-between items-center mb-1 sm:mb-2">
             <span className="font-bold text-slate-200 flex items-center gap-1 sm:gap-2 text-[10px] sm:text-sm">
               <Heart className="w-3 h-3 sm:w-5 sm:h-5 text-red-400 shrink-0" />
               <span className="hidden sm:inline">核心圣殿</span> HP
             </span>
-            <span className="text-slate-300 font-mono text-[10px] sm:text-sm">{hp}/{maxHp}</span>
+            <span className="text-slate-300 font-mono text-[9px] sm:text-sm">{hp}/{maxHp}</span>
           </div>
           <div className="w-full bg-slate-800 rounded-full h-1.5 sm:h-2.5 overflow-hidden">
             <div className={`h-full rounded-full transition-all duration-300 ${hpColor}`} style={{ width: `${hpPercentage}%` }}></div>
@@ -313,21 +331,21 @@ export const TowerHUD = () => {
         </div>
 
         {/* Resources */}
-        <div className="bg-slate-900/90 backdrop-blur-md border border-yellow-500/30 p-2 sm:p-4 rounded-xl shadow-lg shrink-0 w-28 sm:w-64 pointer-events-auto flex items-center gap-2 sm:gap-4 relative overflow-hidden">
+        <div className="bg-slate-900/90 backdrop-blur-md border border-yellow-500/30 p-1.5 sm:p-4 rounded-lg sm:rounded-xl shadow-lg shrink-0 w-24 sm:w-64 pointer-events-auto flex items-center gap-1.5 sm:gap-4 relative overflow-hidden">
           <div className="absolute inset-0 bg-yellow-500/5 animate-pulse"></div>
           <div className="bg-yellow-500/20 p-1 sm:p-2 rounded-lg shrink-0">
-            <Coins className="w-4 h-4 sm:w-6 sm:h-6 text-yellow-400" />
+            <Coins className="w-3.5 h-3.5 sm:w-6 sm:h-6 text-yellow-400" />
           </div>
           <div>
             <div className="text-[9px] sm:text-xs text-yellow-200/70 font-medium leading-none mb-0.5">算力</div>
-            <div className="text-sm sm:text-2xl font-black text-yellow-400 font-mono drop-shadow-[0_0_8px_rgba(250,204,21,0.5)]">{money}</div>
+            <div className="text-xs sm:text-2xl font-black text-yellow-400 font-mono drop-shadow-[0_0_8px_rgba(250,204,21,0.5)]">{money}</div>
           </div>
         </div>
 
         {/* Wave Progress */}
-        <div className="bg-slate-900/90 backdrop-blur-md border border-slate-700 p-2 sm:p-3 rounded-xl shadow-lg shrink-0 w-24 sm:w-64 pointer-events-auto">
+        <div className="bg-slate-900/90 backdrop-blur-md border border-slate-700 p-1.5 sm:p-3 rounded-lg sm:rounded-xl shadow-lg shrink-0 w-20 sm:w-64 pointer-events-auto">
           <div className="flex justify-between items-center mb-1 sm:mb-2">
-            <span className="text-[10px] sm:text-sm font-semibold text-slate-300 flex items-center gap-1 sm:gap-2">
+            <span className="text-[9px] sm:text-sm font-semibold text-slate-300 flex items-center gap-1 sm:gap-2">
               <Zap className="w-3 h-3 sm:w-4 sm:h-4 text-blue-400 shrink-0" />
               波次 {wave}/{maxWaves}
             </span>
@@ -395,13 +413,29 @@ export const TowerHUD = () => {
         </div>
       </div>
 
-      {/* Manual Handbook Button (Top Right) */}
-      <div className="absolute top-10 sm:top-14 right-2 sm:right-32 z-30 pointer-events-auto">
+      {/* 📱 MOBILE ONLY: Action Buttons Top Right */}
+      <div className="absolute top-10 right-2 z-30 pointer-events-auto flex items-center gap-1 sm:hidden">
+        <button
+          onClick={toggleSound}
+          title={isMuted ? "开启音效" : "静音"}
+          className="p-1 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-md text-slate-300 transition-all"
+        >
+          {isMuted ? <VolumeX className="w-3.5 h-3.5 text-red-400" /> : <Volume2 className="w-3.5 h-3.5 text-emerald-400" />}
+        </button>
+
+        <button
+          onClick={() => setIsCodeDiffOpen(true)}
+          title="代码重构对比"
+          className="p-1 bg-purple-950/90 border border-purple-500/50 rounded-md text-purple-200 transition-all"
+        >
+          <FileCode2 className="w-3.5 h-3.5 text-purple-400" />
+        </button>
+
         <button
           onClick={() => setShowKnowledgeCard(selectedTowerType || 'SINGLETON')}
-          className="flex items-center gap-1 px-2.5 sm:px-3 py-1 sm:py-1.5 bg-slate-900/90 hover:bg-slate-800 backdrop-blur border border-purple-500/40 rounded-lg text-purple-300 hover:text-purple-200 text-[11px] sm:text-xs font-bold shadow-lg transition-all"
+          className="px-1.5 py-0.5 bg-slate-900/90 border border-purple-500/40 rounded-md text-purple-300 text-[10px] font-bold shadow-lg transition-all"
         >
-          <span>📖</span> <span className="hidden sm:inline">模式</span>图鉴
+          📖 图鉴
         </button>
       </div>
 
