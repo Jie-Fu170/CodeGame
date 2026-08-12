@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { Cpu, RotateCcw, Star, Link2, Info } from 'lucide-react';
+import { Cpu, RotateCcw, Star, Link2, Info, CheckCircle2, ArrowRight } from 'lucide-react';
+import { useGameStore } from '../../store/useGameStore';
+import { LEVELS } from '../../config/levels';
 
 const INSTRUCTIONS = [
   { id: 'i1', name: 'LOAD R1, [A]', dep: null },
@@ -59,6 +61,7 @@ export default function PipelineFactory() {
   const [order, setOrder] = useState(INIT_ORDER);
   const [selected, setSelected] = useState(null);
   const [message, setMessage] = useState(null);
+  const { setLevel } = useGameStore();
 
   const result = useMemo(() => simulate(order), [order]);
   const seqBaseline = order.length * 3;
@@ -109,6 +112,36 @@ export default function PipelineFactory() {
           {[1, 2, 3].map(s => <Star key={s} size={16} className={s <= stars ? 'text-amber-300 fill-amber-300' : 'text-slate-700'} />)}
         </div>
       </div>
+
+      {stars === 3 && (
+        <div className="my-3 p-3 sm:p-4 rounded-xl bg-gradient-to-r from-emerald-950/90 to-teal-950/90 border-2 border-emerald-500/80 shadow-[0_0_25px_rgba(16,185,129,0.3)] flex flex-col sm:flex-row items-center justify-between gap-3 animate-in fade-in duration-300">
+          <div className="flex items-center gap-3">
+            <div className="p-2 rounded-xl bg-emerald-500/20 border border-emerald-400/30 text-emerald-400 shrink-0">
+              <CheckCircle2 size={24} />
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="font-bold text-emerald-300 text-sm sm:text-base">🎉 考点满分通关！</span>
+                <span className="text-[10px] sm:text-xs px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 font-mono font-bold">3 星 ★★★</span>
+              </div>
+              <p className="text-xs text-slate-300 mt-0.5">
+                已达成理论物理极限最小值（1 个气泡），成功消灭所有可优化的数据冒险！
+              </p>
+            </div>
+          </div>
+          <button
+            onClick={() => {
+              const curIdx = LEVELS.findIndex(l => l.id === 'pipeline-factory-react');
+              if (curIdx >= 0 && curIdx < LEVELS.length - 1) {
+                setLevel(LEVELS[curIdx + 1].id);
+              }
+            }}
+            className="w-full sm:w-auto shrink-0 px-4 py-2 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold rounded-lg text-xs shadow-lg transition-transform hover:scale-105 active:scale-95 flex items-center justify-center gap-1.5"
+          >
+            下一考点 <ArrowRight size={14} />
+          </button>
+        </div>
+      )}
 
       <div className="grid grid-cols-4 gap-2 my-3 pf-mono text-center text-xs">
         <div className="rounded-lg bg-slate-900/70 border border-slate-800 py-2"><div className="text-slate-500">总周期</div><div className="text-base text-slate-100">{result.total}</div></div>
