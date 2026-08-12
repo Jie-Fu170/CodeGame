@@ -62,6 +62,12 @@ const QUIZ = [
 
 const dist = (a, b) => Math.hypot(a.r - b.r, a.c - b.c);
 
+function getPathPos(idx: number) {
+  if (typeof idx !== 'number' || isNaN(idx)) return PATH[0];
+  const safeIdx = Math.max(0, Math.min(Math.floor(idx), PATH.length - 1));
+  return PATH[safeIdx] || PATH[0];
+}
+
 function initState() {
   return {
     towers: [], enemies: [], gold: 200, baseHp: 100, maxBaseHp: 100,
@@ -71,105 +77,115 @@ function initState() {
 }
 
 function tick(prev) {
-  if (prev.status !== 'playing') return prev;
+  if (!prev || prev.status !== 'playing') return prev;
+  try {
+    let baseHp = prev.baseHp;
+    let gold = prev.gold;
+    let enemies = [];
+    (prev.enemies || []).forEach(e => {
+      if (!e) return;
+      const speed = (ENEMIES[e.type] || ENEMIES.nullptr).speed;
+      const idx = e.pathIndex + (e.slowed ? Math.max(0.5, speed / 2) : speed);
+      if (idx >= PATH.length - 1) {
+        baseHp -= (ENEMIES[e.type] || ENEMIES.nullptr).dmg;
+      } else {
+        enemies.push({ ...e, pathIndex: idx, slowed: false });
+      }
+    });
 
-  let baseHp = prev.baseHp;
-  let gold = prev.gold;
-  let enemies = [];
-  prev.enemies.forEach(e => {
-    const idx = e.pathIndex + (e.slowed ? Math.max(0.5, ENEMIES[e.type].speed / 2) : ENEMIES[e.type].speed);
-    if (idx >= PATH.length - 1) baseHp -= ENEMIES[e.type].dmg;
-    else enemies.push({ ...e, pathIndex: idx, slowed: false });
-  });
+    const towers = (prev.towers || []).map(t => ({ ...t }));
+    const attacks = [];
+    towers.forEach(t => {
+      if (!t) return;
+      if (t.cooldown > 0) { t.cooldown = Math.max(0, t.cooldown - 1); return; }
+      const def = TOWERS[t.type] || TOWERS.singleton;
+      const inRange = enemies.filter(e => dist({ r: t.r, c: t.c }, getPathPos(e.pathIndex)) <= def.range);
+      if (inRange.length === 0) return;
+      inRange.sort((a, b) => b.pathIndex - a.pathIndex);
+      const targets = def.multi ? inRange.slice(0, 2) : inRange.slice(0, 1);
+      
+      if (def.slow) {
+         enemies.forEach(e => {
+           if (dist({ r: t.r, c: t.c }, getPathPos(e.pathIndex)) <= def.range) e.slowed = true;
+         });
+      }
 
-  const towers = prev.towers.map(t => ({ ...t }));
-  const attacks = [];
-  towers.forEach(t => {
-    if (t.cooldown > 0) { t.cooldown -= 1; return; }
-    const def = TOWERS[t.type];
-    const inRange = enemies.filter(e => dist({ r: t.r, c: t.c }, PATH[Math.min(Math.floor(e.pathIndex), PATH.length - 1)]) <= def.range);
-    if (inRange.length === 0) return;
-    inRange.sort((a, b) => b.pathIndex - a.pathIndex);
-    const targets = def.multi ? inRange.slice(0, 2) : inRange.slice(0, 1);
-    
-    if (def.slow) {
-       enemies.forEach(e => {
-         if (dist({ r: t.r, c: t.c }, PATH[Math.min(Math.floor(e.pathIndex), PATH.length - 1)]) <= def.range) e.slowed = true;
-       });
+      const decorators = towers.filter(o => o.type === 'decorator' && (Math.abs(o.r - t.r) + Math.abs(o.c - t.c)) === 1);
+      const mult = t.type === 'decorator' ? 1 : (1 + 0.4 * decorators.length);
+      targets.forEach(target => {
+        const pos = getPathPos(target.pathIndex);
+        attacks.push({
+          id: target.id,
+          dmg: Math.round(def.dmg * mult),
+          type: t.type,
+          fromR: t.r,
+          fromC: t.c,
+          toR: pos.r,
+          toC: pos.c
+        });
+      });
+      t.cooldown = def.cd;
+    });
+
+    if (attacks.length > 0) {
+      soundManager.playLaser(attacks[0].type === 'singleton' ? 'heavy' : 'laser');
     }
 
-    const decorators = towers.filter(o => o.type === 'decorator' && (Math.abs(o.r - t.r) + Math.abs(o.c - t.c)) === 1);
-    const mult = t.type === 'decorator' ? 1 : (1 + 0.4 * decorators.length);
-    targets.forEach(target => {
-      const pos = PATH[Math.min(Math.floor(target.pathIndex), PATH.length - 1)];
-      attacks.push({
-        id: target.id,
-        dmg: Math.round(def.dmg * mult),
-        type: t.type,
-        fromR: t.r,
-        fromC: t.c,
-        toR: pos.r,
-        toC: pos.c
+    const observerFired = attacks.some(a => a.type === 'observer');
+    const dmgMap = {};
+    const damagePopups = [];
+    attacks.forEach(a => {
+      const d = Math.round((observerFired && a.type !== 'observer') ? a.dmg * 1.5 : a.dmg);
+      dmgMap[a.id] = (dmgMap[a.id] || 0) + d;
+      damagePopups.push({
+        id: `dmg-${a.id}-${Date.now()}-${Math.random()}`,
+        text: `-${d}`,
+        r: a.toR,
+        c: a.toC,
+        color: TOWERS[a.type]?.stroke || '#facc15'
       });
     });
-    t.cooldown = def.cd;
-  });
 
-  if (attacks.length > 0) {
-    soundManager.playLaser(attacks[0].type === 'singleton' ? 'heavy' : 'laser');
-  }
-
-  const observerFired = attacks.some(a => a.type === 'observer');
-  const dmgMap = {};
-  const damagePopups = [];
-  attacks.forEach(a => {
-    const d = Math.round((observerFired && a.type !== 'observer') ? a.dmg * 1.5 : a.dmg);
-    dmgMap[a.id] = (dmgMap[a.id] || 0) + d;
-    damagePopups.push({
-      id: `dmg-${a.id}-${Date.now()}-${Math.random()}`,
-      text: `-${d}`,
-      r: a.toR,
-      c: a.toC,
-      color: TOWERS[a.type]?.stroke || '#facc15'
+    const survivors = [];
+    enemies.forEach(e => {
+      const hp = e.hp - (dmgMap[e.id] || 0);
+      if (hp <= 0) {
+        gold += (ENEMIES[e.type] || ENEMIES.nullptr).reward;
+        soundManager.playHit();
+      } else {
+        survivors.push({ ...e, hp });
+      }
     });
-  });
+    enemies = survivors;
 
-  const survivors = [];
-  enemies.forEach(e => {
-    const hp = e.hp - (dmgMap[e.id] || 0);
-    if (hp <= 0) {
-      gold += ENEMIES[e.type].reward;
-      soundManager.playHit();
-    } else {
-      survivors.push({ ...e, hp });
+    let spawnQueue = [...(prev.spawnQueue || [])];
+    let spawnTimer = prev.spawnTimer - 1;
+    let nextId = prev.nextId;
+    if (spawnTimer <= 0 && spawnQueue.length > 0) {
+      const type = spawnQueue.shift();
+      enemies = [...enemies, { id: nextId++, type, pathIndex: 0, hp: (ENEMIES[type] || ENEMIES.nullptr).hp }];
+      spawnTimer = 4;
     }
-  });
-  enemies = survivors;
 
-  let spawnQueue = [...prev.spawnQueue];
-  let spawnTimer = prev.spawnTimer - 1;
-  let nextId = prev.nextId;
-  if (spawnTimer <= 0 && spawnQueue.length > 0) {
-    const type = spawnQueue.shift();
-    enemies = [...enemies, { id: nextId++, type, pathIndex: 0, hp: ENEMIES[type].hp }];
-    spawnTimer = 4;
-  }
+    let status = prev.status;
+    if (spawnQueue.length === 0 && enemies.length === 0) {
+      status = 'quiz';
+      soundManager.playWaveSuccess();
+    }
+    if (baseHp <= 0) {
+      baseHp = 0;
+      status = 'lost';
+      soundManager.playGameOver();
+    }
 
-  let status = prev.status;
-  if (spawnQueue.length === 0 && enemies.length === 0) {
-    status = 'quiz';
-    soundManager.playWaveSuccess();
+    return { ...prev, enemies, towers, gold, baseHp, spawnQueue, spawnTimer, nextId, status, attacks, damagePopups };
+  } catch (err) {
+    console.error("DesignPatternTD tick error caught:", err);
+    return prev;
   }
-  if (baseHp <= 0) {
-    baseHp = 0;
-    status = 'lost';
-    soundManager.playGameOver();
-  }
-
-  return { ...prev, enemies, towers, gold, baseHp, spawnQueue, spawnTimer, nextId, status, attacks, damagePopups };
 }
 
-export default function DesignPatternTD() {
+function DesignPatternTD() {
   const [g, setG] = useState(initState);
   const [isCodeDiffOpen, setIsCodeDiffOpen] = useState(false);
   const [showUMLBlueprint, setShowUMLBlueprint] = useState(false);
@@ -456,6 +472,51 @@ export default function DesignPatternTD() {
           <button onClick={reset} className="dpt-focus px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 inline-flex items-center gap-2 transition-colors"><RotateCcw size={15} />重新开始</button>
         </div>
       )}
+      {/* Code Refactoring Comparison Drawer */}
+      <CodeDiffDrawer
+        scenario={currentScenario}
+        isOpen={isCodeDiffOpen}
+        onClose={() => setIsCodeDiffOpen(false)}
+      />
     </div>
+  );
+}
+
+class ErrorBoundary extends React.Component<{ children: React.ReactNode }, { hasError: boolean }> {
+  constructor(props: any) {
+    super(props);
+    this.state = { hasError: false };
+  }
+  static getDerivedStateFromError() {
+    return { hasError: true };
+  }
+  componentDidCatch(error: any, errorInfo: any) {
+    console.error("DesignPatternTD Render Error Caught:", error, errorInfo);
+  }
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div className="w-full max-w-4xl mx-auto rounded-2xl p-6 bg-slate-900 border border-rose-500/50 text-center font-mono my-4">
+          <AlertOctagon size={40} className="mx-auto text-rose-400 mb-2 animate-pulse" />
+          <h2 className="text-lg font-bold text-rose-300 mb-1">系统已从运行异常中自动恢复</h2>
+          <p className="text-xs text-slate-400 mb-4">防守已被安全重置，您可以重新启动关卡。</p>
+          <button
+            onClick={() => this.setState({ hasError: false })}
+            className="px-5 py-2 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-slate-950 font-bold text-xs"
+          >
+            重启防守关卡
+          </button>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
+
+export default function DesignPatternTDWithBoundary() {
+  return (
+    <ErrorBoundary>
+      <DesignPatternTD />
+    </ErrorBoundary>
   );
 }
