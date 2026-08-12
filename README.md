@@ -1,11 +1,13 @@
 # 📘 CodeGame (代码大陆) — 软考中级《软件设计师》交互式备考游戏平台
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Online Demo](https://img.shields.io/badge/Online%20Demo-Cloudflare%20Pages-success?logo=cloudflare)](https://codegame-51x.pages.dev/)
 [![Vite](https://img.shields.io/badge/Vite-5.x-646CFF?logo=vite)](https://vitejs.dev/)
 [![React](https://img.shields.io/badge/React-18.x-61DAFB?logo=react)](https://react.dev/)
 [![Phaser](https://img.shields.io/badge/Phaser-3.70-red?logo=phaser)](https://phaser.io/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.4-38BDF8?logo=tailwindcss)](https://tailwindcss.com/)
 
+> 🌐 **官方在线体验地址**：👉 [https://codegame-51x.pages.dev/](https://codegame-51x.pages.dev/) (免安装，手机/电脑端浏览器即开即玩)  
 > 🎓 **专为全国计算机技术与软件专业技术资格（水平）考试 —— 软考中级《软件设计师》打造！**  
 > 告别死记硬背！将复杂的软考大纲核心考点（如 CPU流水线、PV操作与死锁、DFD数据流图、UML设计模式、数据库范式、McCabe圈复杂度等）转化为 2D 互动解谜游戏，助力高效刷题过考！
 
@@ -75,9 +77,10 @@ npm run dev
 
 ---
 
-## 🌐 在线体验与 Vercel 部署
+## 🌐 在线体验与 部署
 
-支持免费部署在 [Vercel](https://vercel.com/) 上，方便手机与电脑端在线刷关卡备考。
+* **🔗 官方在线体验地址**：👉 [https://codegame-51x.pages.dev/](https://codegame-51x.pages.dev/) (免安装，手机/电脑端即开即玩)
+* **⚡ 部署说明**：基于 Cloudflare Pages 托管，同时支持在 [Vercel](https://vercel.com/) 或 Netlify 上进行一键自动部署。
 
 ---
 
