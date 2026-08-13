@@ -130,6 +130,50 @@
 
 ---
 
+## 🎯 补全关卡 (NEW: 10 大软考高频缺漏考点)
+
+### 19. CRC 循环冗余校验码 (ID: `crc-checksum`)
+- **考点**: 模 2 除法 (XOR 运算)、多项式二进制转换、阶数补 0、CRC 码计算与帧检错。
+- **引擎**: React (`CRCChecksum`)
+
+### 20. RISC vs CISC 架构对决 (ID: `risc-vs-cisc`)
+- **考点**: RISC 与 CISC 架构对比、硬布线 vs 微程序控制器、Load/Store 访存与寄存器数量。
+- **引擎**: React (`RiscVsCisc`)
+
+### 21. 位示图法磁盘空间管理 (ID: `bitmap-disk`)
+- **考点**: 位示图 (Bitmap) 盘块管理、字号 (i) 与位号 (j) 换算公式、容量与空闲块计算。
+- **引擎**: React (`BitmapDisk`)
+
+### 22. MMU 虚拟地址转换塔 (ID: `mmu-translator`)
+- **考点**: 逻辑地址拆分 (页号/页内偏移)、页表映射物理块号与缺页中断 (Page Fault) 诊断。
+- **引擎**: React (`MMUTranslator`)
+
+### 23. 哈夫曼树与前缀编码 (ID: `huffman-coder`)
+- **考点**: 哈夫曼树构造法则、带权路径长度 (WPL) 计算与变长无前缀编码。
+- **引擎**: React (`HuffmanCoder`)
+
+### 24. AOV 网拓扑排序 (ID: `topological-sort`)
+- **考点**: AOV 网节点入度计算、零入度节点出栈、拓扑序列生成与有向回路死锁诊断。
+- **引擎**: React (`TopologicalSort`)
+
+### 25. 数据库事务与并发锁 (ID: `db-concurrency-lock`)
+- **考点**: 事务 ACID 特性、脏读/不可重复读/幻读、S锁/X锁与一/二/三级封锁协议。
+- **引擎**: React (`DBConcurrencyLock`)
+
+### 26. 敏捷 Scrum 看板与 4 种维护 (ID: `agile-scrum-board`)
+- **考点**: Scrum/XP 敏捷开发实践，改正性、适应性、完善性、预防性 4 种软件维护判定。
+- **引擎**: React (`AgileScrumBoard`)
+
+### 27. 防火墙与安全设备防御 (ID: `network-security-wall`)
+- **考点**: 防火墙/IDS/IPS 拓扑部署、DMZ 隔离区与 XSS/CSRF 常见网络攻击防御。
+- **引擎**: React (`NetworkSecurityWall`)
+
+### 28. 标准化与合规裁判所 (ID: `std-compliance-court`)
+- **考点**: 国家强制性标准 (GB) 与推荐性标准 (GB/T)、ISO/IEEE 代号识别与法律效力层级。
+- **引擎**: React (`StdComplianceCourt`)
+
+---
+
 ## 📝 框架双引擎扩展指南
 目前 CodeGame 支持 **Phaser 渲染层** 和 **React 交互层** 两种开发引擎。在添加新游戏时：
 1. 准备好组件：开发你的 Phaser 场景或纯 React 组件（推荐）。

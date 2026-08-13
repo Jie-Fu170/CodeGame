@@ -787,6 +787,154 @@ export const LEVELS: GameLevel[] = [
       '发送方使用【发送方私钥】对 Hash 摘要签名。',
       '接收方使用【发送方公钥】对数字签名验签。'
     ]
+  },
+  // --- 补全 10 大考点关卡 ---
+  {
+    id: 'crc-checksum',
+    title: 'CRC 循环冗余校验码',
+    category: LEVEL_CATEGORIES.COMPUTER_ORG,
+    description: '模 2 除法 (XOR)、多项式二进制转换与余数校验码计算',
+    hudComponent: 'CRCChecksum',
+    themeColor: 'cyan',
+    engine: 'react',
+    isNew: true,
+    instructions: [
+      '根据生成多项式 G(X) 的阶数 r，在数据尾部补 r 个 0。',
+      '计算模 2 不进位除法 (异或 XOR)，得出余数 CRC 校验码。',
+      '在传输中测试接收端余数是否为 0 以检错。'
+    ]
+  },
+  {
+    id: 'risc-vs-cisc',
+    title: 'RISC vs CISC 架构对决',
+    category: LEVEL_CATEGORIES.COMPUTER_ORG,
+    description: '硬布线 vs 微程序控制器、Load/Store 访存与寄存器对比',
+    hudComponent: 'RiscVsCisc',
+    themeColor: 'amber',
+    engine: 'react',
+    isNew: true,
+    instructions: [
+      '判断指令集特性归属 (RISC vs CISC)。',
+      'RISC 采用硬布线控制器、大量寄存器与 Load/Store 访存。',
+      'CISC 采用微程序控制器与变长指令。'
+    ]
+  },
+  {
+    id: 'bitmap-disk',
+    title: '位示图法磁盘空间管理',
+    category: LEVEL_CATEGORIES.OS,
+    description: '位示图 (Bitmap) 盘块管理、字号 (i) 与位号 (j) 换算公式',
+    hudComponent: 'BitmapDisk',
+    themeColor: 'amber',
+    engine: 'react',
+    isNew: true,
+    instructions: [
+      '由磁盘物理块号 N 计算字号 i = ⌊N/32⌋ 与位号 j = N mod 32。',
+      '扫描位示图中的 0/1 状态求已分配与空闲容量。'
+    ]
+  },
+  {
+    id: 'mmu-translator',
+    title: 'MMU 虚拟地址转换塔',
+    category: LEVEL_CATEGORIES.OS,
+    description: '逻辑地址分解 (页号/页内偏移)、页表映射物理块号与缺页中断',
+    hudComponent: 'MMUTranslator',
+    themeColor: 'cyan',
+    engine: 'react',
+    isNew: true,
+    instructions: [
+      '分解十六进制逻辑地址的高位页号与低位页内偏移。',
+      '查页表获取物理块号并拼接物理地址。',
+      '识别 Valid=0 触发的缺页中断 (Page Fault)。'
+    ]
+  },
+  {
+    id: 'huffman-coder',
+    title: '哈夫曼树与前缀编码',
+    category: LEVEL_CATEGORIES.DATA_STRUCTURE,
+    description: '哈夫曼树构造、带权路径长度 (WPL) 计算与变长前缀编码',
+    hudComponent: 'HuffmanCoder',
+    themeColor: 'amber',
+    engine: 'react',
+    isNew: true,
+    instructions: [
+      '每次合并权重最小的两个节点构造最优二叉树。',
+      '计算 WPL = Σ(权重 * 路径长度)。',
+      '分配左 0 右 1 变长无前缀编码。'
+    ]
+  },
+  {
+    id: 'topological-sort',
+    title: 'AOV 网拓扑排序',
+    category: LEVEL_CATEGORIES.DATA_STRUCTURE,
+    description: '顶点入度计算、零入度节点出栈与有向环死锁诊断',
+    hudComponent: 'TopologicalSort',
+    themeColor: 'cyan',
+    engine: 'react',
+    isNew: true,
+    instructions: [
+      '挑选入度为 0 的节点弹出并更新后继节点入度。',
+      '生成完整的拓扑排序序列。',
+      '诊断包含有向回路 (Cycle) 导致排序失败。'
+    ]
+  },
+  {
+    id: 'db-concurrency-lock',
+    title: '数据库事务与并发锁',
+    category: LEVEL_CATEGORIES.DATABASE,
+    description: '事务 ACID、脏读/不可重复读/幻读，S锁/X锁与一/二/三级封锁协议',
+    hudComponent: 'DBConcurrencyLock',
+    themeColor: 'purple',
+    engine: 'react',
+    isNew: true,
+    instructions: [
+      '诊断读未提交引起的脏读 (Dirty Read) 异常。',
+      '部署二级封锁协议 (读加 S 锁用完即释放) 消除脏读。',
+      '掌握三级封锁协议消除不可重复读。'
+    ]
+  },
+  {
+    id: 'agile-scrum-board',
+    title: '敏捷 Scrum 看板与 4 种维护',
+    category: LEVEL_CATEGORIES.SOFTWARE_ENG,
+    description: 'Scrum/XP 敏捷实践，改正性/适应性/完善性/预防性维护判定',
+    hudComponent: 'AgileScrumBoard',
+    themeColor: 'orange',
+    engine: 'react',
+    isNew: true,
+    instructions: [
+      '掌握 Scrum Sprint 与 XP 结对编程/TDD 敏捷实践。',
+      '诊断 6 个工程案例对应的 4 种软件维护类型。'
+    ]
+  },
+  {
+    id: 'network-security-wall',
+    title: '防火墙与安全设备防御',
+    category: LEVEL_CATEGORIES.SECURITY,
+    description: '防火墙/IDS/IPS 拓扑部署、DMZ 隔离区与 XSS/CSRF 防御',
+    hudComponent: 'NetworkSecurityWall',
+    themeColor: 'emerald',
+    engine: 'react',
+    isNew: true,
+    instructions: [
+      '区分 IDS 旁路告警与 IPS 串联阻断部署。',
+      '掌握 DMZ 区域访问隔离规则。',
+      '防御 XSS 跨站脚本与 CSRF 跨站请求伪造。'
+    ]
+  },
+  {
+    id: 'std-compliance-court',
+    title: '标准化与合规裁判所',
+    category: LEVEL_CATEGORIES.SECURITY,
+    description: '国家标准 (GB 强制 / GB/T 推荐)、ISO/IEEE 代号与法律效力',
+    hudComponent: 'StdComplianceCourt',
+    themeColor: 'amber',
+    engine: 'react',
+    isNew: true,
+    instructions: [
+      '区分 GB 强制性标准与 GB/T 推荐性标准。',
+      '裁决国标、行标与企标的效力层级冲突。'
+    ]
   }
 ];
 

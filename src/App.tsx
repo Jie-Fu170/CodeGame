@@ -59,6 +59,16 @@ import HeapSort from './components/react-games/heap-sort'
 import WhiteBoxCoverage from './components/react-games/white-box-coverage'
 import DBNormalForms from './components/react-games/db-normal-forms'
 import DigitalSignature from './components/react-games/digital-signature'
+import CRCChecksum from './components/react-games/crc-checksum'
+import RiscVsCisc from './components/react-games/risc-vs-cisc'
+import BitmapDisk from './components/react-games/bitmap-disk'
+import MMUTranslator from './components/react-games/mmu-translator'
+import HuffmanCoder from './components/react-games/huffman-coder'
+import TopologicalSort from './components/react-games/topological-sort'
+import DBConcurrencyLock from './components/react-games/db-concurrency-lock'
+import AgileScrumBoard from './components/react-games/agile-scrum-board'
+import NetworkSecurityWall from './components/react-games/network-security-wall'
+import StdComplianceCourt from './components/react-games/std-compliance-court'
 
 const HUD_MAP: Record<string, React.FC> = {
   // Phaser HUDs
@@ -115,6 +125,16 @@ const HUD_MAP: Record<string, React.FC> = {
   'WhiteBoxCoverage': WhiteBoxCoverage,
   'DBNormalForms': DBNormalForms,
   'DigitalSignature': DigitalSignature,
+  'CRCChecksum': CRCChecksum,
+  'RiscVsCisc': RiscVsCisc,
+  'BitmapDisk': BitmapDisk,
+  'MMUTranslator': MMUTranslator,
+  'HuffmanCoder': HuffmanCoder,
+  'TopologicalSort': TopologicalSort,
+  'DBConcurrencyLock': DBConcurrencyLock,
+  'AgileScrumBoard': AgileScrumBoard,
+  'NetworkSecurityWall': NetworkSecurityWall,
+  'StdComplianceCourt': StdComplianceCourt,
 }
 
 /** 按声明顺序对关卡做领域分组（保持 LEVELS 的原始顺序） */
@@ -273,8 +293,18 @@ function App() {
       </div>
 
       {/* Active HUD Layer / React Game Layer */}
-      <div className="relative z-10 w-full h-full flex items-center justify-center pointer-events-none overflow-hidden">
-        <div className={`w-full h-full flex items-center justify-center ${isReactLevel ? 'pointer-events-auto' : 'pointer-events-none'}`}>
+      <div
+        className={`relative z-10 w-full h-full ${
+          isReactLevel
+            ? 'overflow-y-auto pointer-events-auto nav-scroll pt-12 sm:pt-16 pb-8 px-2 sm:px-4 flex flex-col items-center justify-start sm:justify-center'
+            : 'overflow-hidden pointer-events-none flex items-center justify-center'
+        }`}
+      >
+        <div
+          className={`w-full max-w-5xl my-auto ${
+            isReactLevel ? 'pointer-events-auto' : 'pointer-events-none h-full flex items-center justify-center'
+          }`}
+        >
           {ActiveHUD && <ActiveHUD />}
         </div>
       </div>
