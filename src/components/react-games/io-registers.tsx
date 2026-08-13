@@ -232,7 +232,7 @@ export default function IORegisters() {
           <Trophy size={48} className="mx-auto text-amber-300 mb-3 animate-bounce" />
           <h2 className="ior-display text-2xl font-bold text-cyan-400 mb-2">🎉 恭喜通关：I/O 与寄存器探秘大师！</h2>
           <p className="text-xs text-slate-300 max-w-md mx-auto mb-4 leading-relaxed">
-            你已经完全掌握了 <span className="text-cyan-300">PC -> MAR -> RAM -> MDR -> IR</span> 取指流程与 <span className="text-indigo-300">DMA 方式</span> 的高效率原理！
+            你已经完全掌握了 <span className="text-cyan-300">PC &rarr; MAR &rarr; RAM &rarr; MDR &rarr; IR</span> 取指流程与 <span className="text-indigo-300">DMA 方式</span> 的高效率原理！
           </p>
 
           <button

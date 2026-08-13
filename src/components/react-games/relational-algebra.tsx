@@ -273,11 +273,7 @@ export default function RelationalAlgebra() {
                     投影后关系表 $\pi$ 预览
                   </span>
                   <span className="ra-mono text-xs text-indigo-300">
-                    投影表达式: $\pi_{\{[
-                      projCols.sno && 'SNO',
-                      projCols.sname && 'SNAME',
-                      projCols.dept && 'DEPT'
-                    ].filter(Boolean).join(', ')\}}(S)$
+                    投影列: {[projCols.sno && 'SNO', projCols.sname && 'SNAME', projCols.dept && 'DEPT'].filter(Boolean).join(', ')}
                   </span>
                 </div>
 

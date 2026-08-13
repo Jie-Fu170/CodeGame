@@ -585,8 +585,8 @@ export default function PVSemaphore() {
 
           <div className="bg-slate-950 p-4 rounded-xl border border-slate-800 max-w-lg mx-auto text-left text-xs text-slate-400 space-y-2 mb-6">
             <div className="font-bold text-slate-200 border-b border-slate-800 pb-1 mb-2">💡 PV 操作口诀与考点速记：</div>
-            <div>• <strong className="text-amber-300">P(S) 操作：</strong> $S = S - 1$，若 $S < 0$ 进程阻塞入队；相当于【申请资源】。</div>
-            <div>• <strong className="text-cyan-300">V(S) 操作：</strong> $S = S + 1$，若 $S \le 0$ 从队列唤醒一个进程；相当于【释放资源】。</div>
+            <div>• <strong className="text-amber-300">P(S) 操作：</strong> S = S - 1，若 S &lt; 0 进程阻塞入队；相当于【申请资源】。</div>
+            <div>• <strong className="text-cyan-300">V(S) 操作：</strong> S = S + 1，若 S &le; 0 从队列唤醒一个进程；相当于【释放资源】。</div>
             <div>• <strong className="text-emerald-300">防死锁公式：</strong> $N$ 个进程各自需要 $M$ 个资源，保证死锁不发生的最小资源数 $R = N \times (M-1) + 1$。</div>
           </div>
 
