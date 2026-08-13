@@ -549,6 +549,244 @@ export const LEVELS: GameLevel[] = [
       '"是一种"用泛化(继承)，接口的落地用实现，箭头形状和虚实线都要区分。',
       '全部 7 条关系判定正确即通关。'
     ]
+  },
+  {
+    id: 'osi-encapsulator',
+    title: 'OSI 七层封装车间',
+    category: LEVEL_CATEGORIES.NETWORK,
+    description: 'TCP/IP 协议栈数据封装、拆包与网络设备解包界限实战',
+    hudComponent: 'OSIEncapsulator',
+    themeColor: 'emerald',
+    engine: 'react',
+    isNew: true,
+    instructions: [
+      '阶段 1: 模拟发送端数据封装，按自顶向下 (Application -> Physical) 顺序添加协议头。',
+      '阶段 2: 模拟接收端数据解包，按自底向上 (Physical -> Application) 顺序剥离校验头部。',
+      '阶段 3: 识别二层交换机 (L2)、三层路由器 (L3) 与应用网关 (L7) 的最高解包处理边界。'
+    ]
+  },
+  {
+    id: 'pv-semaphore',
+    title: 'PV 信号量交通局',
+    category: LEVEL_CATEGORIES.OS,
+    description: '信号量 P/V 操作与进程互斥、同步、死锁避坑实战',
+    hudComponent: 'PVSemaphore',
+    themeColor: 'amber',
+    engine: 'react',
+    isNew: true,
+    instructions: [
+      '阶段 1: 单行桥临界区互斥，体验 P(wait) 与 V(signal) 对信号量 Mutex 数值的改变及阻塞队列管理。',
+      '阶段 2: 生产者-消费者缓冲区同步，掌握 empty, full, mutex 3 个信号量的标准 PV 顺序。',
+      '阶段 3: 诊断死锁产生原因（如带锁阻塞）与最小不发生死锁资源数的计算公式。'
+    ]
+  },
+  {
+    id: 'relational-algebra',
+    title: '关系代数拼图',
+    category: LEVEL_CATEGORIES.DATABASE,
+    description: '选择 σ、投影 π、自然连接 ⋈ 关系运算拼图实战',
+    hudComponent: 'RelationalAlgebra',
+    themeColor: 'purple',
+    engine: 'react',
+    isNew: true,
+    instructions: [
+      '阶段 1: 选择运算 σ (Sigma)，行筛选符合条件元组。',
+      '阶段 2: 投影运算 π (Pi)，列挑选目标属性。',
+      '阶段 3: 自然连接 ⋈ 与笛卡尔积 × 的区别辩析。'
+    ]
+  },
+  {
+    id: 'disk-scheduler',
+    title: '磁盘调度算法磁头车间',
+    category: LEVEL_CATEGORIES.COMPUTER_ORG,
+    description: 'FCFS 先来先服务、SSTF 最短寻道、SCAN 电梯算法磁头寻道',
+    hudComponent: 'DiskScheduler',
+    themeColor: 'amber',
+    engine: 'react',
+    isNew: true,
+    instructions: [
+      '模拟执行 FCFS (先来先服务)、SSTF (最短寻道时间优先) 与 SCAN (电梯扫描算法)。',
+      '观察磁头在 0~199 磁道间的移动轨迹，对比算出的总寻道磁道数。'
+    ]
+  },
+  {
+    id: 'infix-to-postfix',
+    title: '逆波兰式与表达式树工厂',
+    category: LEVEL_CATEGORIES.DATA_STRUCTURE,
+    description: '中缀表达式转后缀表达式 (逆波兰式) 运算符栈压入弹出',
+    hudComponent: 'InfixToPostfix',
+    themeColor: 'cyan',
+    engine: 'react',
+    isNew: true,
+    instructions: [
+      '操作数直接输出到结果序列。',
+      '运算符与括号压入运算符栈，利用优先级与括号匹配控制出栈顺序。'
+    ]
+  },
+  {
+    id: 'hash-table-clash',
+    title: '哈希冲突与散列表收纳',
+    category: LEVEL_CATEGORIES.DATA_STRUCTURE,
+    description: '开放定址线性探测法与拉链法 (Chaining) 解决哈希冲突',
+    hudComponent: 'HashTableClash',
+    themeColor: 'emerald',
+    engine: 'react',
+    isNew: true,
+    instructions: [
+      '计算 H(key) = key % 7 哈希值。',
+      '体验开放定址法 (线性探测 Hi=(H(k)+i)%m) 与拉链法 (Chaining) 挂载链表处理冲突的过程。'
+    ]
+  },
+  {
+    id: 'min-spanning-tree',
+    title: '图论最小生成树工程',
+    category: LEVEL_CATEGORIES.DATA_STRUCTURE,
+    description: 'Prim 算法与 Kruskal 算法生成最小生成树 (MST)',
+    hudComponent: 'MinSpanningTree',
+    themeColor: 'indigo',
+    engine: 'react',
+    isNew: true,
+    instructions: [
+      '体验 Kruskal 算法按权值升序选边且避开回路。',
+      '体验 Prim 算法切面加点挑选最小连接权值。'
+    ]
+  },
+  {
+    id: 'io-registers',
+    title: 'I/O 控制与 CPU 寄存器探秘',
+    category: LEVEL_CATEGORIES.COMPUTER_ORG,
+    description: 'PC/IR/MAR/MDR 取指周期与程序查询、中断驱动、DMA 控制权转移',
+    hudComponent: 'IORegisters',
+    themeColor: 'cyan',
+    engine: 'react',
+    isNew: true,
+    instructions: [
+      '阶段 1: 指令在 PC -> MAR -> RAM -> MDR -> IR 间流动的取指过程。',
+      '阶段 2: 辩析程序查询、中断驱动与 DMA (直接内存存取) 方式的 CPU 开销。'
+    ]
+  },
+  {
+    id: 'cohesion-coupling',
+    title: '模块内聚与耦合裁判所',
+    category: LEVEL_CATEGORIES.SOFTWARE_ENG,
+    description: '数据耦合、控制耦合、公共耦合、内容耦合与功能内聚诊断',
+    hudComponent: 'CohesionCoupling',
+    themeColor: 'purple',
+    engine: 'react',
+    isNew: true,
+    instructions: [
+      '诊断模块交互代码中的耦合类型（数据、控制、公共、内容）。',
+      '体会高内聚低耦合的架构要领。'
+    ]
+  },
+  {
+    id: 'solid-principles',
+    title: 'SOLID 设计原则裁判',
+    category: LEVEL_CATEGORIES.DESIGN_PATTERN,
+    description: 'SRP, OCP, LSP, ISP, DIP 原则诊断与代码重构',
+    hudComponent: 'SolidPrinciples',
+    themeColor: 'emerald',
+    engine: 'react',
+    isNew: true,
+    instructions: [
+      '诊断代码重构案例中违反的 SOLID 面向对象设计原则（如正方形继承长方形违反 LSP）。'
+    ]
+  },
+  {
+    id: 'er-to-relational',
+    title: 'E-R 图转关系表工坊',
+    category: LEVEL_CATEGORIES.DATABASE,
+    description: '1:1、1:n 与 m:n 实体联系转换表结构与外键映射规则',
+    hudComponent: 'ERToRelational',
+    themeColor: 'cyan',
+    engine: 'react',
+    isNew: true,
+    instructions: [
+      '1:n 联系必须将 1 方主键作为外键放入 n 方表中。',
+      'm:n 联系必须建立全新的独立联系表。'
+    ]
+  },
+  {
+    id: 'ip-copyright-court',
+    title: '知识产权大法庭 (逆转裁判版)',
+    category: LEVEL_CATEGORIES.SECURITY,
+    description: '职务作品与委托作品软件著作权与专利权法律归属辩论',
+    hudComponent: 'IPCopyrightCourt',
+    themeColor: 'amber',
+    engine: 'react',
+    isNew: true,
+    instructions: [
+      '委托作品合同未约束著作权的，归受托人 (乙方) 所有。',
+      '主要利用单位物质技术条件的职务作品，著作权归单位所有。'
+    ]
+  },
+  {
+    id: 'page-replacement',
+    title: '页面置换算法缺页实验室',
+    category: LEVEL_CATEGORIES.OS,
+    description: 'FIFO 先进先出、LRU 最近最少使用、OPT 最佳置换与缺页率计算',
+    hudComponent: 'PageReplacement',
+    themeColor: 'cyan',
+    engine: 'react',
+    isNew: true,
+    instructions: [
+      '演练 3 个物理块槽位下的 FIFO, LRU, OPT 页面置换过程。',
+      '观察缺页中断产生与缺页中断率计算。'
+    ]
+  },
+  {
+    id: 'heap-sort',
+    title: '堆排序与大顶堆重构',
+    category: LEVEL_CATEGORIES.DATA_STRUCTURE,
+    description: '大顶堆性质 A[i] >= A[2i+1] 与完全二叉树 Heapify 调整',
+    hudComponent: 'HeapSort',
+    themeColor: 'amber',
+    engine: 'react',
+    isNew: true,
+    instructions: [
+      '点击节点两两交换，将二叉树重构满足大顶堆性质。'
+    ]
+  },
+  {
+    id: 'white-box-coverage',
+    title: '白盒测试逻辑覆盖率',
+    category: LEVEL_CATEGORIES.SOFTWARE_ENG,
+    description: '语句、判定/分支覆盖 (Branch Coverage)、条件覆盖与用例设计',
+    hudComponent: 'WhiteBoxCoverage',
+    themeColor: 'pink',
+    engine: 'react',
+    isNew: true,
+    instructions: [
+      '调整输入参数 A, B, X，触发所有代码分支的真/假路径，达成 100% 判定覆盖。'
+    ]
+  },
+  {
+    id: 'db-normal-forms',
+    title: '数据库 3NF 范式分解工坊',
+    category: LEVEL_CATEGORIES.DATABASE,
+    description: '1NF -> 2NF (消除部分依赖) -> 3NF (消除传递依赖) 规范化拆表',
+    hudComponent: 'DBNormalForms',
+    themeColor: 'blue',
+    engine: 'react',
+    isNew: true,
+    instructions: [
+      '拆分消除部分依赖提升至 2NF。',
+      '拆分消除传递依赖提升至 3NF。'
+    ]
+  },
+  {
+    id: 'digital-signature',
+    title: '数字签名与 PKI 信任链',
+    category: LEVEL_CATEGORIES.SECURITY,
+    description: '公钥/私钥对称与非对称机制、数字签名 (发送方私钥) 与验签 (发送方公钥)',
+    hudComponent: 'DigitalSignature',
+    themeColor: 'indigo',
+    engine: 'react',
+    isNew: true,
+    instructions: [
+      '发送方使用【发送方私钥】对 Hash 摘要签名。',
+      '接收方使用【发送方公钥】对数字签名验签。'
+    ]
   }
 ];
 

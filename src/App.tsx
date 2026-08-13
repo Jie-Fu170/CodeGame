@@ -42,6 +42,23 @@ import McCabeSurveyor from './components/react-games/mccabe-surveyor'
 import IPJudge from './components/react-games/ip-judge'
 import NormalizationVein from './components/react-games/normalization-vein'
 import UmlDesignBench from './components/react-games/uml-design-bench'
+import OSIEncapsulator from './components/react-games/osi-encapsulator'
+import PVSemaphore from './components/react-games/pv-semaphore'
+import RelationalAlgebra from './components/react-games/relational-algebra'
+import DiskScheduler from './components/react-games/disk-scheduler'
+import InfixToPostfix from './components/react-games/infix-to-postfix'
+import HashTableClash from './components/react-games/hash-table-clash'
+import MinSpanningTree from './components/react-games/min-spanning-tree'
+import IORegisters from './components/react-games/io-registers'
+import CohesionCoupling from './components/react-games/cohesion-coupling'
+import SolidPrinciples from './components/react-games/solid-principles'
+import ERToRelational from './components/react-games/er-to-relational'
+import IPCopyrightCourt from './components/react-games/ip-copyright-court'
+import PageReplacement from './components/react-games/page-replacement'
+import HeapSort from './components/react-games/heap-sort'
+import WhiteBoxCoverage from './components/react-games/white-box-coverage'
+import DBNormalForms from './components/react-games/db-normal-forms'
+import DigitalSignature from './components/react-games/digital-signature'
 
 const HUD_MAP: Record<string, React.FC> = {
   // Phaser HUDs
@@ -81,6 +98,23 @@ const HUD_MAP: Record<string, React.FC> = {
   'IPJudge': IPJudge,
   'NormalizationVein': NormalizationVein,
   'UmlDesignBench': UmlDesignBench,
+  'OSIEncapsulator': OSIEncapsulator,
+  'PVSemaphore': PVSemaphore,
+  'RelationalAlgebra': RelationalAlgebra,
+  'DiskScheduler': DiskScheduler,
+  'InfixToPostfix': InfixToPostfix,
+  'HashTableClash': HashTableClash,
+  'MinSpanningTree': MinSpanningTree,
+  'IORegisters': IORegisters,
+  'CohesionCoupling': CohesionCoupling,
+  'SolidPrinciples': SolidPrinciples,
+  'ERToRelational': ERToRelational,
+  'IPCopyrightCourt': IPCopyrightCourt,
+  'PageReplacement': PageReplacement,
+  'HeapSort': HeapSort,
+  'WhiteBoxCoverage': WhiteBoxCoverage,
+  'DBNormalForms': DBNormalForms,
+  'DigitalSignature': DigitalSignature,
 }
 
 /** 按声明顺序对关卡做领域分组（保持 LEVELS 的原始顺序） */
