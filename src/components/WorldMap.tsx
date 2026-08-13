@@ -33,13 +33,13 @@ export function WorldMap() {
   const progressPercent = Math.round((totalCompleted / LEVELS.length) * 100);
 
   return (
-    <div className="w-screen h-screen relative flex flex-col bg-slate-950 overflow-hidden text-slate-200">
+    <div className="fixed inset-0 flex flex-col bg-slate-950 overflow-hidden text-slate-200">
       {/* Background Layer */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-slate-900 via-slate-950 to-black pointer-events-none"></div>
       <div className="absolute inset-0 bg-blueprint-grid opacity-30 pointer-events-none"></div>
       
       {/* Header */}
-      <div className="relative z-20 flex justify-between items-center px-8 py-6 border-b border-slate-800 bg-slate-950/80 backdrop-blur-md shadow-2xl">
+      <div className="relative z-20 flex flex-col sm:flex-row justify-between items-start sm:items-center px-6 py-5 border-b border-slate-800 bg-slate-950/80 backdrop-blur-md shadow-2xl gap-4">
         <div className="flex items-center gap-4">
           <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg shadow-indigo-500/20">
             <Map size={28} className="text-white" />
@@ -70,7 +70,7 @@ export function WorldMap() {
       </div>
 
       {/* Map Canvas */}
-      <div className="relative z-10 flex-1 overflow-auto nav-scroll p-8 md:p-12">
+      <div className="relative z-10 flex-1 overflow-y-auto overscroll-contain touch-pan-y nav-scroll p-4 sm:p-8 md:p-12">
         <div className="max-w-[1400px] mx-auto flex flex-col gap-12 pb-24">
           {groups.map((group, groupIdx) => {
             const groupCompleted = group.levels.filter(l => completedLevels.includes(l.id)).length;
