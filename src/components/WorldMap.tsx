@@ -70,7 +70,7 @@ export function WorldMap() {
       </div>
 
       {/* Map Canvas */}
-      <div className="relative z-10 flex-1 overflow-y-auto overscroll-contain touch-pan-y nav-scroll p-4 sm:p-8 md:p-12">
+      <div className="relative z-10 flex-1 min-h-0 overflow-y-auto overscroll-contain touch-pan-y nav-scroll p-4 sm:p-8 md:p-12" style={{ WebkitOverflowScrolling: 'touch' }}>
         <div className="max-w-[1400px] mx-auto flex flex-col gap-12 pb-24">
           {groups.map((group, groupIdx) => {
             const groupCompleted = group.levels.filter(l => completedLevels.includes(l.id)).length;
