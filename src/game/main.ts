@@ -48,11 +48,26 @@ export const initGame = () => {
 }
 
 export const switchScene = (levelId: string) => {
-  if (!game) return
+  const targetLevel = getLevelById(levelId)
+
+  if (targetLevel?.engine === 'react') {
+    // If target level is a pure React game, stop Phaser scenes
+    if (game && game.scene && game.scene.scenes) {
+      game.scene.scenes.forEach(s => {
+        const key = s.sys.settings.key
+        if (key) game!.scene.stop(key)
+      })
+    }
+    return
+  }
+
+  // Target level requires Phaser engine
+  if (!game) {
+    initGame()
+  }
 
   const executeSwitch = () => {
     if (!game) return
-    const targetLevel = getLevelById(levelId)
 
     // Stop all active/inactive scenes in Phaser except target
     if (game.scene && game.scene.scenes) {
@@ -64,14 +79,14 @@ export const switchScene = (levelId: string) => {
       })
     }
 
-    if (targetLevel && targetLevel.sceneKey && targetLevel.engine !== 'react') {
+    if (targetLevel && targetLevel.sceneKey) {
       game.scene.start(targetLevel.sceneKey)
     }
   }
 
-  if (game.isBooted) {
+  if (game && game.isBooted) {
     executeSwitch()
-  } else {
+  } else if (game) {
     game.events.once(Phaser.Core.Events.READY, executeSwitch)
   }
 }

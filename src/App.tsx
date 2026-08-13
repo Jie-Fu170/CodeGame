@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState, Suspense } from 'react'
 import { HUD } from './components/HUD'
 import { SQLConsole } from './components/SQLConsole'
 import { TowerHUD } from './components/TowerHUD'
@@ -15,62 +15,69 @@ import { getLevelTheme } from './config/theme'
 import { VoiceGuide } from './components/VoiceGuide'
 import { TutorialModal } from './components/TutorialModal'
 
-// Import pure React games
-import AlgorithmDuel from './components/react-games/algorithm-duel'
-import BankersMaze from './components/react-games/bankers-maze'
-import CipherWorkshop from './components/react-games/cipher-workshop'
-import CriticalPathExpedition from './components/react-games/critical-path-expedition'
-import DesignPatternTD from './components/react-games/design-pattern-td'
-import PipelineFactory from './components/react-games/pipeline-factory'
-import PseudocodeForge from './components/react-games/pseudocode-forge'
-import SQLAssemblyBench from './components/react-games/sql-assembly-bench'
-import SubnetTerritory from './components/react-games/subnet-territory'
-import HammingAgent from './components/react-games/hamming-agent'
-import CacheMaster from './components/react-games/cache-master'
-import DFAMaze from './components/react-games/dfa-maze'
-import UnixInode from './components/react-games/unix-inode'
-import PathFinder from './components/react-games/path-finder'
-import WhiteBoxExplorer from './components/react-games/white-box-explorer'
-import DFDInspector from './components/react-games/dfd-inspector'
-import UMLStateMachine from './components/react-games/uml-state-machine'
-import DPKnapsack from './components/react-games/dp-knapsack'
-import DBNormalizer from './components/react-games/db-normalizer'
-import FloatOperator from './components/react-games/float-operator'
-import ReliabilityArchitect from './components/react-games/reliability-architect'
-import MatrixCompressor from './components/react-games/matrix-compressor'
-import McCabeSurveyor from './components/react-games/mccabe-surveyor'
-import IPJudge from './components/react-games/ip-judge'
-import NormalizationVein from './components/react-games/normalization-vein'
-import UmlDesignBench from './components/react-games/uml-design-bench'
-import OSIEncapsulator from './components/react-games/osi-encapsulator'
-import PVSemaphore from './components/react-games/pv-semaphore'
-import RelationalAlgebra from './components/react-games/relational-algebra'
-import DiskScheduler from './components/react-games/disk-scheduler'
-import InfixToPostfix from './components/react-games/infix-to-postfix'
-import HashTableClash from './components/react-games/hash-table-clash'
-import MinSpanningTree from './components/react-games/min-spanning-tree'
-import IORegisters from './components/react-games/io-registers'
-import CohesionCoupling from './components/react-games/cohesion-coupling'
-import SolidPrinciples from './components/react-games/solid-principles'
-import ERToRelational from './components/react-games/er-to-relational'
-import IPCopyrightCourt from './components/react-games/ip-copyright-court'
-import PageReplacement from './components/react-games/page-replacement'
-import HeapSort from './components/react-games/heap-sort'
-import WhiteBoxCoverage from './components/react-games/white-box-coverage'
-import DBNormalForms from './components/react-games/db-normal-forms'
-import DigitalSignature from './components/react-games/digital-signature'
-import CRCChecksum from './components/react-games/crc-checksum'
-import RiscVsCisc from './components/react-games/risc-vs-cisc'
-import BitmapDisk from './components/react-games/bitmap-disk'
-import MMUTranslator from './components/react-games/mmu-translator'
-import HuffmanCoder from './components/react-games/huffman-coder'
-import TopologicalSort from './components/react-games/topological-sort'
-import DBConcurrencyLock from './components/react-games/db-concurrency-lock'
-import AgileScrumBoard from './components/react-games/agile-scrum-board'
-import NetworkSecurityWall from './components/react-games/network-security-wall'
-import StdComplianceCourt from './components/react-games/std-compliance-court'
+// Lazy-loaded pure React games for optimal initial bundle size
+const AlgorithmDuel = React.lazy(() => import('./components/react-games/algorithm-duel'))
+const BankersMaze = React.lazy(() => import('./components/react-games/bankers-maze'))
+const CipherWorkshop = React.lazy(() => import('./components/react-games/cipher-workshop'))
+const CriticalPathExpedition = React.lazy(() => import('./components/react-games/critical-path-expedition'))
+const DesignPatternTD = React.lazy(() => import('./components/react-games/design-pattern-td'))
+const PipelineFactory = React.lazy(() => import('./components/react-games/pipeline-factory'))
+const PseudocodeForge = React.lazy(() => import('./components/react-games/pseudocode-forge'))
+const SQLAssemblyBench = React.lazy(() => import('./components/react-games/sql-assembly-bench'))
+const SubnetTerritory = React.lazy(() => import('./components/react-games/subnet-territory'))
+const HammingAgent = React.lazy(() => import('./components/react-games/hamming-agent'))
+const CacheMaster = React.lazy(() => import('./components/react-games/cache-master'))
+const DFAMaze = React.lazy(() => import('./components/react-games/dfa-maze'))
+const UnixInode = React.lazy(() => import('./components/react-games/unix-inode'))
+const PathFinder = React.lazy(() => import('./components/react-games/path-finder'))
+const WhiteBoxExplorer = React.lazy(() => import('./components/react-games/white-box-explorer'))
+const DFDInspector = React.lazy(() => import('./components/react-games/dfd-inspector'))
+const UMLStateMachine = React.lazy(() => import('./components/react-games/uml-state-machine'))
+const DPKnapsack = React.lazy(() => import('./components/react-games/dp-knapsack'))
+const DBNormalizer = React.lazy(() => import('./components/react-games/db-normalizer'))
+const FloatOperator = React.lazy(() => import('./components/react-games/float-operator'))
+const ReliabilityArchitect = React.lazy(() => import('./components/react-games/reliability-architect'))
+const MatrixCompressor = React.lazy(() => import('./components/react-games/matrix-compressor'))
+const McCabeSurveyor = React.lazy(() => import('./components/react-games/mccabe-surveyor'))
+const IPJudge = React.lazy(() => import('./components/react-games/ip-judge'))
+const NormalizationVein = React.lazy(() => import('./components/react-games/normalization-vein'))
+const UmlDesignBench = React.lazy(() => import('./components/react-games/uml-design-bench'))
+const OSIEncapsulator = React.lazy(() => import('./components/react-games/osi-encapsulator'))
+const PVSemaphore = React.lazy(() => import('./components/react-games/pv-semaphore'))
+const RelationalAlgebra = React.lazy(() => import('./components/react-games/relational-algebra'))
+const DiskScheduler = React.lazy(() => import('./components/react-games/disk-scheduler'))
+const InfixToPostfix = React.lazy(() => import('./components/react-games/infix-to-postfix'))
+const HashTableClash = React.lazy(() => import('./components/react-games/hash-table-clash'))
+const MinSpanningTree = React.lazy(() => import('./components/react-games/min-spanning-tree'))
+const IORegisters = React.lazy(() => import('./components/react-games/io-registers'))
+const CohesionCoupling = React.lazy(() => import('./components/react-games/cohesion-coupling'))
+const SolidPrinciples = React.lazy(() => import('./components/react-games/solid-principles'))
+const ERToRelational = React.lazy(() => import('./components/react-games/er-to-relational'))
+const IPCopyrightCourt = React.lazy(() => import('./components/react-games/ip-copyright-court'))
+const PageReplacement = React.lazy(() => import('./components/react-games/page-replacement'))
+const HeapSort = React.lazy(() => import('./components/react-games/heap-sort'))
+const WhiteBoxCoverage = React.lazy(() => import('./components/react-games/white-box-coverage'))
+const DBNormalForms = React.lazy(() => import('./components/react-games/db-normal-forms'))
+const DigitalSignature = React.lazy(() => import('./components/react-games/digital-signature'))
+const CRCChecksum = React.lazy(() => import('./components/react-games/crc-checksum'))
+const RiscVsCisc = React.lazy(() => import('./components/react-games/risc-vs-cisc'))
+const BitmapDisk = React.lazy(() => import('./components/react-games/bitmap-disk'))
+const MMUTranslator = React.lazy(() => import('./components/react-games/mmu-translator'))
+const HuffmanCoder = React.lazy(() => import('./components/react-games/huffman-coder'))
+const TopologicalSort = React.lazy(() => import('./components/react-games/topological-sort'))
+const DBConcurrencyLock = React.lazy(() => import('./components/react-games/db-concurrency-lock'))
+const AgileScrumBoard = React.lazy(() => import('./components/react-games/agile-scrum-board'))
+const NetworkSecurityWall = React.lazy(() => import('./components/react-games/network-security-wall'))
+const StdComplianceCourt = React.lazy(() => import('./components/react-games/std-compliance-court'))
 
-const HUD_MAP: Record<string, React.FC> = {
+const HUDLoadingFallback = () => (
+  <div className="w-full py-12 flex flex-col items-center justify-center gap-3 text-cyan-400 font-mono">
+    <div className="w-8 h-8 border-2 border-cyan-500/30 border-t-cyan-400 rounded-full animate-spin"></div>
+    <div className="text-xs tracking-widest uppercase animate-pulse">关卡资源加载中...</div>
+  </div>
+)
+
+const HUD_MAP: Record<string, React.ComponentType<any>> = {
   // Phaser HUDs
   'HUD': HUD,
   'SQLConsole': SQLConsole,
@@ -154,19 +161,22 @@ function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
   useEffect(() => {
-    if (gameRef.current) {
-      initGame()
+    const currentLvl = LEVELS.find(l => l.id === currentLevelId)
+    if (currentLvl?.engine === 'phaser') {
+      if (gameRef.current) {
+        initGame()
+        switchScene(currentLevelId)
+      }
+    } else {
       switchScene(currentLevelId)
     }
+  }, [currentLevelId])
+
+  useEffect(() => {
     return () => {
       destroyGame()
     }
   }, [])
-
-  // Switch scene when level changes
-  useEffect(() => {
-    switchScene(currentLevelId)
-  }, [currentLevelId])
 
   // 导航面板打开时支持 Esc 关闭
   useEffect(() => {
@@ -305,7 +315,9 @@ function App() {
             isReactLevel ? 'pointer-events-auto' : 'pointer-events-none h-full flex items-center justify-center'
           }`}
         >
-          {ActiveHUD && <ActiveHUD />}
+          <Suspense fallback={<HUDLoadingFallback />}>
+            {ActiveHUD && <ActiveHUD />}
+          </Suspense>
         </div>
       </div>
 
