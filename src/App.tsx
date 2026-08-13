@@ -14,6 +14,7 @@ import { LEVELS, GameLevel } from './config/levels'
 import { getLevelTheme } from './config/theme'
 import { VoiceGuide } from './components/VoiceGuide'
 import { TutorialModal } from './components/TutorialModal'
+import { WorldMap } from './components/WorldMap'
 
 // Lazy-loaded pure React games for optimal initial bundle size
 const AlgorithmDuel = React.lazy(() => import('./components/react-games/algorithm-duel'))
@@ -69,6 +70,16 @@ const DBConcurrencyLock = React.lazy(() => import('./components/react-games/db-c
 const AgileScrumBoard = React.lazy(() => import('./components/react-games/agile-scrum-board'))
 const NetworkSecurityWall = React.lazy(() => import('./components/react-games/network-security-wall'))
 const StdComplianceCourt = React.lazy(() => import('./components/react-games/std-compliance-court'))
+const MemoryAddressing = React.lazy(() => import('./components/react-games/memory-addressing'))
+const PrecedencePV = React.lazy(() => import('./components/react-games/precedence-pv'))
+const DijkstraShortestPath = React.lazy(() => import('./components/react-games/dijkstra-shortest-path'))
+const BlackboxTesting = React.lazy(() => import('./components/react-games/blackbox-testing'))
+const SoftwareLifecycleCMMI = React.lazy(() => import('./components/react-games/software-lifecycle-cmmi'))
+const DesignPatternCode = React.lazy(() => import('./components/react-games/design-pattern-code'))
+const NetProtocolPorts = React.lazy(() => import('./components/react-games/net-protocol-ports'))
+const QueryOptimizationTree = React.lazy(() => import('./components/react-games/query-optimization-tree'))
+const DigitalEnvelope = React.lazy(() => import('./components/react-games/digital-envelope'))
+const ArchStyleATAM = React.lazy(() => import('./components/react-games/arch-style-atam'))
 
 const HUDLoadingFallback = () => (
   <div className="w-full py-12 flex flex-col items-center justify-center gap-3 text-cyan-400 font-mono">
@@ -142,6 +153,16 @@ const HUD_MAP: Record<string, React.ComponentType<any>> = {
   'AgileScrumBoard': AgileScrumBoard,
   'NetworkSecurityWall': NetworkSecurityWall,
   'StdComplianceCourt': StdComplianceCourt,
+  'MemoryAddressing': MemoryAddressing,
+  'PrecedencePV': PrecedencePV,
+  'DijkstraShortestPath': DijkstraShortestPath,
+  'BlackboxTesting': BlackboxTesting,
+  'SoftwareLifecycleCMMI': SoftwareLifecycleCMMI,
+  'DesignPatternCode': DesignPatternCode,
+  'NetProtocolPorts': NetProtocolPorts,
+  'QueryOptimizationTree': QueryOptimizationTree,
+  'DigitalEnvelope': DigitalEnvelope,
+  'ArchStyleATAM': ArchStyleATAM,
 }
 
 /** 按声明顺序对关卡做领域分组（保持 LEVELS 的原始顺序） */
@@ -157,10 +178,10 @@ const CATEGORY_GROUPS: Array<{ category: string; levels: GameLevel[] }> = (() =>
 
 function App() {
   const gameRef = useRef<HTMLDivElement>(null)
-  const { currentLevelId, setLevel } = useGameStore()
-  const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const { currentLevelId, setLevel, returnToMap } = useGameStore()
 
   useEffect(() => {
+    if (!currentLevelId) return
     const currentLvl = LEVELS.find(l => l.id === currentLevelId)
     if (currentLvl?.engine === 'phaser') {
       if (gameRef.current) {
@@ -178,15 +199,9 @@ function App() {
     }
   }, [])
 
-  // 导航面板打开时支持 Esc 关闭
-  useEffect(() => {
-    if (!isMenuOpen) return
-    const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setIsMenuOpen(false)
-    }
-    window.addEventListener('keydown', onKeyDown)
-    return () => window.removeEventListener('keydown', onKeyDown)
-  }, [isMenuOpen])
+  if (!currentLevelId) {
+    return <WorldMap />
+  }
 
   const currentLevel = LEVELS.find(l => l.id === currentLevelId)
   const theme = getLevelTheme(currentLevel?.themeColor)
@@ -231,75 +246,15 @@ function App() {
         </div>
       )}
 
-      {/* 考点导航（右上角） */}
+      {/* 返回地图（右上角） */}
       <div className="absolute top-2 sm:top-3 right-2 sm:right-4 z-40">
         <button
-          onClick={() => setIsMenuOpen(!isMenuOpen)}
-          aria-expanded={isMenuOpen}
-          className="px-2.5 sm:px-4 py-1.5 sm:py-2 bg-slate-900/80 backdrop-blur text-slate-300 hover:text-white rounded-lg border border-slate-700 hover:border-slate-500 shadow-lg flex items-center gap-1.5 sm:gap-2.5 transition-colors font-mono text-xs sm:text-sm"
+          onClick={returnToMap}
+          className="px-3 sm:px-4 py-1.5 sm:py-2 bg-slate-900/80 backdrop-blur text-slate-300 hover:text-white rounded-lg border border-slate-700 hover:border-slate-500 shadow-lg flex items-center gap-1.5 sm:gap-2 transition-colors font-mono text-xs sm:text-sm group"
         >
-          <span className={`h-2 w-2 rounded-full ${theme.dot}`}></span>
-          <span className="font-bold text-xs sm:text-sm">考点导航</span>
-          <span className="text-[10px] sm:text-[11px] text-slate-500">{LEVELS.length}</span>
-          <span className="text-[10px] sm:text-xs text-slate-500">{isMenuOpen ? '▲' : '▼'}</span>
+          <span className="group-hover:-translate-x-1 transition-transform">🗺️</span>
+          <span className="font-bold">返回地图</span>
         </button>
-
-        {isMenuOpen && (
-          <>
-            {/* 点击空白处关闭 */}
-            <div className="fixed inset-0 z-40" onClick={() => setIsMenuOpen(false)}></div>
-
-            <div className="panel-in absolute right-0 top-full z-50 mt-2 w-[440px] max-w-[92vw] max-h-[72vh] overflow-y-auto nav-scroll bg-slate-900/95 backdrop-blur border border-slate-700 rounded-xl shadow-2xl p-3">
-              <div className="flex items-center justify-between px-2 pb-2 border-b border-slate-800">
-                <span className="text-sm font-bold text-slate-200">选择要挑战的考点</span>
-                <span className="font-mono text-[11px] text-slate-500">
-                  {LEVELS.length} 个考点 · {CATEGORY_GROUPS.length} 大领域
-                </span>
-              </div>
-
-              {/* 当前关卡说明 */}
-              <div className="mx-1 mt-2 mb-1 rounded-lg border border-slate-800 bg-slate-950/50 p-2.5">
-                <div className={`text-xs font-bold mb-0.5 ${theme.text}`}>当前 · {currentLevel?.title}</div>
-                <p className="text-[11px] leading-relaxed text-slate-500">{currentLevel?.description}</p>
-              </div>
-
-              {CATEGORY_GROUPS.map(group => (
-                <div key={group.category} className="mb-3 last:mb-0">
-                  <div className="flex items-center gap-2 px-2 pt-2 pb-1.5">
-                    <span className="text-[11px] text-slate-500 font-bold uppercase tracking-widest">{group.category}</span>
-                    <span className="h-px flex-1 bg-slate-800"></span>
-                    <span className="font-mono text-[10px] text-slate-600">{group.levels.length}</span>
-                  </div>
-                  <div className="flex flex-wrap gap-1.5 px-1">
-                    {group.levels.map((level: GameLevel) => {
-                      const t = getLevelTheme(level.themeColor)
-                      const isActive = currentLevelId === level.id
-                      return (
-                        <button
-                          key={level.id}
-                          onClick={() => {
-                            setLevel(level.id)
-                            setIsMenuOpen(false)
-                          }}
-                          title={level.description}
-                          className={`px-2.5 py-1.5 rounded-md font-bold text-xs transition-colors border flex items-center gap-1.5 ${
-                            isActive
-                              ? `${t.bgSolid} text-white ${t.border} shadow-lg`
-                              : 'bg-slate-800/60 text-slate-400 border-slate-700/80 hover:border-slate-500 hover:text-slate-100'
-                          }`}
-                        >
-                          <span className={`h-1.5 w-1.5 rounded-full shrink-0 ${isActive ? 'bg-white/80' : t.dot}`}></span>
-                          {level.title}
-                          {level.isNew && <span className="text-[9px] text-yellow-400 font-mono">NEW</span>}
-                        </button>
-                      )
-                    })}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </>
-        )}
       </div>
 
       {/* Active HUD Layer / React Game Layer */}

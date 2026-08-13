@@ -935,6 +935,215 @@ export const LEVELS: GameLevel[] = [
       '区分 GB 强制性标准与 GB/T 推荐性标准。',
       '裁决国标、行标与企标的效力层级冲突。'
     ]
+  },
+  {
+    id: 'memory-addressing',
+    title: '内存编址与芯片扩展',
+    category: LEVEL_CATEGORIES.COMPUTER_ORG,
+    description: '十六进制地址空间计算、按字节/按字编址与 RAM 芯片扩展片数求解',
+    hudComponent: 'MemoryAddressing',
+    themeColor: 'cyan',
+    engine: 'react',
+    isNew: true,
+    instructions: [
+      '根据起始地址 80000H 与 BFFFFH 计算存储容量。',
+      '掌握按字节编址与按字编址下寻址单元数换算。',
+      '计算扩充 256KB 内存所需的 RAM 芯片数量。'
+    ]
+  },
+  {
+    id: 'precedence-pv',
+    title: '进程前趋图与 PV 信号量',
+    category: LEVEL_CATEGORIES.OS,
+    description: 'DAG 前趋图转化为 P(Si) 与 V(Sj) 信号量代码段逻辑填空',
+    hudComponent: 'PrecedencePV',
+    themeColor: 'cyan',
+    engine: 'react',
+    isNew: true,
+    instructions: [
+      '前趋节点执行结束放置 V(S) 信号量通知后继。',
+      '后继节点执行开始放置 P(S) 信号量等待前趋。'
+    ]
+  },
+  {
+    id: 'dijkstra-shortest-path',
+    title: 'Dijkstra 最短路径算法',
+    category: LEVEL_CATEGORIES.DATA_STRUCTURE,
+    description: '单源加权图贪心松弛过程与 dist[] 数组动态更新',
+    hudComponent: 'DijkstraShortestPath',
+    themeColor: 'cyan',
+    engine: 'react',
+    isNew: true,
+    instructions: [
+      '每次选择未访问集合中 dist 最小的节点。',
+      '对相邻节点实施松弛操作 dist[v] = min(dist[v], dist[u] + w)。'
+    ]
+  },
+  {
+    id: 'blackbox-testing',
+    title: '黑盒测试与边界值分析 (BVA)',
+    category: LEVEL_CATEGORIES.SOFTWARE_ENG,
+    description: '等价类划分与 [min-1, min, min+1, max-1, max, max+1] 边界用例设计',
+    hudComponent: 'BlackboxTesting',
+    themeColor: 'pink',
+    engine: 'react',
+    isNew: true,
+    instructions: [
+      '挑选最严谨无冗余的边界值测试用例。',
+      '覆盖区间边界极值与无效输入。'
+    ]
+  },
+  {
+    id: 'software-lifecycle-cmmi',
+    title: '软件过程模型与 CMMI 阶梯',
+    category: LEVEL_CATEGORIES.SOFTWARE_ENG,
+    description: '瀑布/螺旋(风险)/V模型(测试)与 CMMI 1-5 级成熟度塔匹配',
+    hudComponent: 'SoftwareLifecycleCMMI',
+    themeColor: 'orange',
+    engine: 'react',
+    isNew: true,
+    instructions: [
+      '匹配瀑布、螺旋、V模型与喷泉模型的核心适用场景。',
+      '将特征描述填入 CMMI 1 至 5 级成熟度阶梯。'
+    ]
+  },
+  {
+    id: 'design-pattern-code',
+    title: '软考下午试题六：设计模式代码填空',
+    category: LEVEL_CATEGORIES.DESIGN_PATTERN,
+    description: '软考下午 15 分试题六：Observer 观察者模式 Java/C++ 代码填空',
+    hudComponent: 'DesignPatternCode',
+    themeColor: 'purple',
+    engine: 'react',
+    isNew: true,
+    instructions: [
+      '填补观察者接口、主题基类与 attach()/notifyAllObservers() 代码。'
+    ]
+  },
+  {
+    id: 'net-protocol-ports',
+    title: '网络协议与默认端口巡警',
+    category: LEVEL_CATEGORIES.NETWORK,
+    description: 'HTTP(80)/HTTPS(443)/FTP(21)/DNS(53)/DHCP(67)/SNMP(161) 端口与 TCP/UDP 识别',
+    hudComponent: 'NetProtocolPorts',
+    themeColor: 'emerald',
+    engine: 'react',
+    isNew: true,
+    instructions: [
+      '为常用应用层协议配置标准默认端口号。',
+      '区分该协议基于 TCP 还是 UDP 传输层协议。'
+    ]
+  },
+  {
+    id: 'query-optimization-tree',
+    title: 'SQL 查询树与关系代数等价优化',
+    category: LEVEL_CATEGORIES.DATABASE,
+    description: '关系代数查询树选择 σ 下推与投影 π 下推减少中间笛卡尔积',
+    hudComponent: 'QueryOptimizationTree',
+    themeColor: 'cyan',
+    engine: 'react',
+    isNew: true,
+    instructions: [
+      '下推选择 σ 与投影 π 节点至叶子节点。',
+      '避免大型笛卡尔积中间结果生成。'
+    ]
+  },
+  {
+    id: 'digital-envelope',
+    title: '数字信封与密码算法树',
+    category: LEVEL_CATEGORIES.SECURITY,
+    description: '对称密钥 K 加密明文 + 接收方公钥 PB 封装信封的混合加密机制',
+    hudComponent: 'DigitalEnvelope',
+    themeColor: 'indigo',
+    engine: 'react',
+    isNew: true,
+    instructions: [
+      '用对称密钥 K 加密明文文件。',
+      '用接收方 Bob 的公钥 PB 加密 K 形成数字信封。'
+    ]
+  },
+  {
+    id: 'arch-style-atam',
+    title: '软件架构风格与 ATAM 评估',
+    category: LEVEL_CATEGORIES.ARCHITECTURE,
+    description: 'ATAM / SAAM 评估方法敏感点、权衡点、风险点与非风险点诊断',
+    hudComponent: 'ArchStyleATAM',
+    themeColor: 'amber',
+    engine: 'react',
+    isNew: true,
+    instructions: [
+      '诊断场景属于敏感点、权衡点 (折衷点) 还是风险点。'
+    ]
+  },
+  {
+    id: 'syntax-tree-builder',
+    title: '语法树构建与文法推导',
+    category: LEVEL_CATEGORIES.SOFTWARE_ENG,
+    description: '上下文无关文法 (CFG) 的最左与最右推导',
+    hudComponent: 'SyntaxTreeBuilder',
+    themeColor: 'blue',
+    engine: 'react',
+    isNew: true,
+    instructions: [
+      '根据给定的文法规则，选择正确的推导步骤。',
+      '确保生成目标字符串。'
+    ]
+  },
+  {
+    id: 'data-representation',
+    title: '底层数据表示 (原反补移)',
+    category: LEVEL_CATEGORIES.COMPUTER_ORG,
+    description: '原码、反码、补码、移码的转换与计算',
+    hudComponent: 'DataRepresentation',
+    themeColor: 'teal',
+    engine: 'react',
+    isNew: true,
+    instructions: [
+      '填入给定十进制数的 8 位二进制编码。',
+      '掌握反码、补码和移码的生成规则。'
+    ]
+  },
+  {
+    id: 'multimedia-calculator',
+    title: '多媒体容量计算',
+    category: LEVEL_CATEGORIES.COMPUTER_ORG,
+    description: '图像、音频未压缩存储容量计算',
+    hudComponent: 'MultimediaCalculator',
+    themeColor: 'fuchsia',
+    engine: 'react',
+    isNew: true,
+    instructions: [
+      '选择正确的计算公式，注意单位转换。',
+      '计算出文件的大小 (MB)。'
+    ]
+  },
+  {
+    id: 'oop-polymorphism',
+    title: '面向对象多态与绑定',
+    category: LEVEL_CATEGORIES.DESIGN_PATTERN,
+    description: '动态绑定 vs 静态绑定，重载 vs 重写',
+    hudComponent: 'OOPPolymorphism',
+    themeColor: 'orange',
+    engine: 'react',
+    isNew: true,
+    instructions: [
+      '阅读代码，判断输出结果。',
+      '区分编译期绑定与运行期绑定。'
+    ]
+  },
+  {
+    id: 'avl-tree-rotation',
+    title: 'AVL 树平衡旋转',
+    category: LEVEL_CATEGORIES.DATA_STRUCTURE,
+    description: 'LL、RR、LR、RL 四大旋转失衡修复',
+    hudComponent: 'AVLTreeRotation',
+    themeColor: 'lime',
+    engine: 'react',
+    isNew: true,
+    instructions: [
+      '找出插入节点后第一个失去平衡的节点。',
+      '选择合适的单旋或双旋操作来修复。'
+    ]
   }
 ];
 

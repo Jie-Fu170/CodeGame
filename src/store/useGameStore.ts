@@ -80,7 +80,10 @@ interface GameState {
   showKnowledgeCard: TowerType | null
 
   // SQL Combat State (8)
-  currentLevelId: string
+  // Global Map State
+  currentLevelId: string | null
+  completedLevels: string[]
+
   sqlQuestions: any[]
   currentQuestionIndex: number
   bossHp: number
@@ -93,6 +96,8 @@ interface GameState {
   
   // Actions
   setLevel: (levelId: string) => void
+  returnToMap: () => void
+  completeLevel: (id: string) => void
   setAlgorithm: (alg: SchedulingAlgorithm) => void
   takeDamage: (amount: number) => void
   addScore: (points: number) => void
@@ -280,8 +285,17 @@ export const useGameStore = create<GameState>((set) => ({
   quizCorrect: null,
   showKnowledgeCard: null,
   
+  // Global Map defaults
+  currentLevelId: null, // Default to map
+  completedLevels: (() => {
+    try {
+      return JSON.parse(localStorage.getItem('code-game-progress') || '[]')
+    } catch {
+      return []
+    }
+  })(),
+
   // SQL Combat defaults
-  currentLevelId: 'cpu-scheduling', // Default level
   sqlQuestions: initialSqlQuestions,
   currentQuestionIndex: 0,
   bossHp: 300,
@@ -314,6 +328,17 @@ export const useGameStore = create<GameState>((set) => ({
     showQuiz: false,
     quizCorrect: null,
     showKnowledgeCard: null
+  }),
+
+  returnToMap: () => set({ currentLevelId: null }),
+
+  completeLevel: (id: string) => set((state) => {
+    if (!state.completedLevels.includes(id)) {
+      const newCompleted = [...state.completedLevels, id];
+      localStorage.setItem('code-game-progress', JSON.stringify(newCompleted));
+      return { completedLevels: newCompleted };
+    }
+    return {};
   }),
 
   setAlgorithm: (alg) => set({ algorithm: alg }),
