@@ -33,7 +33,7 @@ export function WorldMap() {
   const progressPercent = Math.round((totalCompleted / LEVELS.length) * 100);
 
   return (
-    <div className="w-full h-full relative flex flex-col bg-slate-950 overflow-hidden text-slate-200">
+    <div className="w-screen h-screen relative flex flex-col bg-slate-950 overflow-hidden text-slate-200">
       {/* Background Layer */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-slate-900 via-slate-950 to-black pointer-events-none"></div>
       <div className="absolute inset-0 bg-blueprint-grid opacity-30 pointer-events-none"></div>
