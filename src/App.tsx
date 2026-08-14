@@ -265,7 +265,7 @@ function App() {
       <div
         className={`relative z-10 w-full h-full ${
           isReactLevel
-            ? 'overflow-y-auto pointer-events-auto nav-scroll pt-12 sm:pt-16 pb-8 px-2 sm:px-4 flex flex-col items-center justify-start sm:justify-center'
+            ? 'game-skin overflow-y-auto pointer-events-auto nav-scroll pt-12 sm:pt-16 pb-8 px-2 sm:px-4 flex flex-col items-center justify-start sm:justify-center'
             : 'overflow-hidden pointer-events-none flex items-center justify-center'
         }`}
       >

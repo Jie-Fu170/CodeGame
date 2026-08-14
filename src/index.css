@@ -207,6 +207,76 @@
   --t-b1: #d97706; --t-b2: #dc2626; --t-b3: #4f46e5;
 }
 
+/* ==================================================================
+   关卡游戏面板 · 浅色皮肤色调适配（.game-skin 作用域）
+   策略：深色调和不翻色 —— 只把游戏组件内嵌的 slate 深色坡道
+   （bg-slate-950/900/800/700 + border-slate-* + hover:bg-slate-*）
+   重涂为当前皮肤的深色坡道（--g-*）。text-white 与彩色按钮不动，
+   避免浅底白字失明。aurora（深色皮肤）无需覆盖，保持原版 slate。
+   选择器故意不带 @layer，保证盖过 Tailwind 工具类。
+   ================================================================== */
+
+/* 各浅色皮肤的深色坡道 */
+:root {
+  --g-950: #0f1830; --g-900: #17213f; --g-800: #20305a; --g-700: #33416c;
+}
+:root[data-theme='peach'] {
+  --g-950: #2a1123; --g-900: #3a1830; --g-800: #4d2342; --g-700: #643658;
+}
+:root[data-theme='neon'] {
+  --g-950: #160b33; --g-900: #1f1247; --g-800: #2c1c63; --g-700: #3f2887;
+}
+:root[data-theme='wall-1'] {
+  --g-950: #0e1b2e; --g-900: #15253e; --g-800: #1e3153; --g-700: #2f4470;
+}
+:root[data-theme='wall-2'] {
+  --g-950: #24101f; --g-900: #30152a; --g-800: #411e39; --g-700: #582b4e;
+}
+:root[data-theme='wall-3'] {
+  --g-950: #241708; --g-900: #30200c; --g-800: #3f2b12; --g-700: #573d1e;
+}
+
+/* 面板底色族 */
+:root:not([data-theme='aurora']) .game-skin :is(
+  .bg-slate-950, .bg-slate-950\/90, .bg-slate-950\/80, .bg-slate-950\/70,
+  .bg-slate-950\/60, .bg-slate-950\/50, .bg-slate-950\/40, .bg-slate-950\/30
+) { background-color: var(--g-950); }
+
+:root:not([data-theme='aurora']) .game-skin :is(
+  .bg-slate-900, .bg-slate-900\/90, .bg-slate-900\/80, .bg-slate-900\/70,
+  .bg-slate-900\/60, .bg-slate-900\/50, .bg-slate-900\/40, .bg-slate-900\/30,
+  .bg-slate-900\/25, .bg-slate-900\/20
+) { background-color: var(--g-900); }
+
+:root:not([data-theme='aurora']) .game-skin :is(
+  .bg-slate-800, .bg-slate-800\/90, .bg-slate-800\/80, .bg-slate-800\/70,
+  .bg-slate-800\/60, .bg-slate-800\/50, .bg-slate-800\/40, .bg-slate-800\/30,
+  .bg-slate-800\/25, .bg-slate-800\/20
+) { background-color: var(--g-800); }
+
+:root:not([data-theme='aurora']) .game-skin :is(
+  .bg-slate-700, .bg-slate-700\/80, .bg-slate-700\/70, .bg-slate-700\/60,
+  .bg-slate-700\/50, .bg-slate-700\/40, .bg-slate-700\/30, .bg-slate-600
+) { background-color: var(--g-700); }
+
+/* hover 底色族 */
+:root:not([data-theme='aurora']) .game-skin :is(
+  .hover\:bg-slate-900:hover, .hover\:bg-slate-900\/80:hover
+) { background-color: var(--g-900); }
+:root:not([data-theme='aurora']) .game-skin :is(
+  .hover\:bg-slate-800:hover, .hover\:bg-slate-800\/80:hover
+) { background-color: var(--g-800); }
+:root:not([data-theme='aurora']) .game-skin :is(
+  .hover\:bg-slate-700:hover, .hover\:bg-slate-700\/80:hover, .hover\:bg-slate-600:hover
+) { background-color: var(--g-700); }
+
+/* 描边族 */
+:root:not([data-theme='aurora']) .game-skin :is(
+  .border-slate-800, .border-slate-800\/50, .border-slate-700,
+  .border-slate-700\/50, .border-slate-700\/60, .border-slate-600,
+  .border-slate-600\/50, .border-slate-600\/40, .border-slate-500\/50
+) { border-color: var(--g-700); }
+
 @layer base {
   body {
     background-color: var(--t-bg-0);
