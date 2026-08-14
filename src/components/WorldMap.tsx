@@ -81,16 +81,24 @@ function useElementWidth() {
   return { ref, width };
 }
 
-/** 壁纸槽探测：/skins/N.{jpg,jpeg,png,webp,svg} 按顺序找第一个能加载的 */
+/** 壁纸槽探测：按设备区分候选顺序。
+ *  手机/窄屏：N-m.{jpg,...}（竖构图优先）→ N.{...}
+ *  桌面宽屏：N.{...} → N-m.{...}（没放横图就退竖图） */
 function useWallpaperUrls() {
   const [urls, setUrls] = useState<Record<string, string>>({});
   useEffect(() => {
     let cancelled = false;
+    const preferMobile = window.matchMedia('(max-width: 640px)').matches;
     SKINS.forEach(skin => {
       if (!skin.wallpaperSlot) return;
+      const slot = skin.wallpaperSlot;
+      const candidates = WALL_EXTS.flatMap(ext => {
+        const mobile = `/skins/${slot}-m.${ext}`;
+        const base = `/skins/${slot}.${ext}`;
+        return preferMobile ? [mobile, base] : [base, mobile];
+      });
       (async () => {
-        for (const ext of WALL_EXTS) {
-          const url = `/skins/${skin.wallpaperSlot}.${ext}`;
+        for (const url of candidates) {
           const ok = await new Promise<boolean>(resolve => {
             const img = new Image();
             img.onload = () => resolve(true);
@@ -180,10 +188,10 @@ export function WorldMap() {
 
   return (
     <div className="fixed inset-0 flex flex-col t-page overflow-hidden">
-      {/* 风景层：皮肤背景图组；壁纸皮肤有图时用图片覆盖 */}
+      {/* 风景层：皮肤背景图组；壁纸皮肤有图时用图片覆盖（定位偏上 1/3，竖构图人像壁纸能保住面部） */}
       <div
         className="absolute inset-0 t-scenery pointer-events-none"
-        style={activeWallpaper ? { backgroundImage: `url(${activeWallpaper})` } : undefined}
+        style={activeWallpaper ? { backgroundImage: `url(${activeWallpaper})`, backgroundPosition: 'center 32%' } : undefined}
       ></div>
       {activeWallpaper && <div className="absolute inset-0 t-wall-overlay pointer-events-none"></div>}
       <div className="absolute inset-0 bg-blueprint-grid opacity-40 pointer-events-none"></div>
@@ -233,7 +241,7 @@ export function WorldMap() {
             {skinMenuOpen && (
               <>
                 <div className="fixed inset-0 z-40" onClick={() => setSkinMenuOpen(false)}></div>
-                <div className="panel-in absolute right-0 top-full mt-2 z-50 w-56 t-panel border rounded-xl shadow-xl p-1.5 backdrop-blur-xl">
+                <div className="panel-in absolute left-0 right-auto sm:left-auto sm:right-0 top-full mt-2 z-50 w-56 t-panel border rounded-xl shadow-xl p-1.5 backdrop-blur-xl">
                   {SKINS.map(s => (
                     <button
                       type="button"
@@ -366,16 +374,41 @@ export function WorldMap() {
                     const theme = getLevelTheme(level.themeColor);
                     const pos = positions[idx];
                     const hex = accHex(theme);
+                    // hover 卡片横向避让：靠链条左边缘右对齐、右边缘左对齐，其余居中
+                    const tipPos = pos.x < 160 ? 'left-0' : pos.x > zoneWidth - 160 ? 'right-0' : 'left-1/2 -translate-x-1/2';
 
                     return (
                       <button
                         type="button"
                         key={level.id}
                         onClick={() => handleNodeClick(level)}
-                        title={level.title}
                         className="group absolute flex flex-col items-center focus:outline-none"
                         style={{ left: pos.x - CELL_W / 2, top: pos.y - NODE_CY, width: CELL_W }}
                       >
+                        {/* Hover 速览卡 */}
+                        <span className={`pointer-events-none absolute bottom-full mb-2 w-56 z-30 opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100 transition-opacity duration-150 ${tipPos}`}>
+                          <span className="block t-panel border panel-shadow rounded-xl p-3 text-left backdrop-blur-xl">
+                            <span className="flex items-center gap-1.5 mb-1.5 flex-wrap">
+                              <span className="font-mono text-[10px] tracking-widest t-text-4">
+                                LVL {String(idx + 1).padStart(2, '0')}
+                              </span>
+                              <span className="t-chip font-mono text-[10px] px-1.5 py-0.5 rounded border">
+                                {level.engine === 'react' ? 'React' : 'Phaser'}
+                              </span>
+                              {isCompleted && (
+                                <span className={`font-mono text-[10px] tracking-widest ${isLight ? 'text-emerald-600' : 'text-emerald-400'}`}>✓ 已通关</span>
+                              )}
+                              {isLocked && <span className="font-mono text-[10px] tracking-widest t-text-4">🔒 高级</span>}
+                              {isNext && <span className="font-mono text-[10px] tracking-widest font-bold" style={{ color: hex }}>◄ 当前</span>}
+                            </span>
+                            <span className="block text-sm font-bold t-text-1 leading-snug mb-1">{level.title}</span>
+                            <span className="block text-xs t-text-3 leading-relaxed line-clamp-3">{level.description}</span>
+                            <span className="block mt-2 font-mono text-[10px] tracking-wider" style={{ color: hex }}>
+                              {isLocked ? '点击查看解锁方式 ▸' : '点击开始挑战 ▸'}
+                            </span>
+                          </span>
+                        </span>
+
                         <span
                           style={{ '--node-accent': hex, ...(isLocked || isCompleted ? {} : { borderColor: `${hex}99` }) } as React.CSSProperties}
                           className={`h-11 w-11 rounded-full border-2 flex items-center justify-center backdrop-blur transition-transform duration-200 group-hover:scale-110 ${
