@@ -35,6 +35,16 @@ const CATEGORY_ACCENTS: Record<string, string> = {
   '软件工程': 'pink'
 };
 
+/** 冒险者段位：按总完成度晋升（min 为百分比阈值） */
+const RANKS = [
+  { min: 0, name: '见习码农', emoji: '🌱' },
+  { min: 10, name: '代码学徒', emoji: '📘' },
+  { min: 25, name: '算法骑士', emoji: '⚔️' },
+  { min: 50, name: '架构法师', emoji: '🔮' },
+  { min: 75, name: '大陆征服者', emoji: '👑' },
+  { min: 100, name: '源码之神', emoji: '✨' },
+] as const;
+
 /** 技能链节点单元格尺寸（定死 → 位置可纯算出来，不用测量每个节点） */
 const CELL_W = 112;
 const CELL_H = 108;
@@ -268,20 +278,45 @@ export function WorldMap() {
             )}
           </div>
 
-          <div className="flex flex-col items-end">
-            <div className="text-xs t-text-2 uppercase tracking-widest mb-1">Total Progress</div>
-            <div className="flex items-center gap-3">
-              <div className="w-48 h-2 t-track rounded-full overflow-hidden ring-1 t-ringdim">
-                <div
-                  className="relative h-full bg-gradient-to-r from-indigo-400 via-violet-500 to-fuchsia-400 rounded-full transition-all duration-1000 overflow-hidden"
-                  style={{ width: `${progressPercent}%` }}
-                >
-                  <span className="progress-shine absolute inset-y-0 w-1/3 bg-gradient-to-r from-transparent via-white/40 to-transparent"></span>
+          <div className="flex flex-col items-end gap-2">
+            {/* 冒险者段位 */}
+            {(() => {
+              const rankIdx = RANKS.reduce((acc, r, i) => (progressPercent >= r.min ? i : acc), 0);
+              const rank = RANKS[rankIdx];
+              return (
+                <div className="t-chip border rounded-full px-3 py-1 flex items-center gap-1.5 font-mono text-xs">
+                  <span className="text-sm leading-none">{rank.emoji}</span>
+                  <span className="t-text-1 font-bold tracking-wide">{rank.name}</span>
+                  <span className="t-text-3 tracking-widest">LV.{rankIdx}</span>
                 </div>
+              );
+            })()}
+
+            {/* 九科目分段进度：世界地图的缩微模型 */}
+            <div className="flex items-center gap-3">
+              <div className="flex w-48 sm:w-56 h-2 rounded-full overflow-hidden gap-[2px]">
+                {groups.map(g => {
+                  const accentSeg = getLevelTheme(CATEGORY_ACCENTS[g.category] ?? 'slate');
+                  const done = g.levels.filter(l => completedLevels.includes(l.id)).length;
+                  const segPct = Math.round((done / g.levels.length) * 100);
+                  return (
+                    <div
+                      key={g.category}
+                      title={`${g.category} ${done}/${g.levels.length}`}
+                      className="t-track h-full rounded-sm"
+                      style={{ width: `${(g.levels.length / LEVELS.length) * 100}%` }}
+                    >
+                      <div
+                        className="h-full rounded-sm transition-all duration-700"
+                        style={{ width: `${segPct}%`, background: accHex(accentSeg) }}
+                      ></div>
+                    </div>
+                  );
+                })}
               </div>
               <span className="font-mono font-bold text-lg t-text-1">{progressPercent}%</span>
             </div>
-            <div className="text-[10px] t-text-3 mt-1">{totalCompleted} / {LEVELS.length} 关卡已征服</div>
+            <div className="text-[10px] t-text-3 -mt-1">{totalCompleted} / {LEVELS.length} 关卡已征服</div>
           </div>
         </div>
       </div>
