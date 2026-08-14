@@ -4,7 +4,7 @@ import { useGameStore } from '../store/useGameStore';
 import { getLevelTheme, LevelTheme } from '../config/theme';
 import { SKINS, getSkin, WALL_EXTS } from '../config/skins';
 import { PremiumUnlockModal } from './PremiumUnlockModal';
-import { Map, MapPin, CheckCircle2, Play, Compass, Database, Cpu, HardDrive, Network, Layers, Shield, FileCode, Check, Lock, X, ChevronDown } from 'lucide-react';
+import { MapPin, CheckCircle2, Play, Compass, Database, Cpu, HardDrive, Network, Layers, Shield, FileCode, Check, Lock, X, ChevronDown } from 'lucide-react';
 
 const CATEGORY_ICONS: Record<string, React.ReactNode> = {
   '计算机组成原理': <Cpu size={24} />,
@@ -224,15 +224,38 @@ export function WorldMap() {
 
       {/* Header */}
       <div className="relative z-20 flex flex-col sm:flex-row justify-between items-start sm:items-center px-6 py-5 border-b t-header backdrop-blur-xl shadow-2xl gap-4">
-        <div className="flex items-center gap-4">
-          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-indigo-400 to-violet-600 flex items-center justify-center shadow-lg shadow-indigo-500/40">
-            <Map size={28} className="text-white" />
-          </div>
+        <div className="flex items-center gap-3.5">
+          {/* 自制群岛星轨徽标（渐变随皮肤三色） */}
+          <svg
+            viewBox="0 0 48 48"
+            className="w-11 h-11 rounded-[13px] flex-shrink-0"
+            style={{ filter: 'drop-shadow(0 6px 16px color-mix(in srgb, var(--t-b2) 45%, transparent))' }}
+            aria-hidden="true"
+          >
+            <defs>
+              <linearGradient id="wm-logo-grad" x1="0" y1="0" x2="48" y2="48" gradientUnits="userSpaceOnUse">
+                <stop offset="0" style={{ stopColor: 'var(--t-b1)' }} />
+                <stop offset="0.55" style={{ stopColor: 'var(--t-b2)' }} />
+                <stop offset="1" style={{ stopColor: 'var(--t-b3)' }} />
+              </linearGradient>
+            </defs>
+            <rect x="2" y="2" width="44" height="44" rx="13" fill="url(#wm-logo-grad)" />
+            <circle cx="24" cy="24" r="16.5" fill="none" stroke="rgba(255,255,255,0.38)" strokeWidth="1.2" strokeDasharray="3 4" />
+            <ellipse cx="17" cy="29.5" rx="6.5" ry="4" fill="rgba(255,255,255,0.92)" />
+            <ellipse cx="30.5" cy="25.5" rx="8" ry="5" fill="rgba(255,255,255,0.75)" />
+            <ellipse cx="25" cy="34.5" rx="4.5" ry="2.8" fill="rgba(255,255,255,0.6)" />
+            <path d="M29.5 13.5 L35.5 9.5" stroke="white" strokeWidth="1.6" strokeLinecap="round" opacity="0.9" />
+            <path d="M35.5 9 l1 2.6 2.6 1 -2.6 1 -1 2.6 -1 -2.6 -2.6 -1 2.6 -1 Z" fill="white" />
+          </svg>
           <div>
-            <h1 className="text-2xl font-black t-brand tracking-wider">
-              CODE CONTINENT
+            <div className="font-mono text-[10px] uppercase tracking-[0.35em] t-text-3 select-none">
+              Code Continent
+            </div>
+            <h1 className="text-[26px] leading-8 font-black t-brand flex items-baseline select-none">
+              代码大陆
+              <span className="caret-blink ml-1 text-lg leading-none" style={{ color: 'var(--t-b2)' }}>▌</span>
             </h1>
-            <p className="t-text-3 text-sm tracking-widest uppercase">软考核心考点知识图谱</p>
+            <p className="t-text-3 text-xs tracking-widest mt-0.5">软考核心考点知识图谱</p>
           </div>
         </div>
 
