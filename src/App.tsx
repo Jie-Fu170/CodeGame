@@ -12,8 +12,7 @@ import { initGame, destroyGame, switchScene } from './game/main'
 import { useGameStore } from './store/useGameStore'
 import { LEVELS, GameLevel } from './config/levels'
 import { getLevelTheme } from './config/theme'
-import { VoiceGuide } from './components/VoiceGuide'
-import { TutorialModal } from './components/TutorialModal'
+import { FloatingDock } from './components/FloatingDock'
 import { WorldMap } from './components/WorldMap'
 
 // Lazy-loaded pure React games for optimal initial bundle size
@@ -178,7 +177,12 @@ const CATEGORY_GROUPS: Array<{ category: string; levels: GameLevel[] }> = (() =>
 
 function App() {
   const gameRef = useRef<HTMLDivElement>(null)
-  const { currentLevelId, setLevel, returnToMap } = useGameStore()
+  const { currentLevelId, setLevel, returnToMap, skin } = useGameStore()
+
+  // 皮肤属性挂到 <html data-theme>，驱动 index.css 的主题变量
+  useEffect(() => {
+    document.documentElement.dataset.theme = skin
+  }, [skin])
 
   useEffect(() => {
     if (!currentLevelId) return
@@ -210,15 +214,15 @@ function App() {
   const isReactLevel = currentLevel?.engine === 'react'
 
   return (
-    <div className="w-screen h-screen flex flex-col items-center justify-center bg-slate-950 relative overflow-hidden">
-      {/* 环境背景：径向晕染 + 蓝图网格 */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-slate-900 via-slate-950 to-slate-950"></div>
+    <div className="w-screen h-screen flex flex-col items-center justify-center t-page relative overflow-hidden">
+      {/* 环境背景：皮肤风景层 + 蓝图网格 + 柔和暗角 */}
+      <div className="absolute inset-0 t-scenery"></div>
       <div className="absolute inset-0 bg-blueprint-grid"></div>
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_transparent_40%,_rgba(2,6,23,0.85)_100%)] pointer-events-none"></div>
+      <div className="absolute inset-0 t-vignette pointer-events-none"></div>
 
       {/* 品牌角标（左上，纯文字无底色，小屏隐藏避开胶囊） */}
-      <div className="absolute top-1.5 left-4 z-40 font-mono text-[10px] leading-none tracking-[0.3em] text-slate-600 select-none pointer-events-none hidden sm:block">
-        CODE CONTINENT <span className="text-slate-700">//</span> 代码大陆
+      <div className="absolute top-1.5 left-4 z-40 font-mono text-[10px] leading-none tracking-[0.3em] t-text-4 select-none pointer-events-none hidden sm:block">
+        CODE CONTINENT <span className="t-text-3">//</span> 代码大陆
       </div>
 
       {/* 当前关卡胶囊 —— 顶部居中 */}
@@ -250,7 +254,7 @@ function App() {
       <div className="absolute top-2 sm:top-3 right-2 sm:right-4 z-40">
         <button
           onClick={returnToMap}
-          className="px-3 sm:px-4 py-1.5 sm:py-2 bg-slate-900/80 backdrop-blur text-slate-300 hover:text-white rounded-lg border border-slate-700 hover:border-slate-500 shadow-lg flex items-center gap-1.5 sm:gap-2 transition-colors font-mono text-xs sm:text-sm group"
+          className="t-btn px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg border shadow-lg flex items-center gap-1.5 sm:gap-2 transition-colors font-mono text-xs sm:text-sm group"
         >
           <span className="group-hover:-translate-x-1 transition-transform">🗺️</span>
           <span className="font-bold">返回地图</span>
@@ -287,13 +291,13 @@ function App() {
             <span className="flex items-center gap-1.5 sm:gap-2">
               <span className="stage-live-dot h-1.5 w-1.5 rounded-full" style={{ backgroundColor: 'var(--accent)' }}></span>
               <span className={theme.text}>viewport</span>
-              <span className="text-slate-600 truncate max-w-[120px] sm:max-w-none">://{currentLevel?.id}</span>
+              <span className="t-text-4 truncate max-w-[120px] sm:max-w-none">://{currentLevel?.id}</span>
             </span>
-            <span className="text-slate-600 text-[9px] sm:text-[11px]">800 × 600 · PHASER</span>
+            <span className="t-text-4 text-[9px] sm:text-[11px]">800 × 600 · PHASER</span>
           </div>
 
           {/* 舞台框架 + 四角括号 */}
-          <div className="stage-glow relative rounded-xl sm:rounded-2xl border border-slate-800 flex items-center justify-center overflow-hidden">
+          <div className="stage-glow relative rounded-xl sm:rounded-2xl border t-frame flex items-center justify-center overflow-hidden">
             <span className="stage-corner stage-corner-tl"></span>
             <span className="stage-corner stage-corner-tr"></span>
             <span className="stage-corner stage-corner-bl"></span>
@@ -312,11 +316,8 @@ function App() {
       {/* UI Overlay Layer */}
       {currentLevel?.engine !== 'react' && <AIMentor />}
 
-      {/* Voice Guide Toggle */}
-      <VoiceGuide />
-
-      {/* Tutorial / Help Modal */}
-      <TutorialModal />
+      {/* 右下悬浮 Dock：教程 / 语音 / 社群 */}
+      <FloatingDock />
     </div>
   )
 }

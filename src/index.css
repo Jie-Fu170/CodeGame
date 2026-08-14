@@ -2,12 +2,216 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ==================================================================
+   皮肤系统（CSS 变量 + [data-theme] 切换）
+   新增皮肤：在 src/config/skins.ts 注册，并在这里加一组同名变量块。
+   默认（未设置 data-theme）= 晴空白昼。
+   ================================================================== */
+
+:root {
+  color-scheme: light;
+  --t-bg-0: #e9f1fe;
+  --t-layers:
+    radial-gradient(42rem 16rem at 12% -8%, rgba(255, 255, 255, 0.95), transparent 62%),
+    radial-gradient(34rem 14rem at 88% -5%, rgba(255, 255, 255, 0.8), transparent 62%),
+    radial-gradient(52rem 26rem at 50% 112%, rgba(147, 197, 253, 0.35), transparent 70%),
+    linear-gradient(180deg, #eef4ff 0%, #dbe9fe 100%);
+  --t-vignette: rgba(147, 170, 220, 0.2);
+  --t-gridline: rgba(59, 130, 246, 0.1);
+  --t-dim: rgba(15, 23, 42, 0.2);
+  --t-header-bg: rgba(255, 255, 255, 0.7);
+  --t-panel-bg: rgba(255, 255, 255, 0.75);
+  --t-panel-bd: rgba(100, 116, 139, 0.3);
+  --t-drawer-bg: rgba(255, 255, 255, 0.94);
+  --t-chip-bg: rgba(255, 255, 255, 0.65);
+  --t-chip-bd: rgba(100, 116, 139, 0.32);
+  --t-btn-bg: rgba(255, 255, 255, 0.8);
+  --t-btn-bg-hover: #ffffff;
+  --t-btn-bd: rgba(100, 116, 139, 0.4);
+  --t-btn-bd-hover: rgba(100, 116, 139, 0.65);
+  --t-btn-text: #334155;
+  --t-text-1: #0f172a;
+  --t-text-2: #334155;
+  --t-text-3: #64748b;
+  --t-text-4: #94a3b8;
+  --t-line: #c4cfe0;
+  --t-node-bd: #cbd5e1;
+  --t-node-bg: rgba(255, 255, 255, 0.85);
+  --t-track: rgba(148, 163, 184, 0.35);
+  --t-scroll: rgba(100, 116, 139, 0.55);
+  --t-shadow: rgba(30, 64, 175, 0.16);
+  --t-b1: #4f46e5;
+  --t-b2: #a855f7;
+  --t-b3: #ec4899;
+}
+
+/* ---------- 蜜桃少女 ---------- */
+:root[data-theme='peach'] {
+  color-scheme: light;
+  --t-bg-0: #fff2f7;
+  --t-layers:
+    radial-gradient(40rem 16rem at 10% -8%, rgba(255, 255, 255, 0.9), transparent 60%),
+    radial-gradient(36rem 15rem at 90% -6%, rgba(255, 182, 213, 0.35), transparent 65%),
+    radial-gradient(52rem 26rem at 50% 112%, rgba(251, 113, 133, 0.22), transparent 72%),
+    linear-gradient(180deg, #fff5f9 0%, #ffe3ee 100%);
+  --t-vignette: rgba(244, 114, 182, 0.14);
+  --t-gridline: rgba(244, 114, 182, 0.12);
+  --t-dim: rgba(80, 7, 36, 0.16);
+  --t-header-bg: rgba(255, 255, 255, 0.7);
+  --t-panel-bg: rgba(255, 255, 255, 0.78);
+  --t-panel-bd: rgba(190, 90, 130, 0.28);
+  --t-drawer-bg: rgba(255, 255, 255, 0.94);
+  --t-chip-bg: rgba(255, 255, 255, 0.7);
+  --t-chip-bd: rgba(190, 90, 130, 0.32);
+  --t-btn-bg: rgba(255, 255, 255, 0.85);
+  --t-btn-bg-hover: #ffffff;
+  --t-btn-bd: rgba(190, 90, 130, 0.4);
+  --t-btn-bd-hover: rgba(190, 90, 130, 0.65);
+  --t-btn-text: #6e4256;
+  --t-text-1: #431d32;
+  --t-text-2: #6e4256;
+  --t-text-3: #a06e82;
+  --t-text-4: #c39aac;
+  --t-line: #f6c9da;
+  --t-node-bd: #f0c5d5;
+  --t-node-bg: rgba(255, 255, 255, 0.88);
+  --t-track: rgba(190, 90, 130, 0.22);
+  --t-scroll: rgba(190, 90, 130, 0.45);
+  --t-shadow: rgba(190, 24, 93, 0.14);
+  --t-b1: #f43f5e;
+  --t-b2: #fb7185;
+  --t-b3: #f9a8d4;
+}
+
+/* ---------- 电玩霓虹 ---------- */
+:root[data-theme='neon'] {
+  color-scheme: light;
+  --t-bg-0: #fbf7ff;
+  --t-layers:
+    radial-gradient(46rem 15rem at 50% -10%, rgba(168, 85, 247, 0.22), transparent 62%),
+    radial-gradient(30rem 13rem at 8% 12%, rgba(236, 72, 153, 0.16), transparent 62%),
+    radial-gradient(30rem 13rem at 92% 12%, rgba(34, 211, 238, 0.16), transparent 62%),
+    radial-gradient(52rem 26rem at 50% 112%, rgba(168, 85, 247, 0.14), transparent 72%),
+    linear-gradient(180deg, #ffffff 0%, #f3ecff 100%);
+  --t-vignette: rgba(168, 85, 247, 0.1);
+  --t-gridline: rgba(168, 85, 247, 0.1);
+  --t-dim: rgba(46, 16, 101, 0.18);
+  --t-header-bg: rgba(255, 255, 255, 0.72);
+  --t-panel-bg: rgba(255, 255, 255, 0.78);
+  --t-panel-bd: rgba(124, 58, 237, 0.26);
+  --t-drawer-bg: rgba(255, 255, 255, 0.94);
+  --t-chip-bg: rgba(255, 255, 255, 0.7);
+  --t-chip-bd: rgba(124, 58, 237, 0.3);
+  --t-btn-bg: rgba(255, 255, 255, 0.85);
+  --t-btn-bg-hover: #ffffff;
+  --t-btn-bd: rgba(124, 58, 237, 0.38);
+  --t-btn-bd-hover: rgba(124, 58, 237, 0.62);
+  --t-btn-text: #4a3f5c;
+  --t-text-1: #241433;
+  --t-text-2: #4a3f5c;
+  --t-text-3: #7c7391;
+  --t-text-4: #a49eb5;
+  --t-line: #ddd0f0;
+  --t-node-bd: #e0d2f5;
+  --t-node-bg: rgba(255, 255, 255, 0.88);
+  --t-track: rgba(124, 58, 237, 0.18);
+  --t-scroll: rgba(124, 58, 237, 0.4);
+  --t-shadow: rgba(124, 58, 237, 0.15);
+  --t-b1: #7c3aed;
+  --t-b2: #db2777;
+  --t-b3: #06b6d4;
+}
+
+/* ---------- 夜空极光（深色，保留的旧主题） ---------- */
+:root[data-theme='aurora'] {
+  color-scheme: dark;
+  --t-bg-0: #0b1120;
+  --t-layers:
+    radial-gradient(55rem 22rem at 12% -6%, rgba(99, 102, 241, 0.18), transparent 65%),
+    radial-gradient(48rem 20rem at 88% -4%, rgba(168, 85, 247, 0.14), transparent 65%),
+    radial-gradient(60rem 30rem at 50% 112%, rgba(56, 189, 248, 0.08), transparent 70%),
+    linear-gradient(180deg, #101a30 0%, #0b1120 36%, #090e1c 100%);
+  --t-vignette: rgba(4, 8, 20, 0.7);
+  --t-gridline: rgba(148, 163, 184, 0.07);
+  --t-dim: rgba(0, 0, 0, 0.6);
+  --t-header-bg: rgba(11, 17, 32, 0.7);
+  --t-panel-bg: rgba(15, 23, 42, 0.55);
+  --t-panel-bd: rgba(148, 163, 184, 0.25);
+  --t-drawer-bg: rgba(13, 21, 38, 0.95);
+  --t-chip-bg: rgba(30, 41, 59, 0.9);
+  --t-chip-bd: rgba(148, 163, 184, 0.35);
+  --t-btn-bg: rgba(30, 41, 59, 0.8);
+  --t-btn-bg-hover: rgba(51, 65, 85, 0.9);
+  --t-btn-bd: rgba(148, 163, 184, 0.4);
+  --t-btn-bd-hover: rgba(148, 163, 184, 0.65);
+  --t-btn-text: #e2e8f0;
+  --t-text-1: #ffffff;
+  --t-text-2: #e2e8f0;
+  --t-text-3: #94a3b8;
+  --t-text-4: #64748b;
+  --t-line: #334155;
+  --t-node-bd: #334155;
+  --t-node-bg: rgba(15, 23, 42, 0.9);
+  --t-track: rgba(30, 41, 59, 0.9);
+  --t-scroll: rgba(71, 85, 105, 0.9);
+  --t-shadow: rgba(0, 0, 0, 0.5);
+  --t-b1: #a5b4fc;
+  --t-b2: #d8b4fe;
+  --t-b3: #f9a8d4;
+}
+
+/* ---------- 自定义壁纸槽（共享磨砂基调，各自回退渐变） ---------- */
+[data-theme='wall-1'],
+[data-theme='wall-2'],
+[data-theme='wall-3'] {
+  color-scheme: light;
+  --t-vignette: transparent;
+  --t-gridline: transparent;
+  --t-dim: rgba(15, 23, 42, 0.14);
+  --t-header-bg: rgba(255, 255, 255, 0.55);
+  --t-panel-bg: rgba(255, 255, 255, 0.62);
+  --t-panel-bd: rgba(255, 255, 255, 0.45);
+  --t-drawer-bg: rgba(255, 255, 255, 0.9);
+  --t-chip-bg: rgba(255, 255, 255, 0.55);
+  --t-chip-bd: rgba(255, 255, 255, 0.5);
+  --t-btn-bg: rgba(255, 255, 255, 0.7);
+  --t-btn-bg-hover: rgba(255, 255, 255, 0.92);
+  --t-btn-bd: rgba(255, 255, 255, 0.55);
+  --t-btn-bd-hover: rgba(255, 255, 255, 0.85);
+  --t-btn-text: #334155;
+  --t-text-1: #0f172a;
+  --t-text-2: #334155;
+  --t-text-3: #64748b;
+  --t-text-4: #94a3b8;
+  --t-line: rgba(255, 255, 255, 0.55);
+  --t-node-bd: rgba(255, 255, 255, 0.6);
+  --t-node-bg: rgba(255, 255, 255, 0.72);
+  --t-track: rgba(255, 255, 255, 0.4);
+  --t-scroll: rgba(100, 116, 139, 0.55);
+  --t-shadow: rgba(15, 23, 42, 0.2);
+  --t-wall-overlay: linear-gradient(180deg, rgba(255, 255, 255, 0.34), rgba(255, 255, 255, 0.14));
+}
+:root[data-theme='wall-1'] {
+  --t-bg-0: #e0f2fe;
+  --t-layers: linear-gradient(160deg, #bae6fd 0%, #fbcfe8 55%, #fde68a 100%);
+  --t-b1: #0284c7; --t-b2: #db2777; --t-b3: #d97706;
+}
+:root[data-theme='wall-2'] {
+  --t-bg-0: #fdf2f8;
+  --t-layers: linear-gradient(160deg, #fbcfe8 0%, #ddd6fe 100%);
+  --t-b1: #db2777; --t-b2: #7c3aed; --t-b3: #f59e0b;
+}
+:root[data-theme='wall-3'] {
+  --t-bg-0: #fefce8;
+  --t-layers: linear-gradient(160deg, #fde68a 0%, #fecaca 50%, #c7d2fe 100%);
+  --t-b1: #d97706; --t-b2: #dc2626; --t-b3: #4f46e5;
+}
+
 @layer base {
-  html {
-    color-scheme: dark;
-  }
   body {
-    @apply bg-slate-950 text-slate-100 overflow-hidden font-sans;
+    background-color: var(--t-bg-0);
+    color: var(--t-text-2);
+    @apply overflow-hidden font-sans;
     font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI",
       "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei",
       "Noto Sans CJK SC", sans-serif;
@@ -23,20 +227,125 @@
 }
 
 @layer components {
-  /* 蓝图网格背景 —— “演算纸”氛围 */
+  /* ---------- 皮肤系统语义类 ---------- */
+
+  /* 页面底色 + 基础文字色 */
+  .t-page { background-color: var(--t-bg-0); color: var(--t-text-2); }
+  /* 风景层：每个皮肤的背景图组（极光/云光斑/回退渐变），壁纸皮肤可被内联 url 覆盖 */
+  .t-scenery {
+    background-image: var(--t-layers);
+    background-size: cover;
+    background-position: center;
+  }
+  /* 壁纸皮肤的白色柔光罩，保证文字可读 */
+  .t-wall-overlay { background: var(--t-wall-overlay); }
+  /* 关卡页柔和暗角 */
+  .t-vignette {
+    background-image: radial-gradient(circle at center, transparent 40%, var(--t-vignette) 100%);
+  }
+  /* 抽屉遮罩 */
+  .t-dim { background-color: var(--t-dim); }
+
+  .t-header { background-color: var(--t-header-bg); border-color: var(--t-panel-bd); }
+  .t-panel { background-color: var(--t-panel-bg); border-color: var(--t-panel-bd); }
+  .t-drawer { background-color: var(--t-drawer-bg); border-color: var(--t-panel-bd); }
+  .t-chip { background-color: var(--t-chip-bg); border-color: var(--t-chip-bd); color: var(--t-text-3); }
+  .t-frame { border-color: var(--t-panel-bd); }
+  .panel-shadow { box-shadow: 0 12px 32px -16px var(--t-shadow); }
+
+  .t-btn {
+    background-color: var(--t-btn-bg);
+    border-color: var(--t-btn-bd);
+    color: var(--t-btn-text);
+    backdrop-filter: blur(8px);
+  }
+  .t-btn:hover {
+    background-color: var(--t-btn-bg-hover);
+    border-color: var(--t-btn-bd-hover);
+    color: var(--t-text-1);
+  }
+
+  .t-text-1 { color: var(--t-text-1); }
+  .t-text-2 { color: var(--t-text-2); }
+  .t-text-3 { color: var(--t-text-3); }
+  .t-text-4 { color: var(--t-text-4); }
+  .t-label { color: var(--t-text-2); }
+  .group:hover .t-label { color: var(--t-text-1); }
+
+  /* 品牌标题渐变色（每个皮肤有自己的三个梯度色） */
+  .t-brand {
+    background-image: linear-gradient(90deg, var(--t-b1), var(--t-b2), var(--t-b3));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  /* 进度/路径零件 */
+  .t-track { background-color: var(--t-track); }
+  .t-line { stroke: var(--t-line); }              /* SVG 路径暗线段 */
+  .t-node { background-color: var(--t-node-bg); }  /* 可挑战节点圆底 */
+  .t-node-locked {
+    background-color: var(--t-node-bg);
+    border-color: var(--t-node-bd);
+    color: var(--t-text-4);
+  }
+  /* 仅配合 tailwind 的 ring-1 使用：给环一个主题色 */
+  .t-ringdim { --tw-ring-color: var(--t-panel-bd); }
+
+  /* ---------- 右下悬浮 Dock 内的图标钮 ---------- */
+  .dock-item {
+    position: relative;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 9999px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--t-text-3);
+    transition: background-color 0.18s ease, color 0.18s ease, transform 0.18s ease;
+  }
+  .dock-item:hover {
+    background-color: var(--t-chip-bg);
+    color: var(--t-text-1);
+    transform: translateY(-1px);
+  }
+  .dock-item.active {
+    background-color: #2563eb;
+    color: #ffffff;
+    box-shadow: 0 0 14px rgba(37, 99, 235, 0.45);
+  }
+  .dock-item.active:hover {
+    background-color: #1d4ed8;
+    color: #ffffff;
+  }
+
+  /* ---------- 蓝图网格（线色随皮肤） ---------- */
   .bg-blueprint-grid {
     background-image:
-      linear-gradient(rgba(148, 163, 184, 0.045) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(148, 163, 184, 0.045) 1px, transparent 1px);
+      linear-gradient(var(--t-gridline, rgba(148, 163, 184, 0.07)) 1px, transparent 1px),
+      linear-gradient(90deg, var(--t-gridline, rgba(148, 163, 184, 0.07)) 1px, transparent 1px);
     background-size: 36px 36px;
   }
 
-  /* 舞台外发光 —— 颜色由 --accent CSS 变量驱动（随关卡主题切换） */
+  /* ---------- 皮肤装饰粒子 ---------- */
+  /* 蜜桃少女：樱瓣飘落 */
+  .deco-petal {
+    position: absolute;
+    top: -8%;
+    animation: petal-fall linear infinite;
+    opacity: 0.55;
+    will-change: transform;
+  }
+  /* 电玩霓虹：像素星闪烁 */
+  .deco-star {
+    position: absolute;
+    animation: star-twinkle 2.8s ease-in-out infinite;
+  }
+
+  /* ---------- 舞台（Phaser 视口） ---------- */
   .stage-glow {
     box-shadow: 0 0 60px -16px var(--accent, rgba(56, 189, 248, 0.45));
   }
-
-  /* 舞台四角括号（HUD 取景器风格） */
   .stage-corner {
     position: absolute;
     width: 26px;
@@ -51,28 +360,43 @@
   .stage-corner-bl { bottom: -10px; left: -10px; border-bottom-width: 2px; border-left-width: 2px; border-bottom-left-radius: 7px; }
   .stage-corner-br { bottom: -10px; right: -10px; border-bottom-width: 2px; border-right-width: 2px; border-bottom-right-radius: 7px; }
 
-  /* 导航面板滚动条 */
+  /* ---------- 导航面板滚动条（色随皮肤） ---------- */
   .nav-scroll {
     scrollbar-width: thin;
-    scrollbar-color: rgba(51, 65, 85, 0.9) transparent;
+    scrollbar-color: var(--t-scroll) transparent;
   }
   .nav-scroll::-webkit-scrollbar {
     width: 6px;
   }
   .nav-scroll::-webkit-scrollbar-thumb {
-    background-color: rgba(51, 65, 85, 0.9);
+    background-color: var(--t-scroll);
     border-radius: 9999px;
   }
   .nav-scroll::-webkit-scrollbar-track {
     background: transparent;
   }
 
-  /* 面板进入动画 */
+  /* ---------- 进场与高光动画 ---------- */
   .panel-in {
     animation: panel-in 160ms cubic-bezier(0.22, 1, 0.36, 1) both;
   }
+  .map-rise {
+    animation: map-rise 480ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+  .progress-shine {
+    animation: progress-shine 2.8s ease-in-out infinite;
+  }
+  /* 当前待挑战节点：主题色呼吸光环（颜色由内联 --node-accent 驱动） */
+  .next-node {
+    box-shadow: 0 0 0 2px var(--node-accent), 0 0 26px -6px var(--node-accent);
+    animation: node-breathe 2.6s ease-in-out infinite;
+  }
+  /* 详情抽屉入场 */
+  .drawer-in {
+    animation: drawer-in 220ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
 
-  /* AAA Cyberpunk Tactical HUD Bevel & Glow */
+  /* AAA Cyberpunk Tactical HUD Bevel & Glow（关卡 HUD 用，不随皮肤） */
   .cyber-panel {
     background: rgba(15, 23, 42, 0.88);
     backdrop-filter: blur(16px);
@@ -111,6 +435,26 @@
   to { opacity: 1; transform: translateY(0) scale(1); }
 }
 
+@keyframes map-rise {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes progress-shine {
+  from { transform: translateX(-120%); }
+  to { transform: translateX(420%); }
+}
+
+@keyframes node-breathe {
+  0%, 100% { box-shadow: 0 0 0 2px var(--node-accent), 0 0 26px -6px var(--node-accent); }
+  50% { box-shadow: 0 0 0 2px var(--node-accent), 0 0 36px 0px var(--node-accent); }
+}
+
+@keyframes drawer-in {
+  from { opacity: 0; transform: translateX(28px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
 @keyframes corner-breathe {
   0%, 100% { opacity: 0.3; }
   50% { opacity: 0.9; }
@@ -121,15 +465,36 @@
   50% { opacity: 0.3; }
 }
 
+@keyframes petal-fall {
+  0% { transform: translate3d(0, -6vh, 0) rotate(0deg); }
+  100% { transform: translate3d(4vw, 112vh, 0) rotate(320deg); }
+}
+
+@keyframes star-twinkle {
+  0%, 100% { opacity: 0.15; transform: scale(0.8); }
+  50% { opacity: 0.85; transform: scale(1.15); }
+}
+
 .stage-live-dot {
   animation: live-pulse 2.4s ease-in-out infinite;
 }
 
 @media (prefers-reduced-motion: reduce) {
   .panel-in,
+  .map-rise,
+  .progress-shine,
+  .next-node,
+  .drawer-in,
+  .deco-petal,
+  .deco-star,
   .stage-corner,
   .stage-live-dot {
     animation: none;
+  }
+  .map-rise,
+  .drawer-in {
+    opacity: 1;
+    transform: none;
   }
   .stage-corner {
     opacity: 0.75;

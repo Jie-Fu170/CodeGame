@@ -48,16 +48,12 @@ export const VoiceGuide: React.FC = () => {
   return (
     <button
       onClick={toggleVoice}
-      className={`fixed bottom-4 right-4 z-50 p-3 rounded-full shadow-lg border transition-all ${
-        voiceEnabled 
-          ? 'bg-blue-600 text-white border-blue-500 shadow-[0_0_15px_rgba(37,99,235,0.5)]' 
-          : 'bg-slate-800 text-slate-400 border-slate-700 hover:bg-slate-700'
-      }`}
+      className={`dock-item ${voiceEnabled ? 'active' : ''}`}
       title={voiceEnabled ? "关闭语音讲解" : "开启语音讲解"}
     >
       {voiceEnabled ? (
         <div className="relative">
-          <Volume2 size={24} />
+          <Volume2 size={20} />
           {isPlaying && (
             <span className="absolute -top-1 -right-1 flex h-3 w-3">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-300 opacity-75"></span>
@@ -66,7 +62,7 @@ export const VoiceGuide: React.FC = () => {
           )}
         </div>
       ) : (
-        <VolumeX size={24} />
+        <VolumeX size={20} />
       )}
     </button>
   );

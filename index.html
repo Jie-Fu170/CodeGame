@@ -6,6 +6,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="代码大陆 Code Continent —— 用游戏的方式攻克计算机核心考点" />
     <title>代码大陆 · Code Continent</title>
+    <script>
+      // 皮肤首帧应用：在 React 挂载前读取本地记忆，避免从默认皮肤闪跳
+      try {
+        document.documentElement.dataset.theme = localStorage.getItem('code-game-skin') || 'daylight';
+      } catch (e) {
+        document.documentElement.dataset.theme = 'daylight';
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>

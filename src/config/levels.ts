@@ -9,6 +9,7 @@ export interface GameLevel {
   hudComponent: string;
   themeColor: string;
   isNew?: boolean;
+  isPremium?: boolean;
   engine?: 'phaser' | 'react';
   instructions?: string[];
 }
@@ -82,6 +83,7 @@ export const LEVELS: GameLevel[] = [
     hudComponent: 'TowerHUD',
     themeColor: 'purple',
     engine: 'phaser',
+    isPremium: true,
     instructions: [
       '选择底部的设计模式塔，点击网格空地建造。',
       '每种塔的能力映射真实设计模式的核心语义。',
@@ -236,6 +238,7 @@ export const LEVELS: GameLevel[] = [
     themeColor: 'purple',
     engine: 'react',
     isNew: true,
+    isPremium: true,
     instructions: [
       '点击下方设计模式卡片在网格上建造防御塔。',
       '利用单例模式、工厂模式、观察者模式等的特定能力抵御 Bug。',
@@ -443,6 +446,7 @@ export const LEVELS: GameLevel[] = [
     themeColor: 'blue',
     engine: 'react',
     isNew: true,
+    isPremium: true,
     instructions: [
       '理解 1NF, 2NF, 3NF 的定义与消除传递函数依赖。',
       '将冗余的非主属性拆分至正确的独立关系表。'
@@ -499,6 +503,7 @@ export const LEVELS: GameLevel[] = [
     themeColor: 'fuchsia',
     engine: 'react',
     isNew: true,
+    isPremium: true,
     instructions: [
       '计算程序图环路复杂度 V(G) = m - n + 2p (边数 - 节点数 + 2) 或 V(G) = P + 1 (判定节点数 + 1)。',
       '准确求出线性无关的独立路径条数。'

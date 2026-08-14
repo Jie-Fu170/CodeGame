@@ -1,4 +1,5 @@
 import { create } from 'zustand'
+import { DEFAULT_SKIN } from '../config/skins'
 
 export type SchedulingAlgorithm = 'FCFS' | 'SJF' | 'RR' | 'PRIORITY'
 
@@ -83,6 +84,9 @@ interface GameState {
   // Global Map State
   currentLevelId: string | null
   completedLevels: string[]
+  isPremiumUnlocked: boolean
+  /** 当前皮肤 id（见 src/config/skins.ts），持久化到 localStorage */
+  skin: string
 
   sqlQuestions: any[]
   currentQuestionIndex: number
@@ -98,6 +102,8 @@ interface GameState {
   setLevel: (levelId: string) => void
   returnToMap: () => void
   completeLevel: (id: string) => void
+  unlockPremium: () => void
+  setSkin: (skinId: string) => void
   setAlgorithm: (alg: SchedulingAlgorithm) => void
   takeDamage: (amount: number) => void
   addScore: (points: number) => void
@@ -294,6 +300,20 @@ export const useGameStore = create<GameState>((set) => ({
       return []
     }
   })(),
+  isPremiumUnlocked: (() => {
+    try {
+      return localStorage.getItem('code-game-premium') === 'true'
+    } catch {
+      return false
+    }
+  })(),
+  skin: (() => {
+    try {
+      return localStorage.getItem('code-game-skin') || DEFAULT_SKIN
+    } catch {
+      return DEFAULT_SKIN
+    }
+  })(),
 
   // SQL Combat defaults
   sqlQuestions: initialSqlQuestions,
@@ -340,6 +360,19 @@ export const useGameStore = create<GameState>((set) => ({
     }
     return {};
   }),
+
+  unlockPremium: () => {
+    localStorage.setItem('code-game-premium', 'true');
+    set({ isPremiumUnlocked: true });
+  },
+
+  setSkin: (skinId: string) => {
+    try {
+      localStorage.setItem('code-game-skin', skinId);
+    } catch { /* 隐私模式等场景静默失败 */ }
+    document.documentElement.dataset.theme = skinId;
+    set({ skin: skinId });
+  },
 
   setAlgorithm: (alg) => set({ algorithm: alg }),
   

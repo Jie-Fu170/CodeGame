@@ -4,12 +4,16 @@
 // App / TutorialModal 主题色整体失效的原因）。因此这里全部是完整字面量。
 
 export interface LevelTheme {
-  /** 代表色 hex，用于内联样式（舞台外发光、四角括号） */
+  /** 代表色 hex（500 档），用于内联样式（舞台外发光、四角括号、深色底上的节点） */
   hex: string
+  /** 深一档 hex（600 档），浅色皮肤上的小字/图标/圆环用它保证对比度 */
+  hexStrong: string
   /** 主强调文字色，如 text-cyan-400 */
   text: string
   /** 更亮的强调文字色，如 text-cyan-300 */
   textBright: string
+  /** 深一档强调文字色（浅色皮肤用），如 text-cyan-600 */
+  textStrong: string
   /** 深色染色面板背景，如 bg-cyan-950/40 */
   bgDeep: string
   /** 柔和染色背景，如 bg-cyan-500/10 */
@@ -31,8 +35,10 @@ export interface LevelTheme {
 const THEMES: Record<string, LevelTheme> = {
   slate: {
     hex: '#64748b',
+    hexStrong: '#475569',
     text: 'text-slate-400',
     textBright: 'text-slate-300',
+    textStrong: 'text-slate-600',
     bgDeep: 'bg-slate-950/40',
     bgSoft: 'bg-slate-500/10',
     bgSolid: 'bg-slate-600',
@@ -44,8 +50,10 @@ const THEMES: Record<string, LevelTheme> = {
   },
   indigo: {
     hex: '#6366f1',
+    hexStrong: '#4f46e5',
     text: 'text-indigo-400',
     textBright: 'text-indigo-300',
+    textStrong: 'text-indigo-600',
     bgDeep: 'bg-indigo-950/40',
     bgSoft: 'bg-indigo-500/10',
     bgSolid: 'bg-indigo-600',
@@ -57,8 +65,10 @@ const THEMES: Record<string, LevelTheme> = {
   },
   blue: {
     hex: '#3b82f6',
+    hexStrong: '#2563eb',
     text: 'text-blue-400',
     textBright: 'text-blue-300',
+    textStrong: 'text-blue-600',
     bgDeep: 'bg-blue-950/40',
     bgSoft: 'bg-blue-500/10',
     bgSolid: 'bg-blue-600',
@@ -70,8 +80,10 @@ const THEMES: Record<string, LevelTheme> = {
   },
   red: {
     hex: '#ef4444',
+    hexStrong: '#dc2626',
     text: 'text-red-400',
     textBright: 'text-red-300',
+    textStrong: 'text-red-600',
     bgDeep: 'bg-red-950/40',
     bgSoft: 'bg-red-500/10',
     bgSolid: 'bg-red-600',
@@ -83,8 +95,10 @@ const THEMES: Record<string, LevelTheme> = {
   },
   purple: {
     hex: '#a855f7',
+    hexStrong: '#9333ea',
     text: 'text-purple-400',
     textBright: 'text-purple-300',
+    textStrong: 'text-purple-600',
     bgDeep: 'bg-purple-950/40',
     bgSoft: 'bg-purple-500/10',
     bgSolid: 'bg-purple-600',
@@ -96,8 +110,10 @@ const THEMES: Record<string, LevelTheme> = {
   },
   emerald: {
     hex: '#10b981',
+    hexStrong: '#059669',
     text: 'text-emerald-400',
     textBright: 'text-emerald-300',
+    textStrong: 'text-emerald-600',
     bgDeep: 'bg-emerald-950/40',
     bgSoft: 'bg-emerald-500/10',
     bgSolid: 'bg-emerald-600',
@@ -109,8 +125,10 @@ const THEMES: Record<string, LevelTheme> = {
   },
   cyan: {
     hex: '#06b6d4',
+    hexStrong: '#0891b2',
     text: 'text-cyan-400',
     textBright: 'text-cyan-300',
+    textStrong: 'text-cyan-600',
     bgDeep: 'bg-cyan-950/40',
     bgSoft: 'bg-cyan-500/10',
     bgSolid: 'bg-cyan-600',
@@ -122,8 +140,10 @@ const THEMES: Record<string, LevelTheme> = {
   },
   yellow: {
     hex: '#eab308',
+    hexStrong: '#ca8a04',
     text: 'text-yellow-400',
     textBright: 'text-yellow-300',
+    textStrong: 'text-yellow-600',
     bgDeep: 'bg-yellow-950/40',
     bgSoft: 'bg-yellow-500/10',
     bgSolid: 'bg-yellow-600',
@@ -135,8 +155,10 @@ const THEMES: Record<string, LevelTheme> = {
   },
   orange: {
     hex: '#f97316',
+    hexStrong: '#ea580c',
     text: 'text-orange-400',
     textBright: 'text-orange-300',
+    textStrong: 'text-orange-600',
     bgDeep: 'bg-orange-950/40',
     bgSoft: 'bg-orange-500/10',
     bgSolid: 'bg-orange-600',
@@ -148,8 +170,10 @@ const THEMES: Record<string, LevelTheme> = {
   },
   amber: {
     hex: '#f59e0b',
+    hexStrong: '#d97706',
     text: 'text-amber-400',
     textBright: 'text-amber-300',
+    textStrong: 'text-amber-600',
     bgDeep: 'bg-amber-950/40',
     bgSoft: 'bg-amber-500/10',
     bgSolid: 'bg-amber-600',
@@ -161,8 +185,10 @@ const THEMES: Record<string, LevelTheme> = {
   },
   green: {
     hex: '#22c55e',
+    hexStrong: '#16a34a',
     text: 'text-green-400',
     textBright: 'text-green-300',
+    textStrong: 'text-green-600',
     bgDeep: 'bg-green-950/40',
     bgSoft: 'bg-green-500/10',
     bgSolid: 'bg-green-600',
@@ -174,8 +200,10 @@ const THEMES: Record<string, LevelTheme> = {
   },
   pink: {
     hex: '#ec4899',
+    hexStrong: '#db2777',
     text: 'text-pink-400',
     textBright: 'text-pink-300',
+    textStrong: 'text-pink-600',
     bgDeep: 'bg-pink-950/40',
     bgSoft: 'bg-pink-500/10',
     bgSolid: 'bg-pink-600',
@@ -187,8 +215,10 @@ const THEMES: Record<string, LevelTheme> = {
   },
   fuchsia: {
     hex: '#d946ef',
+    hexStrong: '#c026d3',
     text: 'text-fuchsia-400',
     textBright: 'text-fuchsia-300',
+    textStrong: 'text-fuchsia-600',
     bgDeep: 'bg-fuchsia-950/40',
     bgSoft: 'bg-fuchsia-500/10',
     bgSolid: 'bg-fuchsia-600',
@@ -197,6 +227,36 @@ const THEMES: Record<string, LevelTheme> = {
     border: 'border-fuchsia-500/50',
     borderSoft: 'border-fuchsia-500/25',
     dot: 'bg-fuchsia-400',
+  },
+  teal: {
+    hex: '#14b8a6',
+    hexStrong: '#0d9488',
+    text: 'text-teal-400',
+    textBright: 'text-teal-300',
+    textStrong: 'text-teal-600',
+    bgDeep: 'bg-teal-950/40',
+    bgSoft: 'bg-teal-500/10',
+    bgSolid: 'bg-teal-600',
+    bgSolidHover: 'hover:bg-teal-500',
+    bgBar: 'bg-teal-500',
+    border: 'border-teal-500/50',
+    borderSoft: 'border-teal-500/25',
+    dot: 'bg-teal-400',
+  },
+  lime: {
+    hex: '#84cc16',
+    hexStrong: '#65a30d',
+    text: 'text-lime-400',
+    textBright: 'text-lime-300',
+    textStrong: 'text-lime-600',
+    bgDeep: 'bg-lime-950/40',
+    bgSoft: 'bg-lime-500/10',
+    bgSolid: 'bg-lime-600',
+    bgSolidHover: 'hover:bg-lime-500',
+    bgBar: 'bg-lime-500',
+    border: 'border-lime-500/50',
+    borderSoft: 'border-lime-500/25',
+    dot: 'bg-lime-400',
   },
 }
 
