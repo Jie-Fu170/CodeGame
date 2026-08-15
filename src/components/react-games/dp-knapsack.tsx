@@ -13,6 +13,7 @@ export default function DPKnapsack() {
   
   // Stage 1 State
   const [selected, setSelected] = useState<string[]>([]);
+  const [greedyDemonstrated, setGreedyDemonstrated] = useState(false);
   const [s1Msg, setS1Msg] = useState('');
 
   // Stage 2 State
@@ -23,6 +24,11 @@ export default function DPKnapsack() {
   const currentValue = selected.reduce((acc, id) => acc + ITEMS.find(i => i.id === id)!.value, 0);
 
   const toggleItem = (id: string) => {
+    if (greedyDemonstrated) {
+      setS1Msg('贪心结果已记录，请进入动态规划表比较全局最优解。');
+      return;
+    }
+
     if (selected.includes(id)) {
       setSelected(selected.filter(i => i !== id));
     } else {
@@ -37,11 +43,17 @@ export default function DPKnapsack() {
   };
 
   const submitStage1 = () => {
-    if (currentValue === 14) {
+    if (greedyDemonstrated) {
       setS1Msg('');
       setStage(2);
+      return;
+    }
+
+    if (selected.length === 1 && selected[0] === 'A') {
+      setGreedyDemonstrated(true);
+      setS1Msg('按单位价值贪心会先选 A：价值 10、剩余容量 3，B 和 C 均无法再装入。因此贪心结果为 10，下一步用 DP 寻找全局最优。');
     } else {
-      setS1Msg(`当前总价值 ${currentValue}，还能更高！(提示：不要被"单价最高"的贪心策略迷惑)`);
+      setS1Msg('请先按“价值/重量”从高到低执行贪心：本例应先选择 A。');
     }
   };
 
@@ -63,7 +75,7 @@ export default function DPKnapsack() {
         <p className="text-slate-400 max-w-lg mb-8 text-lg">
           你成功破解了 0-1 背包问题！贪心策略往往只能得到局部最优（10），而动态规划通过状态转移表穷尽了所有的可能性，找到了全局最优解（14）。
         </p>
-        <button onClick={() => { setStage(1); setSelected([]); setDpInputs({c1:'', c2:''}); }} className="px-8 py-3 bg-amber-600 hover:bg-amber-500 rounded-xl text-white font-bold transition-all">
+        <button onClick={() => { setStage(1); setSelected([]); setGreedyDemonstrated(false); setS1Msg(''); setS2Msg(''); setDpInputs({c1:'', c2:''}); }} className="px-8 py-3 bg-amber-600 hover:bg-amber-500 rounded-xl text-white font-bold transition-all">
           深藏功与名
         </button>
       </div>
@@ -89,8 +101,8 @@ export default function DPKnapsack() {
         <div className="flex-1 flex flex-col gap-6 animate-in slide-in-from-left">
           <div className="bg-slate-800/50 p-6 rounded-2xl border border-slate-700 flex justify-between items-center">
             <div>
-              <h3 className="text-xl font-bold text-white mb-2 flex items-center gap-2"><Target className="text-rose-400"/> 任务：将背包价值最大化</h3>
-              <p className="text-slate-400">点击物品放入背包。注意：每种物品只有一个 (0-1 背包)。</p>
+              <h3 className="text-xl font-bold text-white mb-2 flex items-center gap-2"><Target className="text-rose-400"/> 任务：先执行单位价值贪心</h3>
+              <p className="text-slate-400">按“价值/重量”从高到低选择物品，观察它为何只能得到局部最优。每种物品只有一个 (0-1 背包)。</p>
             </div>
             <div className="text-right">
               <div className="text-xs text-slate-500 uppercase tracking-widest font-bold">背包容量</div>
@@ -184,7 +196,7 @@ export default function DPKnapsack() {
               onClick={submitStage1}
               className="px-8 py-4 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-2xl flex items-center gap-2 transition-all shadow-[0_4px_20px_rgba(217,119,6,0.4)]"
             >
-              提交方案 <ChevronRight />
+              {greedyDemonstrated ? '进入 DP 对比' : '执行贪心方案'} <ChevronRight />
             </button>
           </div>
         </div>
@@ -243,7 +255,8 @@ export default function DPKnapsack() {
                 <tr className="bg-emerald-950/10">
                   <td className="p-3 border-r-2 border-slate-700 font-bold text-emerald-400">3 (+C: 4kg,$7)</td>
                   {[0,1,2,3].map(cap => <td key={cap} className="p-3">0</td>)}
-                  {[4,5,6,7].map(cap => <td key={cap} className="p-3 text-blue-300">7<span className="text-rose-300 ml-2 block sm:inline">10</span></td>)}
+                  <td className="p-3 text-blue-300">7</td>
+                  {[5,6,7].map(cap => <td key={cap} className="p-3 text-rose-300">10</td>)}
                   <td className="p-3">
                     <input type="text" value={dpInputs.c2} onChange={e => setDpInputs({...dpInputs, c2: e.target.value})} className="w-16 bg-slate-950 border border-emerald-500 text-center rounded py-1 text-white font-bold focus:outline-none focus:ring-2 focus:ring-emerald-500 shadow-[0_0_15px_rgba(16,185,129,0.2)]" placeholder="?" />
                   </td>
