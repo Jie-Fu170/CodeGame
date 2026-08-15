@@ -46,6 +46,7 @@ export class LoadBalancerScene extends Phaser.Scene {
     })
 
     this.requestsGroup = this.physics.add.group()
+    this.ensureCircleTexture('firework_particle', 0xffffff)
 
     this.spawnTimer = this.time.addEvent({ delay: 300, callback: this.spawnRequest, callbackScope: this, loop: true })
     this.tickTimer = this.time.addEvent({ delay: 1000, callback: this.processTick, callbackScope: this, loop: true })
@@ -118,12 +119,9 @@ export class LoadBalancerScene extends Phaser.Scene {
     
     const store = useGameStore.getState()
     
-    // Generate graphics dynamically
-    const g = this.make.graphics({x: 0, y: 0, add: false})
-    g.fillStyle(this.currentPhase === 2 ? color : 0xffffff)
-    g.fillCircle(8, 8, 8)
-    g.generateTexture(`req_${this.currentPhase}_${color}`, 16, 16)
-    req.setTexture(`req_${this.currentPhase}_${color}`)
+    const textureKey = `req_${this.currentPhase}_${color}`
+    this.ensureCircleTexture(textureKey, this.currentPhase === 2 ? color : 0xffffff)
+    req.setTexture(textureKey)
 
     let target: 'A'|'B'|'C' = 'A'
     
@@ -162,6 +160,16 @@ export class LoadBalancerScene extends Phaser.Scene {
     })
 
     this.requestsGroup.add(req)
+  }
+
+  private ensureCircleTexture(key: string, color: number) {
+    if (this.textures.exists(key)) return
+
+    const graphics = this.make.graphics({ x: 0, y: 0, add: false })
+    graphics.fillStyle(color)
+    graphics.fillCircle(8, 8, 8)
+    graphics.generateTexture(key, 16, 16)
+    graphics.destroy()
   }
 
   private processTick() {
@@ -213,7 +221,7 @@ export class LoadBalancerScene extends Phaser.Scene {
   
   private triggerFireworks() {
     // Huge particle explosion
-    const particles = this.add.particles(400, 300, 'req_2_16729344', {
+    const particles = this.add.particles(400, 300, 'firework_particle', {
       speed: { min: 200, max: 600 },
       angle: { min: 0, max: 360 },
       scale: { start: 1, end: 0 },
