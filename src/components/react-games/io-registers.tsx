@@ -39,7 +39,7 @@ export default function IORegisters() {
     setIoMode(mode);
     if (mode === 'DMA') {
       setErrorMsg(null);
-      setSuccessMsg('🎯 正确！DMA (直接内存存取) 方式由 DMA 控制器直接在主存与外设间传送成块数据，传输期间完全不占用 CPU，CPU 效率最高！');
+      setSuccessMsg('🎯 正确！DMA（直接内存存取）由 DMA 控制器在主存与外设间传送成块数据。CPU 负责配置、启动及完成中断处理，传输期间无需逐字搬运数据，因此大块传输时 CPU 开销通常最低；但 DMA 仍可能与 CPU 竞争总线。');
       setTimeout(() => setIsCompleted(true), 1200);
     } else if (mode === 'POLLING') {
       setErrorMsg('错误！程序查询方式中 CPU 处于死等轮询状态，无法执行其他任务，CPU 利用率最低！');
@@ -190,7 +190,7 @@ export default function IORegisters() {
                 {[
                   { mode: 'POLLING', title: '程序查询方式', desc: 'CPU 在死循环中反复轮询外设状态标志。CPU 完全无法做别的事。' },
                   { mode: 'INTERRUPT', title: '中断驱动方式', desc: '外设准备好后发中断通知 CPU，但每传输一个字仍要中断 CPU 一次。' },
-                  { mode: 'DMA', title: 'DMA 直接内存存取', desc: 'DMA 控制器接管总线直接与 RAM 传数据，CPU 仅在起始和结束时参与！' },
+                  { mode: 'DMA', title: 'DMA 直接内存存取', desc: 'DMA 控制器在主存与外设间成块传输数据；CPU 负责配置、启动与完成处理，无需逐字搬运，但可能共享总线。' },
                 ].map((item) => (
                   <button
                     key={item.mode}
