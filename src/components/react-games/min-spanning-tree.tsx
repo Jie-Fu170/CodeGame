@@ -19,6 +19,64 @@ const EDGES: Edge[] = [
 ];
 
 const CORRECT_MST_EDGES = ['e3', 'e1', 'e5', 'e6']; // BC(1), AB(2), CD(3), CE(5) -> Total: 11
+const PRIM_START_VERTEX = 'A';
+
+const getEdgeById = (id: string) => EDGES.find((edge) => edge.id === id)!;
+
+const wouldCreateCycle = (selectedEdgeIds: string[], candidate: Edge) => {
+  const adjacency = new Map<string, string[]>();
+  selectedEdgeIds.forEach((id) => {
+    const edge = getEdgeById(id);
+    adjacency.set(edge.u, [...(adjacency.get(edge.u) ?? []), edge.v]);
+    adjacency.set(edge.v, [...(adjacency.get(edge.v) ?? []), edge.u]);
+  });
+
+  const visited = new Set<string>();
+  const visit = (vertex: string): boolean => {
+    if (vertex === candidate.v) return true;
+    visited.add(vertex);
+    return (adjacency.get(vertex) ?? []).some((next) => !visited.has(next) && visit(next));
+  };
+
+  return visit(candidate.u);
+};
+
+const getNextKruskalEdge = (selectedEdgeIds: string[]) =>
+  [...EDGES]
+    .sort((a, b) => a.weight - b.weight)
+    .find((edge) => !selectedEdgeIds.includes(edge.id) && !wouldCreateCycle(selectedEdgeIds, edge));
+
+const getPrimTreeVertices = (selectedEdgeIds: string[]) => {
+  const adjacency = new Map<string, string[]>();
+  selectedEdgeIds.forEach((id) => {
+    const edge = getEdgeById(id);
+    adjacency.set(edge.u, [...(adjacency.get(edge.u) ?? []), edge.v]);
+    adjacency.set(edge.v, [...(adjacency.get(edge.v) ?? []), edge.u]);
+  });
+
+  const connected = new Set<string>([PRIM_START_VERTEX]);
+  const queue = [PRIM_START_VERTEX];
+  while (queue.length > 0) {
+    const vertex = queue.shift()!;
+    (adjacency.get(vertex) ?? []).forEach((next) => {
+      if (!connected.has(next)) {
+        connected.add(next);
+        queue.push(next);
+      }
+    });
+  }
+  return connected;
+};
+
+const getNextPrimEdge = (selectedEdgeIds: string[]) => {
+  const treeVertices = getPrimTreeVertices(selectedEdgeIds);
+  return [...EDGES]
+    .sort((a, b) => a.weight - b.weight)
+    .find((edge) => {
+      if (selectedEdgeIds.includes(edge.id)) return false;
+      return treeVertices.has(edge.u) !== treeVertices.has(edge.v);
+    });
+};
 
 export default function MinSpanningTree() {
   const [algo, setAlgo] = useState<'PRIM' | 'KRUSKAL'>('KRUSKAL');
@@ -35,28 +93,30 @@ export default function MinSpanningTree() {
   const handlePickEdge = (edge: Edge) => {
     if (selectedEdges.includes(edge.id)) return;
 
-    // Check if adding this edge causes a cycle
-    if (algo === 'KRUSKAL') {
-      const sorted = [...EDGES].sort((a, b) => a.weight - b.weight);
-      const currentNext = sorted.find(e => !selectedEdges.includes(e.id));
+    if (wouldCreateCycle(selectedEdges, edge)) {
+      setErrorMsg(`边【${edge.u}-${edge.v} (权值: ${edge.weight})】会形成回路。生成树必须保持连通且无环，请跳过它。`);
+      return;
+    }
 
-      if (currentNext && currentNext.id !== edge.id) {
-        if (edge.weight > currentNext.weight) {
-          setErrorMsg(`Kruskal 算法要求按权值从小到大升序挑选！应该优先选择权值更小的边【${currentNext.u}-${currentNext.v} (权值: ${currentNext.weight})】！`);
-          return;
-        }
-      }
+    const expectedEdge = algo === 'KRUSKAL'
+      ? getNextKruskalEdge(selectedEdges)
+      : getNextPrimEdge(selectedEdges);
+
+    if (expectedEdge && edge.id !== expectedEdge.id) {
+      const rule = algo === 'KRUSKAL'
+        ? '全图中权值最小且不成环的边'
+        : `从顶点 ${PRIM_START_VERTEX} 已生成树连向树外、权值最小的边`;
+      setErrorMsg(`本步应选择【${expectedEdge.u}-${expectedEdge.v} (权值: ${expectedEdge.weight})】。${algo} 算法要求选择${rule}。`);
+      return;
     }
 
     setErrorMsg(null);
     const updated = [...selectedEdges, edge.id];
     setSelectedEdges(updated);
 
-    if (updated.length === 4) {
-      if (updated.sort().join(',') === [...CORRECT_MST_EDGES].sort().join(',')) {
-        setSuccessMsg(`🎉 成功构造最小生成树 (MST)！总权值和为 ${totalWeight + edge.weight}！`);
-        setTimeout(() => setIsCompleted(true), 800);
-      }
+    if (updated.length === 4 && [...updated].sort().join(',') === [...CORRECT_MST_EDGES].sort().join(',')) {
+      setSuccessMsg(`🎉 成功构造最小生成树 (MST)！总权值和为 ${totalWeight + edge.weight}！`);
+      setTimeout(() => setIsCompleted(true), 800);
     }
   };
 
@@ -114,7 +174,7 @@ export default function MinSpanningTree() {
           <div className="md:col-span-5 bg-slate-900/80 rounded-xl p-4 border border-slate-800 flex flex-col justify-between">
             <div>
               <div className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">
-                加权无向图边列表 (按权值选择)
+                  加权无向图边列表 ({algo === 'KRUSKAL' ? 'Kruskal：最小且不成环' : `Prim：从 ${PRIM_START_VERTEX} 出发跨割加边`})
               </div>
 
               <div className="space-y-2 mb-4">
@@ -141,7 +201,7 @@ export default function MinSpanningTree() {
             </div>
 
             <div className="text-xs text-slate-400 bg-slate-950 p-3 rounded-xl border border-slate-800">
-              提示：含有 5 个顶点的无向图，最小生成树包含 <strong className="text-cyan-300">4 条边</strong>。已选: {selectedEdges.length} / 4。
+              提示：含有 5 个顶点的无向图，最小生成树包含 <strong className="text-cyan-300">4 条边</strong>。{algo === 'KRUSKAL' ? '每步选择权值最小且不成环的边。' : `Prim 从顶点 ${PRIM_START_VERTEX} 开始，每步选择连接树内与树外的最小边。`} 已选: {selectedEdges.length} / 4。
             </div>
           </div>
 
