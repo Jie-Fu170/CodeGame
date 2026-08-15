@@ -14,7 +14,7 @@ export default function BlackboxTesting() {
   const { addScore } = useGameStore();
 
   // Range [18, 60]
-  // Standard BVA points: 17 (min-1), 18 (min), 19 (min+1), 39 (nom), 59 (max-1), 60 (max), 61 (max+1)
+  // 本关采用六点健壮边界集：min-1, min, min+1, max-1, max, max+1。
   const allTestCases: TestCase[] = [
     { id: 't1', value: 17, label: '17 (min - 1)', category: 'invalid_low', isCorrectBoundary: true },
     { id: 't2', value: 18, label: '18 (下界 min)', category: 'min_bound', isCorrectBoundary: true },
@@ -46,7 +46,7 @@ export default function BlackboxTesting() {
 
     if (hasAllBoundaries && hasNoRedundant) {
       setFeedback({
-        msg: '完美诊断！精确勾选了 5 点法/7 点法标准的边界值用例集 (17, 18, 19, 59, 60, 61)，无任何无效冗余用例！',
+        msg: '完美诊断！精确勾选了六点健壮边界集：17、18、19、59、60、61（min-1、min、min+1、max-1、max、max+1）。',
         isCorrect: true
       });
       if (!isCompleted) {
@@ -55,8 +55,8 @@ export default function BlackboxTesting() {
       }
     } else {
       let err = '';
-      if (!hasAllBoundaries) err += '未覆盖全所有边界节点 (如 min-1, min, min+1, max-1, max, max+1)；';
-      if (!hasNoRedundant) err += '选择了非极值点的普通冗余用例；';
+      if (!hasAllBoundaries) err += '未覆盖全部六个健壮边界点（min-1、min、min+1、max-1、max、max+1）；';
+      if (!hasNoRedundant) err += '本关只要求六个健壮边界点，不应选择普通有效值或远离边界的冗余值；';
       setFeedback({ msg: err, isCorrect: false });
     }
   };
@@ -71,7 +71,7 @@ export default function BlackboxTesting() {
           </div>
           <div>
             <h2 className="text-xl font-bold text-pink-300">黑盒测试与边界值分析 (BVA)</h2>
-            <p className="text-xs text-slate-400">软件工程与质量保证 · 等价类划分与 [min-1, min, min+1, max-1, max, max+1] 测试用例设计</p>
+            <p className="text-xs text-slate-400">软件工程与质量保证 · 六点健壮边界集 [min-1, min, min+1, max-1, max, max+1] 测试用例设计</p>
           </div>
         </div>
       </div>
@@ -81,7 +81,7 @@ export default function BlackboxTesting() {
         <h3 className="text-xs font-mono text-pink-400 uppercase tracking-wider">测试需求说明:</h3>
         <p className="text-sm text-slate-300 leading-relaxed">
           某系统注册模块要求用户年龄输入范围为 <span className="font-mono text-amber-400 font-bold">[18, 60]</span> (闭区间，18岁与60岁均有效)。
-          请根据<span className="text-cyan-300 font-bold">黑盒测试边界值分析法 (Boundary Value Analysis)</span>，从下方备选用例集中挑选出最严谨、无冗余的测试用例组合。
+          本关采用<span className="text-cyan-300 font-bold">六点健壮边界值分析法 (Boundary Value Analysis)</span>，请从下方备选用例中选出 min-1、min、min+1、max-1、max、max+1，且不要加入普通有效值。
         </p>
       </div>
 
