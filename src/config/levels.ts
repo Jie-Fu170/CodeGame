@@ -63,15 +63,15 @@ export const LEVELS: GameLevel[] = [
     id: 'deadlock',
     title: '死锁解除',
     category: LEVEL_CATEGORIES.OS,
-    description: '银行家算法实战，解开错综复杂的资源依赖',
+    description: '识别资源分配图中的循环等待，并通过撤销进程解除死锁',
     sceneKey: 'DeadlockScene',
     hudComponent: 'HUD',
     themeColor: 'red',
     engine: 'phaser',
     instructions: [
       '系统中出现了多个互相等待资源的进程，形成了“死锁”。',
-      '你需要点击画面中出现死锁的节点，破坏它们的“循环等待”条件。',
-      '及时点击红色报警节点，防止系统崩溃！'
+      '本关采用死锁恢复策略：点击红框进程，撤销该进程占有/请求的资源边，从而破坏“循环等待”条件。',
+      '这与银行家算法的死锁避免不同；请及时处理红色报警节点，防止系统崩溃！'
     ]
   },
   {
