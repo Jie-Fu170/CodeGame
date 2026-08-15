@@ -7,9 +7,21 @@ export const PipelineHUD = () => {
   const hpPercentage = (hp / maxHp) * 100
   const hpColor = hpPercentage > 50 ? 'bg-green-500' : hpPercentage > 20 ? 'bg-yellow-500' : 'bg-red-500'
 
-  const maxTime = Math.max(stageTimes.IF, stageTimes.ID, stageTimes.EX) / 1000
+  type PipelineStage = 'IF' | 'ID' | 'EX'
+  const stageLabels: Record<PipelineStage, string> = {
+    IF: '取指',
+    ID: '分析',
+    EX: '执行'
+  }
+  const stageEntries = Object.entries(stageTimes) as [PipelineStage, number][]
+  const [bottleneckStage, bottleneckTime] = stageEntries.reduce((slowest, stage) =>
+    stage[1] > slowest[1] ? stage : slowest
+  )
+  const minStageTime = Math.min(...stageEntries.map(([, time]) => time))
+  const maxTime = bottleneckTime / 1000
   const throughput = (1 / maxTime).toFixed(2)
-  const isBottleneck = stageTimes.ID > stageTimes.IF
+  const hasBottleneck = isPipelined && bottleneckTime > minStageTime
+  const canUpgradeBottleneck = bottleneckTime > 1000 && money >= 50
 
   return (
     <div className="absolute top-0 left-0 w-full h-full pointer-events-none flex flex-col justify-between p-2 sm:p-6 pt-10 sm:pt-14 z-10 overflow-y-auto">
@@ -69,9 +81,11 @@ export const PipelineHUD = () => {
                   流水线模式
                 </button>
               </div>
-              {isPipelined && isBottleneck && (
-                <div className="text-red-400 text-[10px] sm:text-xs animate-pulse text-center font-bold">
-                  ⚠️ 警告：分析阶段(ID)严重阻塞！
+              {isPipelined && (
+                <div className={`text-[10px] sm:text-xs text-center font-bold ${hasBottleneck ? 'text-red-400 animate-pulse' : 'text-emerald-400'}`}>
+                  {hasBottleneck
+                    ? `⚠️ 警告：${stageLabels[bottleneckStage]}阶段(${bottleneckStage})是当前瓶颈！`
+                    : '✓ 各流水阶段时长均衡，当前无单一瓶颈。'}
                 </div>
               )}
             </div>
@@ -79,19 +93,20 @@ export const PipelineHUD = () => {
             {/* Upgrade Factory Button */}
             <div className="flex items-center">
               <button
-                onClick={() => upgradeStage('ID')}
-                disabled={stageTimes.ID <= 2000 || money < 50}
+                onClick={() => upgradeStage(bottleneckStage)}
+                disabled={!hasBottleneck || !canUpgradeBottleneck}
                 className={`w-full py-2 px-3 rounded-lg font-bold flex justify-between items-center transition-all text-xs ${
-                  stageTimes.ID > 2000 && money >= 50
+                  hasBottleneck && canUpgradeBottleneck
                     ? 'bg-purple-600 hover:bg-purple-500 text-white shadow-lg active:scale-95'
                     : 'bg-slate-800 text-slate-500 border border-slate-700 cursor-not-allowed'
                 }`}
               >
-                <div className="flex items-center gap-1.5"><Zap size={14}/> 升级分析(ID)中心</div>
+                <div className="flex items-center gap-1.5"><Zap size={14}/> 升级{stageLabels[bottleneckStage]}({bottleneckStage})阶段</div>
                 <div className="flex flex-col items-end">
                   <div className="text-yellow-300 font-mono text-[11px]">50 资金</div>
-                  {stageTimes.ID > 2000 && <div className="text-[9px] opacity-70">4s &rarr; 2s</div>}
-                  {stageTimes.ID <= 2000 && <div className="text-[9px] opacity-70 text-green-400">已满级</div>}
+                  {hasBottleneck && bottleneckTime > 1000 && <div className="text-[9px] opacity-70">{bottleneckTime / 1000}s &rarr; {Math.max(1000, bottleneckTime - 2000) / 1000}s</div>}
+                  {!hasBottleneck && <div className="text-[9px] opacity-70 text-green-400">当前阶段均衡</div>}
+                  {hasBottleneck && bottleneckTime <= 1000 && <div className="text-[9px] opacity-70 text-green-400">已满级</div>}
                 </div>
               </button>
             </div>
