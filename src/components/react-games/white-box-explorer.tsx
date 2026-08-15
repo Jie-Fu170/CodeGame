@@ -9,7 +9,13 @@ export default function WhiteBoxExplorer() {
 
   const path1Covered = testCases.some(tc => tc.path === 1);
   const path2Covered = testCases.some(tc => tc.path === 2);
-  const coverage = (path1Covered ? 50 : 0) + (path2Covered ? 50 : 0);
+  const branchCoverage = (path1Covered ? 50 : 0) + (path2Covered ? 50 : 0);
+  const aTrueCovered = testCases.some(tc => tc.A);
+  const aFalseCovered = testCases.some(tc => !tc.A);
+  const bTrueCovered = testCases.some(tc => tc.B);
+  const bFalseCovered = testCases.some(tc => !tc.B);
+  const conditionCoverage = [aTrueCovered, aFalseCovered, bTrueCovered, bFalseCovered]
+    .filter(Boolean).length * 25;
 
   const runTest = () => {
     if (status === 'won') return;
@@ -20,7 +26,14 @@ export default function WhiteBoxExplorer() {
     const newCases = [...testCases, { A: aValue, B: bValue, path: pathTaken }];
     setTestCases(newCases);
 
-    if (newCases.some(tc => tc.path === 1) && newCases.some(tc => tc.path === 2)) {
+    const nextBranchCovered = newCases.some(tc => tc.path === 1) && newCases.some(tc => tc.path === 2);
+    const nextConditionCovered =
+      newCases.some(tc => tc.A) &&
+      newCases.some(tc => !tc.A) &&
+      newCases.some(tc => tc.B) &&
+      newCases.some(tc => !tc.B);
+
+    if (nextBranchCovered && nextConditionCovered) {
       setStatus('won');
     }
   };
@@ -37,13 +50,19 @@ export default function WhiteBoxExplorer() {
           <h1 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-indigo-400 flex items-center gap-3">
             <Bug size={32} className="text-pink-500" /> 白盒测试染色师
           </h1>
-          <p className="text-slate-400 mt-2">任务：输入参数，执行代码，点亮所有判定分支（100% 判定覆盖率）。</p>
+          <p className="text-slate-400 mt-2">任务：输入参数，覆盖 True/False 两个判定分支，并让 A、B 两个基本条件均取到真、假。</p>
         </div>
         <div className="flex gap-4">
           <div className="bg-slate-800/80 px-4 py-2 rounded-xl border border-slate-700 flex flex-col items-center">
             <span className="text-xs text-slate-500 uppercase tracking-wider mb-1">判定覆盖率</span>
             <div className="text-2xl font-bold font-mono flex items-center gap-2">
-              <span className={coverage === 100 ? 'text-emerald-400' : 'text-amber-400'}>{coverage}%</span>
+              <span className={branchCoverage === 100 ? 'text-emerald-400' : 'text-amber-400'}>{branchCoverage}%</span>
+            </div>
+          </div>
+          <div className="bg-slate-800/80 px-4 py-2 rounded-xl border border-slate-700 flex flex-col items-center">
+            <span className="text-xs text-slate-500 uppercase tracking-wider mb-1">条件覆盖率</span>
+            <div className="text-2xl font-bold font-mono flex items-center gap-2">
+              <span className={conditionCoverage === 100 ? 'text-emerald-400' : 'text-amber-400'}>{conditionCoverage}%</span>
             </div>
           </div>
         </div>
@@ -114,7 +133,8 @@ export default function WhiteBoxExplorer() {
         {/* Right Side: Inputs & Tests */}
         <div className="w-80 flex flex-col gap-4">
           <div className="bg-slate-800/80 rounded-xl border border-slate-700 p-5">
-            <h3 className="text-sm font-bold text-slate-300 mb-4 uppercase tracking-wider">构造测试用例</h3>
+            <h3 className="text-sm font-bold text-slate-300 mb-2 uppercase tracking-wider">构造测试用例</h3>
+            <p className="text-xs text-slate-400 mb-4">通关条件：两个分支均执行，且 A、B 均至少取过一次 True 与 False。</p>
             
             <div className="flex gap-4 mb-4">
               <div className="flex-1 flex flex-col gap-2">
@@ -170,10 +190,10 @@ export default function WhiteBoxExplorer() {
         <div className="absolute inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center animate-in fade-in duration-300 rounded-3xl">
           <div className="bg-slate-900 p-10 rounded-3xl border-2 border-emerald-500 text-center max-w-lg shadow-[0_0_60px_rgba(16,185,129,0.3)] animate-in zoom-in-95 duration-500">
             <CheckCircle size={80} className="mx-auto text-emerald-400 mb-6 drop-shadow-[0_0_15px_rgba(16,185,129,0.5)]" />
-            <h2 className="text-3xl font-black text-white mb-4">100% 判定覆盖！</h2>
+            <h2 className="text-3xl font-black text-white mb-4">判定与条件覆盖均达 100%！</h2>
             <p className="text-slate-400 mb-8 leading-relaxed">
-              干得好，染色师！你成功利用不同的输入参数覆盖了 True 和 False 两个分支。<br/>
-              通过这种白盒测试方法，代码的逻辑盲区将无处遁形。
+              干得好，染色师！你已覆盖 True 和 False 两个分支，并让 A、B 两个基本条件均经历了真、假取值。<br/>
+              这体现了判定覆盖与条件覆盖的区别：仅走到两个分支，并不必然覆盖每个基本条件的两种取值。
             </p>
             <button onClick={reset} className="px-8 py-3 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl transition-all shadow-lg w-full">
               重置并再次挑战

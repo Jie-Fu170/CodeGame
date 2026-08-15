@@ -384,14 +384,14 @@ export const LEVELS: GameLevel[] = [
     id: 'white-box-explorer',
     title: '控制流图与白盒测试染色',
     category: LEVEL_CATEGORIES.SOFTWARE_ENG,
-    description: '通过输入参数，达成 100% 判定覆盖率。',
+    description: '通过输入参数，达成 100% 判定覆盖率与基本条件覆盖率。',
     hudComponent: 'WhiteBoxExplorer',
     themeColor: 'pink',
     engine: 'react',
     isNew: true,
     instructions: [
       '分析程序的控制流图 (CFG) 与条件分支。',
-      '设计测试用例输入参数，使得测试覆盖率达到 100% 判定覆盖/条件覆盖。'
+      '设计测试用例输入参数，覆盖 True/False 两个判定分支，并使 A、B 两个基本条件均取到真、假。'
     ]
   },
   {
