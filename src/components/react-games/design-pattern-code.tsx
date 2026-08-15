@@ -8,7 +8,7 @@ export default function DesignPatternCode() {
   // Observer Pattern Fill-in-the-blanks
   const [b1, setB1] = useState(''); // interface Observer / class Observer
   const [b2, setB2] = useState(''); // observers.add(obs)
-  const [b3, setB3] = useState(''); // obs.update(this) / obs.update()
+  const [b3, setB3] = useState(''); // obs.update(this)
   const [b4, setB4] = useState(''); // strategy / observer
 
   const [feedback, setFeedback] = useState<{ msg: string; isCorrect: boolean } | null>(null);
@@ -17,7 +17,7 @@ export default function DesignPatternCode() {
   const checkCode = () => {
     const isB1Correct = b1.trim() === 'Observer';
     const isB2Correct = b2.trim() === 'observers.add(obs)' || b2.trim() === 'this.observers.add(obs)';
-    const isB3Correct = b3.trim() === 'obs.update(this)' || b3.trim() === 'obs.update()';
+    const isB3Correct = b3.trim() === 'obs.update(this)';
     const isB4Correct = b4.trim() === 'Subject';
 
     if (isB1Correct && isB2Correct && isB3Correct && isB4Correct) {
