@@ -18,7 +18,7 @@ export default function NetProtocolPorts() {
     { name: 'HTTP', desc: '超文本传输协议', correctPort: 80, correctTransport: 'TCP', userPort: '', userTransport: '' },
     { name: 'HTTPS', desc: '安全超文本传输协议', correctPort: 443, correctTransport: 'TCP', userPort: '', userTransport: '' },
     { name: 'FTP (控制)', desc: '文件传输控制命令端口', correctPort: 21, correctTransport: 'TCP', userPort: '', userTransport: '' },
-    { name: 'DNS', desc: '域名解析服务', correctPort: 53, correctTransport: 'UDP', userPort: '', userTransport: '' },
+    { name: 'DNS（典型查询）', desc: '小型域名解析查询', correctPort: 53, correctTransport: 'UDP', userPort: '', userTransport: '' },
     { name: 'DHCP (服务器)', desc: '动态主机配置协议', correctPort: 67, correctTransport: 'UDP', userPort: '', userTransport: '' },
     { name: 'SNMP', desc: '简单网络管理协议', correctPort: 161, correctTransport: 'UDP', userPort: '', userTransport: '' }
   ]);
@@ -33,7 +33,7 @@ export default function NetProtocolPorts() {
 
     if (isAllCorrect) {
       setFeedback({
-        msg: '网络协议端口与 TCP/UDP 传输层归类完全正确！通信信道安全建立！',
+        msg: '网络协议端口与 TCP/UDP 传输层归类完全正确！本关 DNS 按典型小型查询使用 UDP/53；区域传送、大响应或截断回退等场景也可使用 TCP/53。',
         isCorrect: true
       });
       if (!isCompleted) {
@@ -42,7 +42,7 @@ export default function NetProtocolPorts() {
       }
     } else {
       setFeedback({
-        msg: '校验未通过。提示：HTTP(80), HTTPS(443), FTP(21), DNS(53/UDP), DHCP(67/UDP), SNMP(161/UDP)。',
+        msg: '校验未通过。本关按典型查询口径：HTTP(80/TCP)、HTTPS(443/TCP)、FTP(21/TCP)、DNS(53/UDP)、DHCP(67/UDP)、SNMP(161/UDP)。注意 DNS 在区域传送或大响应等例外中也可使用 TCP/53。',
         isCorrect: false
       });
     }
@@ -64,7 +64,7 @@ export default function NetProtocolPorts() {
       </div>
 
       <div className="p-4 bg-slate-950/80 rounded-xl border border-slate-800 text-xs text-slate-300 mb-6">
-        请为以下常见网络协议配置正确的默认端口号 (Port) 以及传输层协议 (TCP / UDP)：
+        请为以下常见网络协议配置默认端口号 (Port) 与典型传输层协议 (TCP / UDP)。其中 DNS 项仅指典型小型查询；区域传送或大响应等例外可使用 TCP/53。
       </div>
 
       {/* Grid of Protocol Cards */}
