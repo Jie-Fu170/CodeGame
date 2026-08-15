@@ -15,6 +15,12 @@ export default function InfixToPostfix() {
 
   const currentToken = INFIX_TOKENS[tokenIdx];
 
+  const getPrecedence = (operator: string) => {
+    if (operator === '*' || operator === '/') return 2;
+    if (operator === '+' || operator === '-') return 1;
+    return 0;
+  };
+
   const handleNextStep = () => {
     if (tokenIdx >= INFIX_TOKENS.length) {
       // Pop remaining stack to output
@@ -54,8 +60,24 @@ export default function InfixToPostfix() {
         setTokenIdx(i => i + 1);
       }
     } else if (['+', '-', '*', '/'].includes(t)) {
-      setStack(s => [...s, t]);
-      setSuccessMsg(`运算符【${t}】压入 Stack 栈`);
+      // 左结合运算符：入栈前先输出栈内优先级更高或相同的运算符。
+      const nextStack = [...stack];
+      const popped: string[] = [];
+      while (nextStack.length > 0) {
+        const top = nextStack[nextStack.length - 1];
+        if (top === '(' || getPrecedence(top) < getPrecedence(t)) break;
+        popped.push(nextStack.pop()!);
+      }
+
+      if (popped.length > 0) {
+        setOutput(o => [...o, ...popped]);
+      }
+      setStack([...nextStack, t]);
+      setSuccessMsg(
+        popped.length > 0
+          ? `运算符【${t}】入栈前，先输出优先级不低于它的【${popped.join('、')}】`
+          : `运算符【${t}】压入 Stack 栈`
+      );
       setTokenIdx(i => i + 1);
     }
   };

@@ -28,6 +28,7 @@ export default function DijkstraShortestPath() {
     { from: 'A', to: 'B', weight: 4 },
     { from: 'A', to: 'C', weight: 2 },
     { from: 'B', to: 'C', weight: 1 },
+    { from: 'C', to: 'B', weight: 1 },
     { from: 'B', to: 'D', weight: 5 },
     { from: 'C', to: 'D', weight: 8 },
     { from: 'C', to: 'E', weight: 10 },

@@ -79,6 +79,11 @@ const NetProtocolPorts = React.lazy(() => import('./components/react-games/net-p
 const QueryOptimizationTree = React.lazy(() => import('./components/react-games/query-optimization-tree'))
 const DigitalEnvelope = React.lazy(() => import('./components/react-games/digital-envelope'))
 const ArchStyleATAM = React.lazy(() => import('./components/react-games/arch-style-atam'))
+const SyntaxTreeBuilder = React.lazy(() => import('./components/react-games/syntax-tree-builder'))
+const DataRepresentation = React.lazy(() => import('./components/react-games/data-representation'))
+const MultimediaCalculator = React.lazy(() => import('./components/react-games/multimedia-calculator'))
+const OOPPolymorphism = React.lazy(() => import('./components/react-games/oop-polymorphism'))
+const AVLTreeRotation = React.lazy(() => import('./components/react-games/avl-tree-rotation'))
 
 const HUDLoadingFallback = () => (
   <div className="w-full py-12 flex flex-col items-center justify-center gap-3 text-cyan-400 font-mono">
@@ -162,6 +167,11 @@ const HUD_MAP: Record<string, React.ComponentType<any>> = {
   'QueryOptimizationTree': QueryOptimizationTree,
   'DigitalEnvelope': DigitalEnvelope,
   'ArchStyleATAM': ArchStyleATAM,
+  'SyntaxTreeBuilder': SyntaxTreeBuilder,
+  'DataRepresentation': DataRepresentation,
+  'MultimediaCalculator': MultimediaCalculator,
+  'OOPPolymorphism': OOPPolymorphism,
+  'AVLTreeRotation': AVLTreeRotation,
 }
 
 /** 按声明顺序对关卡做领域分组（保持 LEVELS 的原始顺序） */
