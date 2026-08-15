@@ -36,7 +36,7 @@ export const NetworkHUD = () => {
     { type: 'SYN', seq: 100, ack: 0 },
     { type: 'ACK', seq: seqBase, ack: ackBase },
     { type: 'ACK', seq: seqBase + 1, ack: ackBase }, // Wrong SEQ
-    { type: 'ACK', seq: seqBase, ack: ackBase - 1 }, // Wrong ACK
+    { type: 'ACK', seq: seqBase, ack: ackBase + 1 }, // Wrong ACK, but never negative
     { type: 'DATA', seq: seqBase, ack: ackBase },
     { type: 'FIN', seq: seqBase, ack: ackBase },
   ] as const
