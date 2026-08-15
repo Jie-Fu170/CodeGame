@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Disc, Play, RotateCcw, CheckCircle2, Info, Trophy, Gauge } from 'lucide-react';
 
 const INITIAL_HEAD = 53;
+const MAX_TRACK = 199;
 const REQUESTS = [98, 183, 37, 122, 14, 124, 65, 67];
 
 // Calculate sequences and total distances
@@ -43,6 +44,12 @@ function getSCAN() {
   for (const r of up) {
     dist += Math.abs(r - curr);
     curr = r;
+    seq.push(curr);
+  }
+  // 标准 SCAN 在反向前继续移动到磁盘端点，而不仅是最后一个请求位置。
+  if (down.length > 0 && curr !== MAX_TRACK) {
+    dist += Math.abs(MAX_TRACK - curr);
+    curr = MAX_TRACK;
     seq.push(curr);
   }
   for (const r of down) {
@@ -113,7 +120,7 @@ export default function DiskScheduler() {
                 {[
                   { key: 'FCFS', name: 'FCFS (先来先服务)', desc: '按请求到达的先后顺序依次服务，容易产生大量磁头往返摇摆。' },
                   { key: 'SSTF', name: 'SSTF (最短寻道时间优先)', desc: '优先选择距离当前磁头最近的磁道，显著减少寻道总距离。' },
-                  { key: 'SCAN', name: 'SCAN (电梯扫描算法)', desc: '磁头单向移动扫描到顶，反向返回，彻底避免“饥饿”现象。' },
+                  { key: 'SCAN', name: 'SCAN (电梯扫描算法)', desc: '磁头沿一个方向服务请求直到端点后反向，能降低 SSTF 的饥饿风险；实际寻道距离受请求分布与初始方向影响。' },
                 ].map((item) => (
                   <button
                     key={item.key}
@@ -188,7 +195,7 @@ export default function DiskScheduler() {
             </div>
 
             <div className="mt-4 text-[11px] text-slate-400 bg-slate-950 p-2.5 rounded-lg border border-slate-800">
-              💡 <strong className="text-slate-200">对比结论：</strong> FCFS (寻道距离: {fcfsRes.dist}) &gt; SSTF (寻道距离: {sstfRes.dist}) &ge; SCAN (寻道距离: {scanRes.dist})。SSTF 与 SCAN 的寻道效率远高于 FCFS！
+              💡 <strong className="text-slate-200">本组请求的对比：</strong> FCFS 为 {fcfsRes.dist}，SSTF 为 {sstfRes.dist}，SCAN 为 {scanRes.dist} 个磁道。算法优劣会随请求分布、初始方向和端点策略变化，不能据此推出固定不等式。
             </div>
           </div>
         </div>
@@ -200,7 +207,7 @@ export default function DiskScheduler() {
           <Trophy size={48} className="mx-auto text-amber-300 mb-3 animate-bounce" />
           <h2 className="ds-display text-2xl font-bold text-amber-400 mb-2">🎉 恭喜通关：磁盘调度大师！</h2>
           <p className="text-xs text-slate-300 max-w-md mx-auto mb-4 leading-relaxed">
-            你已经掌握了 FCFS (公平无极)、SSTF (就近寻道) 和 SCAN (电梯扫描) 的全部磁头寻道算法原理与平均寻道时间计算！
+            你已经掌握了 FCFS（按到达顺序）、SSTF（就近寻道）和 SCAN（扫至端点后反向）的磁头寻道原理，并能结合具体请求序列比较总寻道距离！
           </p>
 
           <button
