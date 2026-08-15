@@ -3,12 +3,14 @@ import { GitCommit, CheckCircle2, Play, RefreshCw, AlertCircle } from 'lucide-re
 import { useGameStore } from '../../store/useGameStore';
 
 interface SlotState {
-  p1_finish: string;
+  p1_notify_p2: string;
+  p1_notify_p3: string;
   p2_start: string;
   p2_finish: string;
   p3_start: string;
   p3_finish: string;
-  p4_start: string;
+  p4_wait_p2: string;
+  p4_wait_p3: string;
 }
 
 export default function PrecedencePV() {
@@ -16,12 +18,14 @@ export default function PrecedencePV() {
 
   // Semaphores: S1 (P1->P2), S2 (P1->P3), S3 (P2->P4), S4 (P3->P4)
   const [slots, setSlots] = useState<SlotState>({
-    p1_finish: '',
+    p1_notify_p2: '',
+    p1_notify_p3: '',
     p2_start: '',
     p2_finish: '',
     p3_start: '',
     p3_finish: '',
-    p4_start: ''
+    p4_wait_p2: '',
+    p4_wait_p3: ''
   });
 
   const [feedback, setFeedback] = useState<{ msg: string; isCorrect: boolean } | null>(null);
@@ -34,27 +38,25 @@ export default function PrecedencePV() {
   };
 
   const handleVerify = () => {
-    // Correct answers:
-    // P1 ends: V(S1), V(S2) (or V(S1) / V(S2))
-    // P2 starts: P(S1)
-    // P2 ends: V(S3)
-    // P3 starts: P(S2)
-    // P3 ends: V(S4)
-    // P4 starts: P(S3), P(S4) (or P(S3) wait P(S4))
-    const isP1Valid = slots.p1_finish === 'V(S1)' || slots.p1_finish === 'V(S2)';
+    // P1 分叉后需分别通知 P2、P3；P4 汇合前需等待 P2、P3 都完成。
+    const isP1NotifyP2Valid = slots.p1_notify_p2 === 'V(S1)';
+    const isP1NotifyP3Valid = slots.p1_notify_p3 === 'V(S2)';
     const isP2StartValid = slots.p2_start === 'P(S1)';
     const isP2FinishValid = slots.p2_finish === 'V(S3)';
     const isP3StartValid = slots.p3_start === 'P(S2)';
     const isP3FinishValid = slots.p3_finish === 'V(S4)';
-    const isP4StartValid = slots.p4_start === 'P(S3)' || slots.p4_start === 'P(S4)';
+    const isP4WaitP2Valid = slots.p4_wait_p2 === 'P(S3)';
+    const isP4WaitP3Valid = slots.p4_wait_p3 === 'P(S4)';
 
     if (
-      isP1Valid &&
+      isP1NotifyP2Valid &&
+      isP1NotifyP3Valid &&
       isP2StartValid &&
       isP2FinishValid &&
       isP3StartValid &&
       isP3FinishValid &&
-      isP4StartValid
+      isP4WaitP2Valid &&
+      isP4WaitP3Valid
     ) {
       setFeedback({
         msg: '答案完全正确！PV 信号量匹配无误，前趋关系完美同步！',
@@ -74,12 +76,14 @@ export default function PrecedencePV() {
 
   const handleReset = () => {
     setSlots({
-      p1_finish: '',
+      p1_notify_p2: '',
+      p1_notify_p3: '',
       p2_start: '',
       p2_finish: '',
       p3_start: '',
       p3_finish: '',
-      p4_start: ''
+      p4_wait_p2: '',
+      p4_wait_p3: ''
     });
     setFeedback(null);
   };
@@ -139,10 +143,23 @@ export default function PrecedencePV() {
           <div className="text-sm font-bold text-cyan-300 font-mono">P1 代码逻辑</div>
           <div className="p-2 bg-slate-900 rounded font-mono text-xs text-slate-400">L1: 执行 P1 核心工作;</div>
           <div className="flex items-center justify-between gap-2">
-            <span className="text-xs text-slate-300">L2: 离开前通知 P2:</span>
+            <span className="text-xs text-slate-300">L2: 通知 P2:</span>
             <select
-              value={slots.p1_finish}
-              onChange={(e) => handleSelect('p1_finish', e.target.value)}
+              value={slots.p1_notify_p2}
+              onChange={(e) => handleSelect('p1_notify_p2', e.target.value)}
+              className="px-3 py-1.5 bg-slate-900 border border-slate-600 rounded text-xs text-cyan-300 font-mono focus:outline-none"
+            >
+              <option value="">-- 选择 --</option>
+              {options.map((opt) => (
+                <option key={opt} value={opt}>{opt}</option>
+              ))}
+            </select>
+          </div>
+          <div className="flex items-center justify-between gap-2">
+            <span className="text-xs text-slate-300">L3: 通知 P3:</span>
+            <select
+              value={slots.p1_notify_p3}
+              onChange={(e) => handleSelect('p1_notify_p3', e.target.value)}
               className="px-3 py-1.5 bg-slate-900 border border-slate-600 rounded text-xs text-cyan-300 font-mono focus:outline-none"
             >
               <option value="">-- 选择 --</option>
@@ -221,10 +238,10 @@ export default function PrecedencePV() {
         <div className="p-4 bg-slate-800/80 rounded-xl border border-slate-700 space-y-3">
           <div className="text-sm font-bold text-emerald-300 font-mono">P4 代码逻辑</div>
           <div className="flex items-center justify-between gap-2">
-            <span className="text-xs text-slate-300">L1: 等待前趋信号:</span>
+            <span className="text-xs text-slate-300">L1: 等待 P2 完成:</span>
             <select
-              value={slots.p4_start}
-              onChange={(e) => handleSelect('p4_start', e.target.value)}
+              value={slots.p4_wait_p2}
+              onChange={(e) => handleSelect('p4_wait_p2', e.target.value)}
               className="px-3 py-1.5 bg-slate-900 border border-slate-600 rounded text-xs text-emerald-300 font-mono focus:outline-none"
             >
               <option value="">-- 选择 --</option>
@@ -233,7 +250,20 @@ export default function PrecedencePV() {
               ))}
             </select>
           </div>
-          <div className="p-2 bg-slate-900 rounded font-mono text-xs text-slate-400">L2: 执行 P4 最终汇合;</div>
+          <div className="flex items-center justify-between gap-2">
+            <span className="text-xs text-slate-300">L2: 等待 P3 完成:</span>
+            <select
+              value={slots.p4_wait_p3}
+              onChange={(e) => handleSelect('p4_wait_p3', e.target.value)}
+              className="px-3 py-1.5 bg-slate-900 border border-slate-600 rounded text-xs text-emerald-300 font-mono focus:outline-none"
+            >
+              <option value="">-- 选择 --</option>
+              {options.map((opt) => (
+                <option key={opt} value={opt}>{opt}</option>
+              ))}
+            </select>
+          </div>
+          <div className="p-2 bg-slate-900 rounded font-mono text-xs text-slate-400">L3: 执行 P4 最终汇合;</div>
         </div>
       </div>
 
