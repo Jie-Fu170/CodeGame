@@ -490,7 +490,7 @@ export const LEVELS: GameLevel[] = [
     engine: 'react',
     isNew: true,
     instructions: [
-      '推导对称矩阵 / 三角矩阵压缩存储公式 k = i(i-1)/2 + j - 1。',
+      '本关采用 1 基数组下标，推导下三角矩阵压缩公式 k = i(i-1)/2 + j；若数组从 0 开始，则索引 k0 = k - 1。',
       '将二维坐标 (i, j) 映射到一维数组下标 k。'
     ]
   },
