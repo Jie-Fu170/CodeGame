@@ -33,10 +33,17 @@ const INITIAL_EDGES: Edge[] = [
   { id: 'e4', source: 'P3', target: 'E2', label: '账单明细' },
 ];
 
+const REQUIRED_REPAIR_FLOW = {
+  source: 'P2',
+  target: 'P3',
+  label: '发货完成信息'
+};
+
 export default function DFDInspector() {
   const [edges, setEdges] = useState<Edge[]>(INITIAL_EDGES);
   const [selectedNode, setSelectedNode] = useState<string | null>(null);
   const [status, setStatus] = useState<'playing' | 'won'>('playing');
+  const [notice, setNotice] = useState<string | null>(null);
 
   const checkFlaws = (currentEdges: Edge[]) => {
     let hasBlackHole = false;
@@ -50,8 +57,15 @@ export default function DFDInspector() {
       if (inputs.length === 0 && outputs.length > 0) hasMiracle = true;
     });
 
-    if (!hasBlackHole && !hasMiracle) {
+    const hasRequiredRepair = currentEdges.some((edge) =>
+      edge.source === REQUIRED_REPAIR_FLOW.source &&
+      edge.target === REQUIRED_REPAIR_FLOW.target &&
+      edge.label === REQUIRED_REPAIR_FLOW.label
+    );
+
+    if (!hasBlackHole && !hasMiracle && hasRequiredRepair) {
       setStatus('won');
+      setNotice('修复成功：P2 的发货结果已作为 P3 的账单输入，黑洞与奇迹错误均被消除。');
     }
   };
 
@@ -60,30 +74,54 @@ export default function DFDInspector() {
 
     if (!selectedNode) {
       setSelectedNode(nodeId);
-    } else {
-      if (selectedNode !== nodeId) {
-        // Prevent duplicate edges
-        if (!edges.find(e => e.source === selectedNode && e.target === nodeId)) {
-          const newEdge: Edge = {
-            id: `user_${Date.now()}`,
-            source: selectedNode,
-            target: nodeId,
-            label: '数据流',
-            isUserAdded: true
-          };
-          const newEdges = [...edges, newEdge];
-          setEdges(newEdges);
-          checkFlaws(newEdges);
-        }
-      }
-      setSelectedNode(null);
+      setNotice('请选择目标节点。注意：本关需要让“处理发货”的结果成为“生成账单”的输入。');
+      return;
     }
+
+    if (selectedNode === nodeId) {
+      setSelectedNode(null);
+      setNotice('已取消本次连线。');
+      return;
+    }
+
+    const sourceNode = INITIAL_NODES.find((node) => node.id === selectedNode)!;
+    const targetNode = INITIAL_NODES.find((node) => node.id === nodeId)!;
+    const isDirectEntityStoreFlow =
+      (sourceNode.type === 'entity' && targetNode.type === 'datastore') ||
+      (sourceNode.type === 'datastore' && targetNode.type === 'entity');
+
+    if (isDirectEntityStoreFlow) {
+      setSelectedNode(null);
+      setNotice('DFD 规则：外部实体不能直接与数据存储相连，必须经过加工处理。');
+      return;
+    }
+
+    if (selectedNode !== REQUIRED_REPAIR_FLOW.source || nodeId !== REQUIRED_REPAIR_FLOW.target) {
+      setSelectedNode(null);
+      setNotice('这条连线不能修复本关缺陷。请让 P2 的“发货完成信息”流向 P3。');
+      return;
+    }
+
+    if (!edges.find((edge) => edge.source === selectedNode && edge.target === nodeId)) {
+      const newEdge: Edge = {
+        id: `user_${Date.now()}`,
+        source: selectedNode,
+        target: nodeId,
+        label: REQUIRED_REPAIR_FLOW.label,
+        isUserAdded: true
+      };
+      const newEdges = [...edges, newEdge];
+      setEdges(newEdges);
+      checkFlaws(newEdges);
+    }
+    setSelectedNode(null);
   };
 
   const reset = () => {
     setEdges(INITIAL_EDGES);
     setSelectedNode(null);
     setStatus('playing');
+    setNotice(null);
   };
 
   const getDiagnostics = () => {
@@ -111,7 +149,7 @@ export default function DFDInspector() {
           <h1 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-rose-400 flex items-center gap-3">
             <Activity size={32} className="text-orange-500" /> DFD 数据流图检修师
           </h1>
-          <p className="text-slate-400 mt-2">任务：连接节点，修复 DFD 中的"黑洞"与"奇迹"加工错误。</p>
+          <p className="text-slate-400 mt-2">任务：让 P2 的发货结果流向 P3，修复 DFD 中的“黑洞”与“奇迹”加工错误。</p>
         </div>
         <button onClick={reset} className="px-4 py-2 bg-slate-800 hover:bg-slate-700 rounded-lg text-sm font-bold text-slate-300 transition-colors">
           重置画布
@@ -138,7 +176,7 @@ export default function DFDInspector() {
               
               // Simple straight line calculation
               return (
-                <g key={e.id}>
+                    <g key={e.id}>
                   <line 
                     x1={`${src.x}%`} y1={`${src.y}%`} 
                     x2={`${tgt.x}%`} y2={`${tgt.y}%`}
@@ -147,7 +185,17 @@ export default function DFDInspector() {
                     strokeDasharray={e.isUserAdded ? '5,5' : 'none'}
                     markerEnd={`url(#${e.isUserAdded ? 'arrow-user' : 'arrow-default'})`}
                     className={e.isUserAdded ? 'animate-pulse' : ''}
-                  />
+                    />
+                  <text
+                    x={`${(src.x + tgt.x) / 2}%`}
+                    y={`${(src.y + tgt.y) / 2 - 3}%`}
+                    textAnchor="middle"
+                    fill={e.isUserAdded ? '#fdba74' : '#94a3b8'}
+                    fontSize="11"
+                    className="pointer-events-none"
+                  >
+                    {e.label}
+                  </text>
                 </g>
               );
             })}
@@ -190,7 +238,7 @@ export default function DFDInspector() {
               <div className="flex-1 flex flex-col items-center justify-center text-center animate-in zoom-in">
                 <CheckCircle size={64} className="text-emerald-400 mb-4 drop-shadow-[0_0_15px_rgba(52,211,153,0.4)]" />
                 <h4 className="text-xl font-bold text-emerald-300 mb-2">系统运转正常！</h4>
-                <p className="text-slate-400 text-sm">所有黑洞与奇迹已被消除，数据流图平衡校验通过。</p>
+                <p className="text-slate-400 text-sm">P2 的输出已成为 P3 的输入，所有黑洞与奇迹错误已被消除。</p>
               </div>
             ) : (
               <div className="flex-1 flex flex-col gap-3">
@@ -207,11 +255,17 @@ export default function DFDInspector() {
                   </div>
                 )}
                 
+                {notice && (
+                  <div className="bg-orange-950/30 border border-orange-800 p-3 rounded-lg text-orange-200 text-sm leading-relaxed">
+                    {notice}
+                  </div>
+                )}
+
                 <div className="mt-auto bg-slate-900 p-4 rounded-xl border border-slate-700 text-xs text-slate-400 leading-relaxed">
                   <strong className="text-slate-300 block mb-1">提示：</strong>
                   黑洞：该节点像黑洞一样吸入数据，但没有任何产出。<br/>
                   奇迹：该节点没有任何输入，却凭空产生了输出。<br/>
-                  请在它们之间建立合理的数据流。
+                  本关中，P2 处理“待发货订单”后应输出“发货完成信息”，作为 P3 生成账单的输入。
                 </div>
               </div>
             )}
