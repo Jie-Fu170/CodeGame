@@ -32,7 +32,7 @@ export default function SoftwareLifecycleCMMI() {
   // Part 2: CMMI Levels
   const [cmmiLevels, setCmmiLevels] = useState<CMMILevel[]>([
     { level: 1, name: 'Level 1 初始级 (Initial)', correctKeyword: '混乱无序，个人英雄主义', selectedKeyword: '' },
-    { level: 2, name: 'Level 2 已管理级 (Managed)', correctKeyword: '项目级过程可度量、可复用', selectedKeyword: '' },
+    { level: 2, name: 'Level 2 已管理级 (Managed)', correctKeyword: '项目级过程已计划、执行、测量和控制', selectedKeyword: '' },
     { level: 3, name: 'Level 3 已定义级 (Defined)', correctKeyword: '企业标准化组织级过程体系', selectedKeyword: '' },
     { level: 4, name: 'Level 4 已量化管理级 (Quantitatively Managed)', correctKeyword: '统计学与数据量化控制', selectedKeyword: '' },
     { level: 5, name: 'Level 5 优化级 (Optimizing)', correctKeyword: '持续自我改进与技术创新', selectedKeyword: '' }
@@ -41,7 +41,7 @@ export default function SoftwareLifecycleCMMI() {
   const sdlcOptions = ['瀑布模型', '螺旋模型', 'V模型', '喷泉模型'];
   const cmmiKeywords = [
     '混乱无序，个人英雄主义',
-    '项目级过程可度量、可复用',
+    '项目级过程已计划、执行、测量和控制',
     '企业标准化组织级过程体系',
     '统计学与数据量化控制',
     '持续自我改进与技术创新'
@@ -66,7 +66,7 @@ export default function SoftwareLifecycleCMMI() {
       setCmmiFeedback({ msg: 'CMMI 1-5 级成熟度判定完全正确！从初始级到优化级特征掌握扎实！', isCorrect: true });
       addScore(50);
     } else {
-      setCmmiFeedback({ msg: '部分 CMMI 等级特征不匹配。注意：L4 是量化控制，L5 是持续优化！', isCorrect: false });
+      setCmmiFeedback({ msg: '部分 CMMI 等级特征不匹配。注意：L2 是项目级计划、执行、测量和控制；L4 才是统计/量化管理，L5 是持续优化。', isCorrect: false });
     }
   };
 
