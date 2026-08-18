@@ -1165,6 +1165,21 @@ export const LEVELS: GameLevel[] = [
       '使用10题即时自测检验易混固定搭配，正确率达到80%即可点亮通关状态。',
       '在考场策略页完成14天冲刺计划，并在临考前补齐考前12个月时政。'
     ]
+  },
+  {
+    id: 'management-principles-study',
+    title: '13683 管理学通关课',
+    category: LEVEL_CATEGORIES.SELF_STUDY,
+    description: '自考13683《管理学原理（中级）》：12章高频理论、主观题框架与案例化自测',
+    hudComponent: 'ManagementPrinciplesStudy',
+    themeColor: 'teal',
+    engine: 'react',
+    isNew: true,
+    instructions: [
+      '按12章完成管理理论、计划组织、领导激励和控制模块的高频知识点学习。',
+      '使用12题即时自测，重点训练“理论名称—限定词—案例情境”的对应关系。',
+      '在考场策略页按10天冲刺节奏完成理论默写与简答、论述题分点训练。'
+    ]
   }
 ];
 
