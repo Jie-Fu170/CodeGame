@@ -84,6 +84,7 @@ const DataRepresentation = React.lazy(() => import('./components/react-games/dat
 const MultimediaCalculator = React.lazy(() => import('./components/react-games/multimedia-calculator'))
 const OOPPolymorphism = React.lazy(() => import('./components/react-games/oop-polymorphism'))
 const AVLTreeRotation = React.lazy(() => import('./components/react-games/avl-tree-rotation'))
+const XjpThoughtStudy = React.lazy(() => import('./components/react-games/xjp-thought-study'))
 
 const HUDLoadingFallback = () => (
   <div className="w-full py-12 flex flex-col items-center justify-center gap-3 text-cyan-400 font-mono">
@@ -172,6 +173,7 @@ const HUD_MAP: Record<string, React.ComponentType<any>> = {
   'MultimediaCalculator': MultimediaCalculator,
   'OOPPolymorphism': OOPPolymorphism,
   'AVLTreeRotation': AVLTreeRotation,
+  'XjpThoughtStudy': XjpThoughtStudy,
 }
 
 /** 按声明顺序对关卡做领域分组（保持 LEVELS 的原始顺序） */

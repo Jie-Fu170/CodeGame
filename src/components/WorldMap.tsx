@@ -4,7 +4,7 @@ import { useGameStore } from '../store/useGameStore';
 import { getLevelTheme, LevelTheme } from '../config/theme';
 import { SKINS, getSkin, WALL_EXTS } from '../config/skins';
 import { PremiumUnlockModal } from './PremiumUnlockModal';
-import { MapPin, CheckCircle2, Play, Compass, Database, Cpu, HardDrive, Network, Layers, Shield, FileCode, Check, Lock, X, ChevronDown } from 'lucide-react';
+import { MapPin, CheckCircle2, Play, Compass, Database, Cpu, HardDrive, Network, Layers, Shield, FileCode, Check, Lock, X, ChevronDown, BookOpenCheck } from 'lucide-react';
 
 const CATEGORY_ICONS: Record<string, React.ReactNode> = {
   '计算机组成原理': <Cpu size={24} />,
@@ -15,7 +15,8 @@ const CATEGORY_ICONS: Record<string, React.ReactNode> = {
   '设计模式': <FileCode size={24} />,
   '信息安全': <Shield size={24} />,
   '系统架构': <MapPin size={24} />,
-  '软件工程': <Compass size={24} />
+  '软件工程': <Compass size={24} />,
+  '自考公共课': <BookOpenCheck size={24} />
 };
 
 /**
@@ -32,7 +33,8 @@ const CATEGORY_ACCENTS: Record<string, string> = {
   '设计模式': 'green',
   '信息安全': 'red',
   '系统架构': 'amber',
-  '软件工程': 'pink'
+  '软件工程': 'pink',
+  '自考公共课': 'amber'
 };
 
 /** 冒险者段位：按总完成度晋升（min 为百分比阈值） */

@@ -23,7 +23,8 @@ export const LEVEL_CATEGORIES = {
   DESIGN_PATTERN: '设计模式',
   SECURITY: '信息安全',
   ARCHITECTURE: '系统架构',
-  SOFTWARE_ENG: '软件工程'
+  SOFTWARE_ENG: '软件工程',
+  SELF_STUDY: '自考公共课'
 };
 
 export const LEVELS: GameLevel[] = [
@@ -1148,6 +1149,21 @@ export const LEVELS: GameLevel[] = [
     instructions: [
       '找出插入节点后第一个失去平衡的节点。',
       '选择合适的单旋或双旋操作来修复。'
+    ]
+  },
+  {
+    id: 'xjp-thought-study',
+    title: '15040 习概通关课',
+    category: LEVEL_CATEGORIES.SELF_STUDY,
+    description: '自考15040《习近平新时代中国特色社会主义思想概论》：18章高频知识点、主观题框架与通关自测',
+    hudComponent: 'XjpThoughtStudy',
+    themeColor: 'amber',
+    engine: 'react',
+    isNew: true,
+    instructions: [
+      '按导论至第十七章完成高频知识点学习，并将已掌握章节标记为完成。',
+      '使用10题即时自测检验易混固定搭配，正确率达到80%即可点亮通关状态。',
+      '在考场策略页完成14天冲刺计划，并在临考前补齐考前12个月时政。'
     ]
   }
 ];
