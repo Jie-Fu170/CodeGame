@@ -15,8 +15,8 @@ export default function CRCChecksum() {
   const [verifyResult, setVerifyResult] = useState<{ isCorrect: boolean; remainder: string } | null>(null);
 
   // Correct CRC calculation for 101001 + 000 with divisor 1011
-  // 101001000 / 1011 = 100111 remainder 011
-  const correctCRC = '011';
+  // 101001000 / 1011 = 100100 remainder 100
+  const correctCRC = '100';
 
   // Modulo-2 division function
   const modulo2Div = (dividend: string, divisor: string) => {
@@ -62,7 +62,7 @@ export default function CRCChecksum() {
   };
 
   const handleSimulateTransmission = () => {
-    const fullFrame = dataStream + correctCRC; // 101001011
+    const fullFrame = dataStream + correctCRC; // 101001100
     let transmitted = fullFrame.split('');
 
     if (corruptedBitIndex !== null) {
@@ -96,7 +96,7 @@ export default function CRCChecksum() {
             <ShieldCheck size={28} /> CRC 循环冗余校验码 (Cyclic Redundancy Check)
           </h1>
           <p className="text-slate-400 mt-1 text-sm">
-            考点：多项式展开 $G(X) = X^3+X+1 \Rightarrow 1011$、模 2 异或除法与余数校验
+            考点：多项式展开 <i className="font-serif">G(X) = X<sup>3</sup> + X + 1 ⇒ 1011</i>、模 2 异或除法与余数校验
           </p>
         </div>
         <button
@@ -129,18 +129,18 @@ export default function CRCChecksum() {
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
               <div className="bg-slate-900/80 p-4 rounded-lg border border-slate-700">
-                <span className="text-slate-400">原始数据 stream ($M$):</span>
+                <span className="text-slate-400">原始数据 stream (<i className="font-serif">M</i>):</span>
                 <div className="text-xl font-bold text-emerald-400 tracking-wider mt-1">{dataStream} (6 位)</div>
               </div>
               <div className="bg-slate-900/80 p-4 rounded-lg border border-slate-700">
-                <span className="text-slate-400">生成多项式 $G(X) = X^3 + X + 1$:</span>
-                <div className="text-xl font-bold text-amber-400 tracking-wider mt-1">{generatorPoly} (4 位, 阶数 $r=3$)</div>
+                <span className="text-slate-400">生成多项式 <i className="font-serif">G(X) = X<sup>3</sup> + X + 1</i>:</span>
+                <div className="text-xl font-bold text-amber-400 tracking-wider mt-1">{generatorPoly} (4 位, 阶数 <i className="font-serif">r=3</i>)</div>
               </div>
             </div>
 
             <div className="p-4 bg-slate-900/50 rounded-lg text-xs text-slate-300 space-y-2 border border-slate-700/60">
               <p className="text-cyan-300 font-semibold">💡 软考解题解法要领：</p>
-              <p>1. 生成多项式最高次幂为 3 ($r=3$)，故需在原始数据 $M$ 尾部补 <strong>3 个 0</strong> 得到：<span className="text-emerald-300 font-bold">101001000</span>。</p>
+              <p>1. 生成多项式最高次幂为 3 (<i className="font-serif">r=3</i>)，故需在原始数据 <i className="font-serif">M</i> 尾部补 <strong>3 个 0</strong> 得到：<span className="text-emerald-300 font-bold">101001000</span>。</p>
               <p>2. 用 <span className="text-emerald-300 font-bold">101001000</span> 除以除数 <span className="text-amber-300 font-bold">1011</span>，按<strong>模 2 减法（不进位/不借位异或 XOR）</strong>求 3 位余数。</p>
             </div>
           </div>
@@ -250,7 +250,7 @@ export default function CRCChecksum() {
           
           <div className="bg-slate-900/80 p-4 rounded-lg text-left text-xs text-slate-300 space-y-2 border border-slate-700">
             <h4 className="font-bold text-cyan-300 text-sm">📘 软考核心真题密押卡片：</h4>
-            <p>1. <strong>生成多项式与阶数</strong>：$G(X) = X^k + ... + 1$ 的最高次幂 $k$ 为余数位数，尾部补 $k$ 个 0。</p>
+            <p>1. <strong>生成多项式与阶数</strong>：<i className="font-serif">G(X) = X<sup>k</sup> + ... + 1</i> 的最高次幂 <i className="font-serif">k</i> 为余数位数，尾部补 <i className="font-serif">k</i> 个 0。</p>
             <p>2. <strong>模 2 运算规则</strong>：加减法等价于异或 XOR（不进位也不借位，同 0 异 1）。</p>
             <p>3. <strong>检错与纠错能力</strong>：CRC 具备强大的<strong>检错能力</strong>（余数为 0 接收，非 0 丢弃重传），但无自动纠错能力（海明码具备单比特纠错能力）。</p>
           </div>

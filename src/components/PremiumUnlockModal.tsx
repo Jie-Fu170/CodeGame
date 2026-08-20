@@ -57,13 +57,9 @@ export function PremiumUnlockModal({ isOpen, onClose }: PremiumUnlockModalProps)
           </p>
 
           {/* QR Code Area */}
-          <div className="w-48 h-48 bg-slate-800 border-2 border-dashed border-slate-600 rounded-xl flex flex-col items-center justify-center mb-6 relative group overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-cyan-500/10 to-transparent translate-y-[-100%] group-hover:animate-[scan_2s_ease-in-out_infinite]"></div>
-            <span className="text-4xl mb-2">📱</span>
-            <span className="text-xs text-slate-400 font-mono">扫码添加作者微信</span>
-            <span className="text-xs text-cyan-400 font-mono mt-1 font-bold">获取通关密钥</span>
-            {/* 替换为您真实的二维码图片 */}
-            {/* <img src="/your-wechat-qr.png" alt="WeChat QR" className="absolute inset-0 w-full h-full object-cover" /> */}
+          <div className="w-48 h-48 bg-white border-2 border-cyan-500/40 rounded-xl flex flex-col items-center justify-center mb-6 relative group overflow-hidden p-2 shadow-[0_0_20px_rgba(6,182,212,0.15)]">
+            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-cyan-500/10 to-transparent translate-y-[-100%] group-hover:animate-[scan_2s_ease-in-out_infinite] pointer-events-none z-10"></div>
+            <img src="/wechat-qr.png" alt="WeChat QR" className="w-full h-full object-contain rounded-lg relative z-0" />
           </div>
 
           {/* Input Area */}

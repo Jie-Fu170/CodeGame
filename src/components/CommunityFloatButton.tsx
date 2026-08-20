@@ -9,7 +9,7 @@ export function CommunityFloatButton() {
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="dock-item"
-        title="加入社群 / 支持项目"
+        title="添加作者微信 / 交流与支持"
       >
         <span className="text-lg leading-none">💬</span>
       </button>
@@ -19,7 +19,7 @@ export function CommunityFloatButton() {
         <div className="absolute bottom-full right-0 mb-3 w-64 t-panel border rounded-2xl shadow-2xl p-4 panel-in origin-bottom-right backdrop-blur-xl">
           <div className="flex justify-between items-start mb-3">
             <h3 className="text-sm font-bold t-text-1 font-mono">
-              加入软考硬核通关群
+              添加作者微信
             </h3>
             <button
               onClick={() => setIsOpen(false)}
@@ -30,14 +30,11 @@ export function CommunityFloatButton() {
           </div>
 
           <p className="text-xs t-text-3 mb-4 leading-relaxed">
-            分享软考经验，讨论设计模式与架构难题，反馈 Bug，或者只是想给主理人点个赞。
+            交流软考备考经验，讨论设计模式与系统架构，反馈 Bug 或获取最新通关攻略。
           </p>
 
-          <div className="w-full aspect-square t-chip border rounded-xl flex flex-col items-center justify-center relative overflow-hidden">
-             <span className="text-3xl mb-2">👾</span>
-             <span className="text-[10px] t-text-4 font-mono">微信群二维码占位</span>
-             {/* 替换为您真实的二维码图片 */}
-             {/* <img src="/your-group-qr.png" alt="Group QR" className="absolute inset-0 w-full h-full object-cover" /> */}
+          <div className="w-full aspect-square bg-white border rounded-xl flex items-center justify-center relative overflow-hidden p-2 shadow-inner">
+             <img src="/wechat-qr.png" alt="Author WeChat QR" className="w-full h-full object-contain rounded-lg" />
           </div>
 
           <div className="mt-4 flex flex-col gap-2">
